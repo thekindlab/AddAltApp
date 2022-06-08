@@ -1,36 +1,79 @@
-//
-//  Media_AccessTests.swift
-//  Media-AccessTests
-//
-//  Created on 6/7/22.
-//
-
 import XCTest
 
+class Media_AccessTests: XCTestCase{
 
-class Media_AccessTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp()
+    {
+        super.setUp()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown()
+    {
+        super.tearDown()
+
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func test_AlbumDownloadEmpty() //critical value of downloading 0 images
+    {
+        
+        XCTAssertEqual(-1,0)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
+    func test_AlbumDownloadCaptionedImage()  //representative case of downloading a regular image
+    {
+        XCTAssertEqual(-1,0)
+    
     }
+
+    func test_AlbumDownloadUnCaptionedImage() //critical test case of downloading an unCaptioned Image
+    {
+        XCTAssertEqual(-1,0)
+    
+    
+    }
+
+    func test_AlbumDownloadMaxNumberOfCaptionedImage() //critical test case of downloading the maxiumum number of images at once.
+    {
+        XCTAssertEqual(-1,0)
+    }
+
+    func test_AlbumNotificationOnPhotoAdd() //representative test case of notification when photo is added to library
+    {
+        XCTAssertEqual(-1,0)
+    
+    }
+
+    func test_PickPhoto_Image_1()  //representative test case of picking a photo
+    {
+        XCTAssertEqual(-1,0)
+    
+    }
+
+    func test_PickPhoto_Image_2()  //representative test case of picking a photo
+    {
+        XCTAssertEqual(-1,0)
+    
+    }
+
+    
+
+    func test_RemovePhoto_Image_1() //representative test case of removing a test photo
+    {
+        XCTAssertEqual(-1,0)
+    }
+
+
+    func test_RemovePhoto_Image_2() //representative test case of removing a test photo
+    {
+        XCTAssertEqual(-1,0)
+    }
+
+
+    func test_RemoveAllPhotos() //critical test case of removing all chosen photos
+    {
+    
+        XCTAssertEqual(-1,0)
+    }
+
 
 }

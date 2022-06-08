@@ -8,8 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "Media_AccessTests-Swift.h"
 
-__attribute((constructor))
+__attribute__((constructor))
 void CucumberishInit(){
     
-    [CucumberishInit setupCucumberish];
+    [CucumberishInitializer setupCucumberish];
 }
