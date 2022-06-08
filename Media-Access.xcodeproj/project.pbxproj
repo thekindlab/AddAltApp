@@ -17,9 +17,26 @@
 		0B443B8F27CB6251005A5329 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B443B8E27CB6251005A5329 /* PhotoPicker.swift */; };
 		0B443B9127CB625D005A5329 /* PhotoPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B443B9027CB625D005A5329 /* PhotoPickerModel.swift */; };
 		0B443B9327CD67B0005A5329 /* CaptionedPhotosAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B443B9227CD67AF005A5329 /* CaptionedPhotosAlbum.swift */; };
+		190FC6892850149D00BE28D9 /* Media_AccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190FC6882850149D00BE28D9 /* Media_AccessTests.swift */; };
+		190FC6902850262300BE28D9 /* Features in Resources */ = {isa = PBXBuildFile; fileRef = 190FC68F2850262300BE28D9 /* Features */; };
+		190FC6932850276900BE28D9 /* CucumberishLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 190FC6922850276900BE28D9 /* CucumberishLoader.m */; };
+		190FC6972850381800BE28D9 /* CucumberishInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190FC6942850285400BE28D9 /* CucumberishInitializer.swift */; };
+		66F5586044F2D4BF00BBC506 /* Pods_Media_Access.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F36D501FEF2E3E9C1F75BB6 /* Pods_Media_Access.framework */; };
+		6C5C28791D6511BE5E547746 /* Pods_Media_AccessTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF75B29C88AA0D41637C1280 /* Pods_Media_AccessTests.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		190FC68A2850149D00BE28D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B443B6D27CB61B3005A5329 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B443B7427CB61B3005A5329;
+			remoteInfo = "Media-Access";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		089B9230A5F03B9C8E7E0AED /* Pods-Media-AccessTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-AccessTests.debug.xcconfig"; path = "Target Support Files/Pods-Media-AccessTests/Pods-Media-AccessTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0B443B7527CB61B3005A5329 /* Media-Access.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media-Access.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B443B7827CB61B3005A5329 /* Media_AccessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media_AccessApp.swift; sourceTree = "<group>"; };
 		0B443B7C27CB61B5005A5329 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -32,6 +49,17 @@
 		0B443B9027CB625D005A5329 /* PhotoPickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoPickerModel.swift; path = ../../../PHPickerDemo/final/PHPickerDemo/PHPickerDemo/PhotoPickerModel.swift; sourceTree = "<group>"; };
 		0B443B9227CD67AF005A5329 /* CaptionedPhotosAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionedPhotosAlbum.swift; sourceTree = "<group>"; };
 		0B443B9427CD6B8F005A5329 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		190FC6862850149D00BE28D9 /* Media-AccessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Media-AccessTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		190FC6882850149D00BE28D9 /* Media_AccessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media_AccessTests.swift; sourceTree = "<group>"; };
+		190FC68F2850262300BE28D9 /* Features */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Features; path = ../../../../Desktop/Features; sourceTree = "<group>"; };
+		190FC6912850276900BE28D9 /* Media-AccessTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Media-AccessTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		190FC6922850276900BE28D9 /* CucumberishLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CucumberishLoader.m; sourceTree = "<group>"; };
+		190FC6942850285400BE28D9 /* CucumberishInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CucumberishInitializer.swift; sourceTree = "<group>"; };
+		2480D9BD504B93973CD321A0 /* Pods-Media-AccessTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-AccessTests.release.xcconfig"; path = "Target Support Files/Pods-Media-AccessTests/Pods-Media-AccessTests.release.xcconfig"; sourceTree = "<group>"; };
+		6B17235F0555FAD5020C7DFC /* Pods-Media-Access.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Access.release.xcconfig"; path = "Target Support Files/Pods-Media-Access/Pods-Media-Access.release.xcconfig"; sourceTree = "<group>"; };
+		9F36D501FEF2E3E9C1F75BB6 /* Pods_Media_Access.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Media_Access.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF75B29C88AA0D41637C1280 /* Pods_Media_AccessTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Media_AccessTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEACBC2714C2719F9F7E186 /* Pods-Media-Access.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Access.debug.xcconfig"; path = "Target Support Files/Pods-Media-Access/Pods-Media-Access.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +67,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66F5586044F2D4BF00BBC506 /* Pods_Media_Access.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		190FC6832850149D00BE28D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C5C28791D6511BE5E547746 /* Pods_Media_AccessTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +86,10 @@
 			isa = PBXGroup;
 			children = (
 				0B443B7727CB61B3005A5329 /* Media-Access */,
+				190FC6872850149D00BE28D9 /* Media-AccessTests */,
 				0B443B7627CB61B3005A5329 /* Products */,
+				8F3B363FA70834CA742E9077 /* Pods */,
+				4EDB77DBA9D4D02B137BC2FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				0B443B7527CB61B3005A5329 /* Media-Access.app */,
+				190FC6862850149D00BE28D9 /* Media-AccessTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,6 +128,38 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		190FC6872850149D00BE28D9 /* Media-AccessTests */ = {
+			isa = PBXGroup;
+			children = (
+				190FC6922850276900BE28D9 /* CucumberishLoader.m */,
+				190FC6942850285400BE28D9 /* CucumberishInitializer.swift */,
+				190FC68F2850262300BE28D9 /* Features */,
+				190FC6882850149D00BE28D9 /* Media_AccessTests.swift */,
+				190FC6912850276900BE28D9 /* Media-AccessTests-Bridging-Header.h */,
+			);
+			path = "Media-AccessTests";
+			sourceTree = "<group>";
+		};
+		4EDB77DBA9D4D02B137BC2FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9F36D501FEF2E3E9C1F75BB6 /* Pods_Media_Access.framework */,
+				EF75B29C88AA0D41637C1280 /* Pods_Media_AccessTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8F3B363FA70834CA742E9077 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FEEACBC2714C2719F9F7E186 /* Pods-Media-Access.debug.xcconfig */,
+				6B17235F0555FAD5020C7DFC /* Pods-Media-Access.release.xcconfig */,
+				089B9230A5F03B9C8E7E0AED /* Pods-Media-AccessTests.debug.xcconfig */,
+				2480D9BD504B93973CD321A0 /* Pods-Media-AccessTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -94,6 +167,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0B443B8327CB61B5005A5329 /* Build configuration list for PBXNativeTarget "Media-Access" */;
 			buildPhases = (
+				5FA8EEB1B53CF8652B2275A3 /* [CP] Check Pods Manifest.lock */,
 				0B443B7127CB61B3005A5329 /* Sources */,
 				0B443B7227CB61B3005A5329 /* Frameworks */,
 				0B443B7327CB61B3005A5329 /* Resources */,
@@ -107,6 +181,26 @@
 			productReference = 0B443B7527CB61B3005A5329 /* Media-Access.app */;
 			productType = "com.apple.product-type.application";
 		};
+		190FC6852850149D00BE28D9 /* Media-AccessTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 190FC68E2850149D00BE28D9 /* Build configuration list for PBXNativeTarget "Media-AccessTests" */;
+			buildPhases = (
+				5B8CBF4833C0D57FF40C703A /* [CP] Check Pods Manifest.lock */,
+				190FC6822850149D00BE28D9 /* Sources */,
+				190FC6832850149D00BE28D9 /* Frameworks */,
+				190FC6842850149D00BE28D9 /* Resources */,
+				9299C620292E8C9B6CB6CE24 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				190FC68B2850149D00BE28D9 /* PBXTargetDependency */,
+			);
+			name = "Media-AccessTests";
+			productName = "Media-AccessTests";
+			productReference = 190FC6862850149D00BE28D9 /* Media-AccessTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -114,11 +208,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1320;
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					0B443B7427CB61B3005A5329 = {
 						CreatedOnToolsVersion = 13.2.1;
+					};
+					190FC6852850149D00BE28D9 = {
+						CreatedOnToolsVersion = 13.4.1;
+						LastSwiftMigration = 1340;
+						TestTargetID = 0B443B7427CB61B3005A5329;
 					};
 				};
 			};
@@ -136,6 +235,7 @@
 			projectRoot = "";
 			targets = (
 				0B443B7427CB61B3005A5329 /* Media-Access */,
+				190FC6852850149D00BE28D9 /* Media-AccessTests */,
 			);
 		};
 /* End PBXProject section */
@@ -150,7 +250,79 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		190FC6842850149D00BE28D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				190FC6902850262300BE28D9 /* Features in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5B8CBF4833C0D57FF40C703A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Media-AccessTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FA8EEB1B53CF8652B2275A3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Media-Access-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9299C620292E8C9B6CB6CE24 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Media-AccessTests/Pods-Media-AccessTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Media-AccessTests/Pods-Media-AccessTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Media-AccessTests/Pods-Media-AccessTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0B443B7127CB61B3005A5329 /* Sources */ = {
@@ -168,7 +340,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		190FC6822850149D00BE28D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				190FC6892850149D00BE28D9 /* Media_AccessTests.swift in Sources */,
+				190FC6972850381800BE28D9 /* CucumberishInitializer.swift in Sources */,
+				190FC6932850276900BE28D9 /* CucumberishLoader.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		190FC68B2850149D00BE28D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B443B7427CB61B3005A5329 /* Media-Access */;
+			targetProxy = 190FC68A2850149D00BE28D9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0B443B8127CB61B5005A5329 /* Debug */ = {
@@ -289,6 +479,7 @@
 		};
 		0B443B8427CB61B5005A5329 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FEEACBC2714C2719F9F7E186 /* Pods-Media-Access.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -321,6 +512,7 @@
 		};
 		0B443B8527CB61B5005A5329 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B17235F0555FAD5020C7DFC /* Pods-Media-Access.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -351,6 +543,63 @@
 			};
 			name = Release;
 		};
+		190FC68C2850149D00BE28D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 089B9230A5F03B9C8E7E0AED /* Pods-Media-AccessTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Y8SK6CRS6U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "western.Media-AccessTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Media-AccessTests/Media-AccessTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Media-Access.app/Media-Access";
+			};
+			name = Debug;
+		};
+		190FC68D2850149D00BE28D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2480D9BD504B93973CD321A0 /* Pods-Media-AccessTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Y8SK6CRS6U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "western.Media-AccessTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Media-AccessTests/Media-AccessTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Media-Access.app/Media-Access";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -368,6 +617,15 @@
 			buildConfigurations = (
 				0B443B8427CB61B5005A5329 /* Debug */,
 				0B443B8527CB61B5005A5329 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		190FC68E2850149D00BE28D9 /* Build configuration list for PBXNativeTarget "Media-AccessTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				190FC68C2850149D00BE28D9 /* Debug */,
+				190FC68D2850149D00BE28D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
