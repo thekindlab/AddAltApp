@@ -22,19 +22,19 @@ struct ContentView: View {
     @State private var photoLibrary = CaptionedPhotoAlbum()
 
     var body: some View {
-        
+        //check what type of state the curItem is
         VStack {
             Text("Media Accessibility")//Header
                             .font(.headline)
                             .fontWeight(.regular)
                             .padding(.bottom, 100.0)
             
-            if curItem == nil {
+            if curItem == nil { //explanation photo
                 Image("Media-Access")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     
-            } else {
+            } else { //if we have a curItem figure out how to display it
                 if curItem?.mediaType == .photo {
                     Image(uiImage: curItem?.photo ?? UIImage())
                         .resizable()
@@ -56,6 +56,8 @@ struct ContentView: View {
                 }
             }
             
+            
+            //Text editor input object
             TextEditor(text: $currentCaption)
                 .frame(width: 350, height: 80, alignment: .center)
                 .cornerRadius(3.0)
@@ -64,8 +66,14 @@ struct ContentView: View {
                 }
                 .foregroundColor(Color.gray)
                 .border(Color.black, width: 1)
-                
+            
+            
+            
+                //button Stack
             HStack {
+                
+                
+                            //  Cancel Button
                             Button(action: {
                                 print("Cancelled")
                                 
@@ -82,6 +90,9 @@ struct ContentView: View {
                             .frame(width: 100.0, height: 30.0)
                             .background(Color.red)
                             .clipShape(Capsule())
+                            //  Cancel Button
+                
+                
                 
                             //submit button
                             Button(action: {
@@ -103,27 +114,25 @@ struct ContentView: View {
                                     }
                                     currentCaption = "Enter Your Caption"
                                 }
-                                
-                                
-                                
-                                
-                                
-                                
                             }, label: {
                                 Text("Submit").foregroundColor(Color.white)
                             })
                             .frame(width: 100.0, height: 30.0)
                             .background(Color.green)
                             .clipShape(Capsule())
+                            //submit button
                             
-                            
+                
+                
                         }
                         .padding(.bottom, 15.0)
             
-            
+            //Navigation for handeling photos that are being captioned
             NavigationView {
                 
                 
+                
+                //list of media items we're trying to label
                 List(mediaItems.items, id: \.id) { item in
                     ZStack(alignment: .topLeading) {
                         if item.mediaType == .photo {
@@ -157,9 +166,17 @@ struct ContentView: View {
                             .foregroundColor(.white)
                     }
                 }
+                //list of media items looking to be captioned
+                
+                
+                
                     
+                
+                
                 //these are where our "queue buttons are"
                 .toolbar {
+                    
+                    
                     //Trash button
                     ToolbarItem(placement: .navigation) {
                         Button(action:
@@ -178,18 +195,28 @@ struct ContentView: View {
                         }
                         
                     }
+                    //Trash button
+                    
+                    
                     //camera button
                     ToolbarItem(placement: .principal) {
                         Button(action:
                                 {self.showCamera.toggle()})
                         {Image (systemName: "camera")}
                     }
+                    //camera button
+                    
+                    
+                    
                     //photo library
                     ToolbarItem(placement: .primaryAction) {
                         Button(action:
                                 {showSheet = true})
                         {Image (systemName: "photo")}
                     }
+                    //photo library
+                    
+                    
                 }
             }
             //sheets that popup when something is pressed
@@ -223,6 +250,11 @@ struct ContentView: View {
     }
     //This function is not working right now
     //will change the UserComment but not save to the library
+    
+    
+    //function for saving captions correctly
+    
+    
     
     //Ideas: Make a  save(CIImage) in func CPA class
     private func saveCaptionThenSaveToCaptioned() {
@@ -271,6 +303,11 @@ struct ContentView: View {
     
 }
 
+
+
+
+
+//how XCode loads the view
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
