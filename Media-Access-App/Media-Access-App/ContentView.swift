@@ -12,6 +12,9 @@ import UIKit
 
 
 struct ContentView: View {
+    
+    
+    //Global Variables
     @State public var currentCaption: String = "Enter Your Caption"
     @State private var showSheet = false
     @State private var showCamera = false
@@ -219,6 +222,9 @@ struct ContentView: View {
                     
                 }
             }
+            
+            
+            
             //sheets that popup when something is pressed
             .sheet(isPresented: self.$showCamera) {
                 ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
@@ -234,7 +240,7 @@ struct ContentView: View {
         }
     }
     
-    
+    //(reading function notation)item is the object name, PhotoPickerModel is the type
     fileprivate func getMediaImageName(using item: PhotoPickerModel) -> String {
         switch item.mediaType {
             case .photo: return "photo"
