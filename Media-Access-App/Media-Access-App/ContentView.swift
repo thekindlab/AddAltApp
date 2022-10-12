@@ -25,13 +25,21 @@ struct ContentView: View {
     @State private var photoLibrary = CaptionedPhotoAlbum()
 
     var body: some View {
-        //check what type of state the curItem is
+        
+        //App View Stack    (what the user sees on startup )
         VStack {
-            Text("Media Accessibility")//Header
+            
+            
+            
+            //Header
+            Text("Media Accessibility")
                             .font(.headline)
                             .fontWeight(.regular)
                             .padding(.bottom, 100.0)
+            //Header
             
+            
+            //current image chosen
             if curItem == nil { //explanation photo
                 Image("Media-Access")
                     .resizable()
@@ -58,6 +66,8 @@ struct ContentView: View {
                     } else { EmptyView() }
                 }
             }
+            //current image chosen
+            
             
             
             //Text editor input object
@@ -69,10 +79,10 @@ struct ContentView: View {
                 }
                 .foregroundColor(Color.gray)
                 .border(Color.black, width: 1)
+            //Text editor input object
             
             
-            
-                //button Stack
+            //Clear & Submit button Stack
             HStack {
                 
                 
@@ -106,7 +116,12 @@ struct ContentView: View {
                                     
                                 }
                                 if(curItem != nil) {
-                                    //not working currently
+                                    /*
+                                     (BUG)
+                                     not working currently, does not save caption to the library.
+                                     
+                                     
+                                     */
                                     //saveCaptionThenSaveToCaptioned()
                                     let nextItem = mediaItems.getNext(item: curItemID)
                                     mediaItems.getDeleteItem(item: curItemID)
@@ -124,18 +139,20 @@ struct ContentView: View {
                             .background(Color.green)
                             .clipShape(Capsule())
                             //submit button
-                            
-                
-                
+                                      
                         }
                         .padding(.bottom, 15.0)
+            //Clear & Submit button Stack
+            
+            
+            
             
             //Navigation for handeling photos that are being captioned
             NavigationView {
                 
                 
                 
-                //list of media items we're trying to label
+                //list of media items looking to be captioned
                 List(mediaItems.items, id: \.id) { item in
                     ZStack(alignment: .topLeading) {
                         if item.mediaType == .photo {
@@ -176,7 +193,7 @@ struct ContentView: View {
                     
                 
                 
-                //these are where our "queue buttons are"
+                // "queue buttons" location
                 .toolbar {
                     
                     
@@ -201,35 +218,44 @@ struct ContentView: View {
                     //Trash button
                     
                     
-                    //camera button
+                    //Camera button
                     ToolbarItem(placement: .principal) {
                         Button(action:
                                 {self.showCamera.toggle()})
                         {Image (systemName: "camera")}
                     }
-                    //camera button
+                    //Camera button
                     
                     
                     
-                    //photo library
+                    //Photo library
                     ToolbarItem(placement: .primaryAction) {
                         Button(action:
                                 {showSheet = true})
                         {Image (systemName: "photo")}
                     }
-                    //photo library
-                    
-                    
+                    //Photo library
                 }
+                // "queue buttons" location
+                
             }
             
             
             
             //sheets that popup when something is pressed
+            
+            
+            /*
+             (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
+             
+             */
+            //Camera sheet
             .sheet(isPresented: self.$showCamera) {
                 ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
             }
+            //Camera sheet
             
+            //Photo picker
             .sheet(isPresented: $showSheet, content: {
                 PhotoPicker(mediaItems: mediaItems) { didSelectItem in
                     // Handle didSelectItems value here...
@@ -237,7 +263,13 @@ struct ContentView: View {
                     
                 }
             })
+            //Photo picker
+            
+        //End of View Stack
         }
+        
+        
+        
     }
     
     //(reading function notation)item is the object name, PhotoPickerModel is the type
@@ -249,24 +281,32 @@ struct ContentView: View {
         }
     }
     
+    
     private func clearEditor() {
         if(currentCaption == "Enter Your Caption") {
             currentCaption = ""
         }
     }
-    //This function is not working right now
-    //will change the UserComment but not save to the library
     
     
-    //function for saving captions correctly
-    
-    
-    
-    //Ideas: Make a  save(CIImage) in func CPA class
+    /*
+     (BUG) The saveCaptionThenSaveToCaptioned function does not work correctly. It will change the UserComment but not save it to the library.
+     
+     
+     
+     
+     */
+    //Ideas: Make a  save(CIImage) in func CPA class <- prev team notes
     private func saveCaptionThenSaveToCaptioned() {
+        
+        
         var test: UIImage
         test = (curItem?.photo)!
         
+        
+        
+        
+        //I  have no clue what any of these types are, research this -(Robert)
         let imageData: Data = test.jpegData(compressionQuality: 0)!
         let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)!
         let uti: CFString = CGImageSourceGetType(cgImgSource)!
@@ -280,7 +320,7 @@ struct ContentView: View {
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary
 
         let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!
-        
+        //previous teams test code for changing the caption of a picture
 
         //print("before modification \(EXIFDictionary)") check before
         
@@ -313,7 +353,7 @@ struct ContentView: View {
 
 
 
-//how XCode loads the view
+//how XCode loads the preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

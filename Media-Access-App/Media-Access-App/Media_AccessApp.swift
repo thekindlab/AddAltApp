@@ -4,6 +4,8 @@
 //
 //  Created by Ian Vechey on 2/26/22.
 //
+//where the program enters
+
 
 import SwiftUI
 
