@@ -300,42 +300,46 @@ struct ContentView: View {
     private func saveCaptionThenSaveToCaptioned() {
         
         
-        var test: UIImage
+        var test: UIImage //image objects to represent image data of all kinds
         test = (curItem?.photo)!
         
         
         
         
         //I  have no clue what any of these types are, research this -(Robert)
-        let imageData: Data = test.jpegData(compressionQuality: 0)!
-        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)!
-        let uti: CFString = CGImageSourceGetType(cgImgSource)!
-        let dataWithEXIF: NSMutableData = NSMutableData(data: imageData)
-        
-        let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)!
-        
-        let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary
-        
-        
-        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary
+        let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
+        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object.
+        //Data objects are typically used for raw data storage.
 
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!
+        let uti: CFString = CGImageSourceGetType(cgImgSource)! //The uniform type identifier of the image source container.
+        let dataWithEXIF: NSMutableData = NSMutableData(data: imageData) //They are typically used for data storage and are also useful in Distributed Objects applications, where data contained in data objects can be copied or moved between applications.
+        
+        let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
+        
+        let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        
+        
+        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
+
+        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!//A dictionary of key-value pairs for an image that uses Exchangeable Image File Format
         //previous teams test code for changing the caption of a picture
 
         //print("before modification \(EXIFDictionary)") check before
         
         //save to User Comment, not sure it's where we want to save it
         //but it does work!!! Need to save the image to test if it works
-        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption
+        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //index the dict at UserComment and set it to currentCaption
         //this seems like what we want, but nothing shows up in the "after modification" print statement
-        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption
+        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
         
-        mutable[kCGImagePropertyExifDictionary as String] = EXIFDictionary
+        
+        //store the new dict settings?
+        mutable[kCGImagePropertyExifDictionary as String] = EXIFDictionary //resetting the dictionary?
 
         CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))
         CGImageDestinationFinalize(destination)
 
-        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)!
+        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved? 
         
         
         /*let newproperties: NSDictionary = testImage.properties as NSDictionary
