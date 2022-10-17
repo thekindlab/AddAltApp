@@ -306,7 +306,6 @@ struct ContentView: View {
         
         
         
-        //I  have no clue what any of these types are, research this -(Robert)
         let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
         let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object.
         //Data objects are typically used for raw data storage.
@@ -331,7 +330,7 @@ struct ContentView: View {
         EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //index the dict at UserComment and set it to currentCaption
         //this seems like what we want, but nothing shows up in the "after modification" print statement
         EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
-        
+        //kCGImageAuxiliaryDataInfoDataDescription <- maybe try this?
         
         //store the new dict settings?
         mutable[kCGImagePropertyExifDictionary as String] = EXIFDictionary //resetting the dictionary?
