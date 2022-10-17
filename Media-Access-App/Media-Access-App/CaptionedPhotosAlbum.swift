@@ -3,6 +3,12 @@
 //  Media-Access
 //
 //  Created by Ian Vechey on 2/28/22.
+
+/*
+ The CaptionedPhotoAlbum is used to manipulate the library for captioning photos. 
+ 
+ 
+ */
 /*https://stackoverflow.com/questions/28708846/how-to-save-image-to-custom-album
 */
 import Foundation

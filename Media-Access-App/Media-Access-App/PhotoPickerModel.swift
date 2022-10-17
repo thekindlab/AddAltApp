@@ -4,11 +4,20 @@
 //
 //  Created by Gabriel Theodoropoulos.
 //
-
+/*
+ The PhotoPickerModel represents a struct data object that has info for one photo
+ 
+ 
+ PickedMediaItems is a data structure that wraps an array of PhotoPickerModels and gives functions to manipulate said data structure
+ 
+ 
+ */
 import SwiftUI
 import Photos
 
+//struct data structure for each photo
 struct PhotoPickerModel {
+    
     enum MediaType {
         case photo, video, livePhoto
     }
@@ -20,7 +29,7 @@ struct PhotoPickerModel {
     var mediaType: MediaType = .photo
     
     
-    
+    //constructor functions
     init(with photo: UIImage) {
         id = UUID().uuidString
         self.photo = photo
@@ -43,6 +52,7 @@ struct PhotoPickerModel {
         mediaType = .livePhoto
     }
     
+    
     mutating func delete() {
         switch mediaType {
             case .photo: photo = nil
@@ -56,9 +66,16 @@ struct PhotoPickerModel {
 }
 
 
+
+
+
+
+
+
+
 class PickedMediaItems: ObservableObject {
-    @Published var items = [PhotoPickerModel]()
-    
+    @Published var items = [PhotoPickerModel]() //array of photos
+    //functions for manipulating array of photos
     var size: Int = 0
     
     func getSize() -> Int {

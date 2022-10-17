@@ -4,7 +4,11 @@
 //
 //  Created by Gabriel Theodoropoulos.
 //
-
+/*
+ The PhotoPicker struct extends some Swift tools for using the photo library to pick photos. 
+ 
+ 
+ */
 import SwiftUI
 import PhotosUI
 
@@ -14,7 +18,8 @@ struct PhotoPicker: UIViewControllerRepresentable {
     @ObservedObject var mediaItems: PickedMediaItems
     var didFinishPicking: (_ didSelectItems: Bool) -> Void
     
-    func makeUIViewController(context: Context) -> PHPickerViewController {
+    func makeUIViewController(context: Context) -> PHPickerViewController { //constructs a Photo Picker Controller
+        
         var config = PHPickerConfiguration()
         config.filter = .any(of: [.images, .videos, .livePhotos])
         config.selectionLimit = 0
@@ -81,7 +86,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if !isLivePhoto {
                         if let image = object as? UIImage {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image))
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image)) //append a new PhotoPickerModel object to list of picked media
                             }
                         }
                     } else {

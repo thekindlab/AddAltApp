@@ -20,9 +20,9 @@ struct ContentView: View {
     @State private var showCamera = false
     @State private var curImage: UIImage?
     @State private var curItemID: String = ""
-    @State private var curItem: PhotoPickerModel?
-    @ObservedObject var mediaItems = PickedMediaItems()
-    @State private var photoLibrary = CaptionedPhotoAlbum()
+    @State private var curItem: PhotoPickerModel? //struct that is data structure for one photo
+    @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
+    @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
 
     var body: some View {
         
@@ -111,11 +111,11 @@ struct ContentView: View {
                             Button(action: {
                                 
                                 //On press
-                                if(curItem?.mediaType == .photo) {
+                                if(curItem?.mediaType == .photo) { //save the current photo
                                     photoLibrary.saveImage(image: (curItem?.photo)!)
                                     
                                 }
-                                if(curItem != nil) {
+                                if(curItem != nil) { //if we still have photos to save
                                     /*
                                      (BUG)
                                      not working currently, does not save caption to the library.
@@ -123,7 +123,7 @@ struct ContentView: View {
                                      
                                      */
                                     //saveCaptionThenSaveToCaptioned()
-                                    let nextItem = mediaItems.getNext(item: curItemID)
+                                    let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
                                         curItem = nextItem
