@@ -122,7 +122,7 @@ struct ContentView: View {
                                      
                                      
                                      */
-                                    //saveCaptionThenSaveToCaptioned()
+                                    saveCaptionThenSaveToCaptioned()
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -320,29 +320,30 @@ struct ContentView: View {
         
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
 
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!//A dictionary of key-value pairs for an image that uses Exchangeable Image File Format
+        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyFileContentsDictionary as String] as? NSMutableDictionary)!//A dictionary of key-value pairs for an image that uses Exchangeable Image File Format
         //previous teams test code for changing the caption of a picture
 
-        //print("before modification \(EXIFDictionary)") check before
+        print("before modification \(EXIFDictionary)")
         
         //save to User Comment, not sure it's where we want to save it
         //but it does work!!! Need to save the image to test if it works
-        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //index the dict at UserComment and set it to currentCaption
+        EXIFDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at UserComment and set it to currentCaption, I don't think this should be done doesnt make sense for screen reader
         //this seems like what we want, but nothing shows up in the "after modification" print statement
-        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
+       // EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
         //kCGImageAuxiliaryDataInfoDataDescription <- maybe try this?
         
         //store the new dict settings?
-        mutable[kCGImagePropertyExifDictionary as String] = EXIFDictionary //resetting the dictionary?
+        mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary //resetting the dictionary?
 
         CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))
         CGImageDestinationFinalize(destination)
 
-        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved? 
+        //test image, check if
+        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved
         
         
-        /*let newproperties: NSDictionary = testImage.properties as NSDictionary
-        print("after modification \(newproperties)")*/
+        let newproperties: NSDictionary = testImage.properties as NSDictionary
+        print("after modification \(newproperties)")
         
         photoLibrary.saveImage(image: UIImage(ciImage: testImage))
         
