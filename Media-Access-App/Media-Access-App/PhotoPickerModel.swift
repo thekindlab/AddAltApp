@@ -121,7 +121,7 @@ class PickedMediaItems: ObservableObject {
         for (index, _) in items.enumerated() {
             if(item == items[index].id) {
                 if(!(index > items.count-1)) {
-                    return items[index+1]
+                    return items[index+1] //Bug, when trying to caption photos not in order. 
                 }
                 else {
                     return PhotoPickerModel()
