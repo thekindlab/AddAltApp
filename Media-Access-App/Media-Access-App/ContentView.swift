@@ -313,61 +313,76 @@ struct ContentView: View {
         let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
         
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
-        let imageProperties_for_dict = CGImageSourceCopyProperties(cgImgSource, nil)! as CFDictionary?
-        
-        
-        let mutable_properties: CFMutableDictionary = CFDictionaryCreateMutableCopy(kCFAllocatorDefault,0, imageProperties_for_dict)! //get a mutable copy for the image properties dictionary
-        //want to compare this to the after image Proerties later on.
-        print("image properties \(imageProperties)")
-        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
 
-        //let ImagePropertyDictionary: CFMutableDictionary = (mutable_properties[kCGImagePropertyFileContentsDictionary as CFString] as? CFMutableDictionary)!//A dictionary of key-value pairs for an imagethat uses Exchangeable Image File Format
-        //broken needs to be worked on. 
         
-        
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!
-        
-        //previous teams test code for changing the caption of a picture
-
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         //Test Code
+        //
+        //
+        //       //previous teams test code for changing the caption of a picture
+        //
+        //want to compare image properties before and after modification(need to be work on)
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
+        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!
         
         print("before modification \(EXIFDictionary)")
         
-        //save to User Comment, not sure it's where we want to save it
-        //but it does work!!! Need to save the image to test if it works
-        //ImagePropertyDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at data description and set it to currentCaption,<- may work?
         
-        
-        //this seems like what we want, but nothing shows up in the "after modification" print statement
         EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
 
         
         //store the new image properties
         mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary
-
         CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))//mutable is the additional image propeties
         CGImageDestinationFinalize(destination)
 
+        
         //test image, check if
         let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved
-        
-        
         let newproperties: NSDictionary = testImage.properties as NSDictionary
         print("after modification \(newproperties)")
+ 
+        //  photoLibrary.saveImage(image: UIImage(ciImage: testImage))
+        /*
+         (previous team notes)
+         
+         //save to User Comment, not sure it's where we want to save it
+         //but it does work!!! Need to save the image to test if it works
+         //this seems like what we want, but nothing shows up in the "after modification" print statement
+         */
         
-      //  photoLibrary.saveImage(image: UIImage(ciImage: testImage))
+        
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+        
+        
+        
+        //Robert's Code:
+        //
+        //I think we may need to look at saving the Caption to the kCGImageAuxiliaryDataInfoDataDescription for a
+        //
+        //let imageProperties_for_dict = CGImageSourceCopyProperties(cgImgSource, nil)! as CFDictionary?
+        //let mutable_properties: CFMutableDictionary = CFDictionaryCreateMutableCopy(kCFAllocatorDefault,0, imageProperties_for_dict)! //get a mutable copy for the image properties dictionary
+        //let ImagePropertyDictionary: CFMutableDictionary = (mutable_properties[kCGImagePropertyFileContentsDictionary as CFString] as? CFMutableDictionary)!//A dictionary of key-value pairs for an imagethat uses Exchangeable Image File Format
+        //ImagePropertyDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at data description and set it to currentCaption,<- may work?
+        
+        
+        
+        
+        
+        
+        
+    
+        
+       
+        
+        
+        
+        
+        
+        
+
         
         
     }

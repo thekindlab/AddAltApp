@@ -78,7 +78,7 @@ class PickedMediaItems: ObservableObject {
     //functions for manipulating array of photos
     var size: Int = 0
     
-    func getSize() -> Int {
+    func getSize() -> Int { //what is the purpose of this code? not used anywhere I don't think
         return size
     }
     
@@ -90,6 +90,7 @@ class PickedMediaItems: ObservableObject {
     func del(index: Int) {
         
         items.remove(at: index)
+        size -= 1
     }
     
     
@@ -100,6 +101,7 @@ class PickedMediaItems: ObservableObject {
         }
         
         items.removeAll()
+        size = 0
     }
     
 
@@ -113,15 +115,15 @@ class PickedMediaItems: ObservableObject {
         }
     }
     
-    func getNext(item: String) -> PhotoPickerModel {
+    func getNext(item: String) -> PhotoPickerModel { //need to rewrite code, seems badly written. Should implement size variable I believe. 
         if(items.count == 1) {
             //returns an empty PhotoPickerModel
             return PhotoPickerModel()
         }
         for (index, _) in items.enumerated() {
             if(item == items[index].id) {
-                if(!(index > items.count-1)) {
-                    return items[index+1] //Bug, when trying to caption photos not in order. 
+                if(!(index > items.count-2)) {
+                    return items[index+1]
                 }
                 else {
                     return PhotoPickerModel()
