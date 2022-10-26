@@ -355,16 +355,16 @@ struct ContentView: View {
         
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-        
-        
-        
         //Robert's Code:
         //
         //I think we may need to look at saving the Caption to the kCGImageAuxiliaryDataInfoDataDescription for a
         //
-        //let imageProperties_for_dict = CGImageSourceCopyProperties(cgImgSource, nil)! as CFDictionary?
-        //let mutable_properties: CFMutableDictionary = CFDictionaryCreateMutableCopy(kCFAllocatorDefault,0, imageProperties_for_dict)! //get a mutable copy for the image properties dictionary
-        //let ImagePropertyDictionary: CFMutableDictionary = (mutable_properties[kCGImagePropertyFileContentsDictionary as CFString] as? CFMutableDictionary)!//A dictionary of key-value pairs for an imagethat uses Exchangeable Image File Format
+        
+        let imageProperties_for_dict = CGImageSourceCopyProperties(cgImgSource, nil)! as CFDictionary? //okay so this object doesn't have any subscripts weird., what the heck ;(
+        //print("This is the number of keys \(CFDictionaryGetCount((imageProperties_for_dict)))")
+        //let mutable_properties: CFMutableDictionary = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, CFDictionaryGetCount(imageProperties_for_dict), imageProperties_for_dict)! //I don't think this is copying correclt
+        
+        //let ImagePropertyDictionary: CFMutableDictionary = (mutable_properties[kCGImagePropertyFileContentsDictionary as String] as? CFMutableDictionary)!//A dictionary of key-value pairs for an imagethat uses Exchangeable Image File Format
         //ImagePropertyDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at data description and set it to currentCaption,<- may work?
         
         
