@@ -9,8 +9,6 @@ import SwiftUI
 import AVKit
 import UIKit
 
-
-
 struct ContentView: View {
     
     
@@ -122,7 +120,11 @@ struct ContentView: View {
                                      
                                      
                                      */
+                                
                                     saveCaptionThenSaveToCaptioned()
+                                   
+                                    
+                                    
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -289,15 +291,7 @@ struct ContentView: View {
     }
     
     
-    /*
-     (BUG) The saveCaptionThenSaveToCaptioned function does not work correctly. It will change the UserComment but not save it to the library.
-     
-     
-     
-     
-     */
-    //Ideas: Make a  save(CIImage) in func CPA class <- prev team notes
-    private func saveCaptionThenSaveToCaptioned() {
+    private func saveCaptionThenSaveToCaptioned() { 
         
         //grab current image UIImage
         var test: UIImage
@@ -307,85 +301,61 @@ struct ContentView: View {
         let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
         
         
-        /*
-         Robert Notes:
-         
-         To save meta data directly to an image, Apple uses this Source-Destination idea to do so where you get the image source as a cgImgSource object, then you can get a destination object that
-         has a data object where the data should be changed. Then you can you modify the destination using the source and additional properties that you would like to add. 
-         
-         
-         */
-        
-        
         //Source Code
+        //the image source is basically a temp file that holds the images info
         
-        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
-        let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
+        let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
         
         //modify the data
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
         let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)! //mutable dictionary copy
-        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //{key = description, value = currentCaption}
         
-        //store the new image properties
-        mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary
-
+        print("before modification \(EXIFDictionary)") //check if changed before modification
+        
+        //EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption// doesn't work to save because 'kCGImagePropertyPNGDescription as String' is not a valid key in the EXIF dict
+        
+        //modify copy of image meta data
+        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //this saves correctly because key is in right location
+    
+        /*
+            Robert Note: In the future we need to look through Apples keys documentation and pick one that suits our caption goal. "User comment" is not a very good choice.
+         
+         */
         
         
         //Destination Code
+        //an image destination is basically a temp file we create to store new modified image info to
         
-        let uti: CFString = CGImageSourceGetType(cgImgSource)! //The uniform type identifier of the image source container.
+        let uti: CFString = CGImageSourceGetType(imageSource)! //The uniform type identifier of the image source container.
+        let imageDestData: NSMutableData = NSMutableData(data: imageData) //create an Mutable Data object (when destination change, this is where the data will be changed)
         
-        //create an Mutable Data object (this is where we want store the image data)
-        let imageDestData: NSMutableData = NSMutableData(data: imageData)
-        
-        let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
-        
-        //print("before modification \(EXIFDictionary)")
-     
-        
-        CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))//probably problem  is here
-        CGImageDestinationFinalize(destination)//no problems here
+        let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination
 
- 
-        
-        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        //Test Code
-        //
-        //
-        //       //previous teams test code for changing the caption of a picture
-        //
-        //want to compare image properties before and after modification(need to be work on)
         
         
-       
+        //add the modified meta data to the image destination temp file
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)//FIGURED BUG OUT , when you are changing a dict key pair, you need to follow Apples heirarchy for it to save.
+        CGImageDestinationFinalize(destination)
         
-        //test image, check if
-        print( imageDestData as Data)
-        let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //try testing if the changes were saved
+        //check that it's been saved
+        let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
         let newproperties: NSDictionary = testImage.properties as NSDictionary
-        print("after modification \(newproperties)")
-        
-    
-        //  photoLibrary.saveImage(image: UIImage(ciImage: testImage))
-        /*
-         (previous team notes)
+        print("after modification \(newproperties)") //look at "Exif" dict key for comparison
          
-         //save to User Comment, not sure it's where we want to save it
-         //but it does work!!! Need to save the image to test if it works
-         //this seems like what we want, but nothing shows up in the "after modification" print statement
-         */
-        
-    //make sure to release the destination object and source object after using them.
-        
-       
         
         
+        //create a UIImage with the modified data and try saving it to the Captioned Album on the actual phone
+        let captioned_image = UIImage(data: imageDestData as Data)!
+        photoLibrary.saveImage(image: captioned_image)//saves the captioned image
         
+        /*saves the captioned image (NOT WORKING PROPERLY)
+          Seems that when we create a UIImage using the modified data that perhaps the meta data we added does not persist or our method of saving the image does not conserve this meta data?
+         IMPORTANT NOTE, when we check the image properties in this method we do so by getting the image's jpegData bitmap data first, this might not conserve our added metadata even
+         if we actually do change it(can't find documentation on it) so we need to check the image on the computer user the inspector tools.
+        */
         
-        
-        
-
+       //might have to release the source and destination object(not sure )
         
         
     }
