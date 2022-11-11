@@ -112,7 +112,7 @@ struct ContentView: View {
                                 
                                 //On press
                                 if(curItem?.mediaType == .photo) { //save the current photo
-                                    photoLibrary.saveImage(image: (curItem?.photo)!)
+                                    //photoLibrary.saveImage(image: (curItem?.photo)!)
                                     
                                 }
                                 if(curItem != nil) { //if we still have photos to save
@@ -303,17 +303,51 @@ struct ContentView: View {
         var test: UIImage
         test = (curItem?.photo)!
         
-        //
+        //get the image data
         let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
-        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object.
-        //Data objects are typically used for raw data storage.
-
-        let uti: CFString = CGImageSourceGetType(cgImgSource)! //The uniform type identifier of the image source container.
-        let dataWithEXIF: NSMutableData = NSMutableData(data: imageData) //They are typically used for data storage and are also useful in Distributed Objects applications, where data contained in data objects can be copied or moved between applications.
-        let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
         
+        
+        /*
+         Robert Notes:
+         
+         To save meta data directly to an image, Apple uses this Source-Destination idea to do so where you get the image source as a cgImgSource object, then you can get a destination object that
+         has a data object where the data should be changed. Then you can you modify the destination using the source and additional properties that you would like to add. 
+         
+         
+         */
+        
+        
+        //Source Code
+        
+        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        
+        //modify the data
+        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
+        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)! //mutable dictionary copy
+        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //{key = description, value = currentCaption}
+        
+        //store the new image properties
+        mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary
 
+        
+        
+        //Destination Code
+        
+        let uti: CFString = CGImageSourceGetType(cgImgSource)! //The uniform type identifier of the image source container.
+        
+        //create an Mutable Data object (this is where we want store the image data)
+        let imageDestData: NSMutableData = NSMutableData(data: imageData)
+        
+        let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
+        
+        //print("before modification \(EXIFDictionary)")
+     
+        
+        CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))//probably problem  is here
+        CGImageDestinationFinalize(destination)//no problems here
+
+ 
         
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         //Test Code
@@ -323,26 +357,16 @@ struct ContentView: View {
         //
         //want to compare image properties before and after modification(need to be work on)
         
-        let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)!
         
-        print("before modification \(EXIFDictionary)")
-        
-        
-        EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
-
-        
-        //store the new image properties
-        mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary
-        CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))//mutable is the additional image propeties
-        CGImageDestinationFinalize(destination)
-
+       
         
         //test image, check if
-        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved
+        print( imageDestData as Data)
+        let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //try testing if the changes were saved
         let newproperties: NSDictionary = testImage.properties as NSDictionary
         print("after modification \(newproperties)")
- 
+        
+    
         //  photoLibrary.saveImage(image: UIImage(ciImage: testImage))
         /*
          (previous team notes)
@@ -352,28 +376,7 @@ struct ContentView: View {
          //this seems like what we want, but nothing shows up in the "after modification" print statement
          */
         
-        
-        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-        //Robert's Code:
-        //
-        //I think we may need to look at saving the Caption to the kCGImageAuxiliaryDataInfoDataDescription for a
-        //
-        
-        let imageProperties_for_dict = CGImageSourceCopyProperties(cgImgSource, nil)! as CFDictionary? //okay so this object doesn't have any subscripts weird., what the heck ;(
-        //print("This is the number of keys \(CFDictionaryGetCount((imageProperties_for_dict)))")
-        //let mutable_properties: CFMutableDictionary = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, CFDictionaryGetCount(imageProperties_for_dict), imageProperties_for_dict)! //I don't think this is copying correclt
-        
-        //let ImagePropertyDictionary: CFMutableDictionary = (mutable_properties[kCGImagePropertyFileContentsDictionary as String] as? CFMutableDictionary)!//A dictionary of key-value pairs for an imagethat uses Exchangeable Image File Format
-        //ImagePropertyDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at data description and set it to currentCaption,<- may work?
-        
-        
-        
-        
-        
-        
-        
-    
+    //make sure to release the destination object and source object after using them.
         
        
         
