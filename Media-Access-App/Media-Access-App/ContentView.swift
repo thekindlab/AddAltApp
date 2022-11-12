@@ -110,9 +110,9 @@ struct ContentView: View {
                                 
                                 //On press
                                 if(curItem?.mediaType == .photo) { //save the current photo
-                                    //photoLibrary.saveImage(image: (curItem?.photo)!)
                                     
                                 }
+                                
                                 if(curItem != nil) { //if we still have photos to save
                                     /*
                                      (BUG)
@@ -346,8 +346,12 @@ struct ContentView: View {
         
         
         //create a UIImage with the modified data and try saving it to the Captioned Album on the actual phone
-        let captioned_image = UIImage(data: imageDestData as Data)!
-        photoLibrary.saveImage(image: captioned_image)//saves the captioned image
+        //let captioned_image = UIImage(data: imageDestData as Data)!
+        //photoLibrary.saveImage(image: captioned_image)//saves the captioned image
+        
+        
+        photoLibrary.saveImageData(imageData: imageDestData as Data) //saves data correctly
+        
         
         /*saves the captioned image (NOT WORKING PROPERLY)
           Seems that when we create a UIImage using the modified data that perhaps the meta data we added does not persist or our method of saving the image does not conserve this meta data?
