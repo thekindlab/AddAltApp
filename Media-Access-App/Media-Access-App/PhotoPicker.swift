@@ -18,6 +18,8 @@ struct PhotoPicker: UIViewControllerRepresentable {
     @ObservedObject var mediaItems: PickedMediaItems
     var didFinishPicking: (_ didSelectItems: Bool) -> Void
     
+    
+    //makes a UI View Controller
     func makeUIViewController(context: Context) -> PHPickerViewController { //constructs a Photo Picker Controller
         
         var config = PHPickerConfiguration()
@@ -55,26 +57,49 @@ struct PhotoPicker: UIViewControllerRepresentable {
             }
             
             
+            let g = DispatchGroup()
+            
+            
             for result in results {
+                
+                g.enter()
                 let itemProvider = result.itemProvider
                 
+                var file_URL: URL?
                 
                 guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first,
                       let utType = UTType(typeIdentifier)
                 else { continue }
                 
+                itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { (url, error) in
+                    guard let file_url = url else {return }
+                        file_URL = file_url as URL?
+                    g.leave()
+                    
+                }
+                //dangerous!! could result in deadlock, need to implement dispatch.async in case this fails and never leaves.
+                g.wait()
+                
+                print(" this is the image url \(file_URL!)")
+    
+                
                 if utType.conforms(to: .image) {
-                    self.getPhoto(from: itemProvider, isLivePhoto: false)
+                    self.getPhoto(from: itemProvider, isLivePhoto: false, url: file_URL! as URL)
                 } else if utType.conforms(to: .movie) {
                     self.getVideo(from: itemProvider, typeIdentifier: typeIdentifier)
                 } else {
-                    self.getPhoto(from: itemProvider, isLivePhoto: true)
+                    self.getPhoto(from: itemProvider, isLivePhoto: true, url: file_URL! as URL)
                 }
+                
+                g.notify(queue: .main) {
+                        // completed here
+                    }
+                
             }
         }
         
         
-        private func getPhoto(from itemProvider: NSItemProvider, isLivePhoto: Bool) {
+        private func getPhoto(from itemProvider: NSItemProvider, isLivePhoto: Bool, url: URL) {
             let objectType: NSItemProviderReading.Type = !isLivePhoto ? UIImage.self : PHLivePhoto.self
             
             if itemProvider.canLoadObject(ofClass: objectType) {
@@ -82,17 +107,17 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if let error = error {
                         print(error.localizedDescription)
                     }
-                    
+                    //here we need to get URL info I think
                     if !isLivePhoto {
                         if let image = object as? UIImage {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image)) //append a new PhotoPickerModel object to list of picked media
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image, photo_url: url)) //append a new PhotoPickerModel object to list of picked media
                             }
                         }
                     } else {
                         if let livePhoto = object as? PHLivePhoto {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto))
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto, photo_url: url))
                             }
                         }
                     }

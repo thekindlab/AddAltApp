@@ -114,17 +114,9 @@ struct ContentView: View {
                                 }
                                 
                                 if(curItem != nil) { //if we still have photos to save
-                                    /*
-                                     (BUG)
-                                     not working currently, does not save caption to the library.
-                                     
-                                     
-                                     */
                                 
                                     saveCaptionThenSaveToCaptioned()
-                                   
-                                    
-                                    
+
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -295,16 +287,38 @@ struct ContentView: View {
         
         //grab current image UIImage
         var test: UIImage
+        var test_url : URL?
+        test_url = (curItem?.url)
         test = (curItem?.photo)!
+        
+        print(test_url!)
+        
         
         //get the image data
         let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
         
+        do {
+            let imageDataFromURL: Data = try Data(contentsOf: test_url!) //location might not exist, could be changed each session
+            let imageSourceURL: CGImageSource = CGImageSourceCreateWithData(imageDataFromURL as CFData, nil)!
+            
+            let imageProperties_URL = CGImageSourceCopyPropertiesAtIndex(imageSourceURL, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+            print("this is the image properties when getting photo from URL \(imageProperties_URL)")
+        }
+        catch{
+            print("bad stuff happened")
+            
+        }
+        
         
         //Source Code
-        //the image source is basically a temp file that holds the images info
+        //the image source is basically a file that holds the images info
         
         let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
+        print(test_url! as CFURL)
+   //     let imageSourceFromURL = CGImageSourceCreateWithURL( test_url! as CFURL, nil)!
+       // let imageProperties_URL = CGImageSourceCopyPropertiesAtIndex(imageSourceFromURL, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        
+        
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
         
         //modify the data
@@ -313,10 +327,8 @@ struct ContentView: View {
         
         print("before modification \(EXIFDictionary)") //check if changed before modification
         
-        //EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption// doesn't work to save because 'kCGImagePropertyPNGDescription as String' is not a valid key in the EXIF dict
-        
         //modify copy of image meta data
-        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //this saves correctly because key is in right location
+        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //saves correctly because follows Apples key Hierarchy
     
         /*
             Robert Note: In the future we need to look through Apples keys documentation and pick one that suits our caption goal. "User comment" is not a very good choice.
@@ -325,7 +337,7 @@ struct ContentView: View {
         
         
         //Destination Code
-        //an image destination is basically a temp file we create to store new modified image info to
+        //an image destination is basically a file we create to store new modified image info to
         
         let uti: CFString = CGImageSourceGetType(imageSource)! //The uniform type identifier of the image source container.
         let imageDestData: NSMutableData = NSMutableData(data: imageData) //create an Mutable Data object (when destination change, this is where the data will be changed)
@@ -335,29 +347,15 @@ struct ContentView: View {
         
         
         //add the modified meta data to the image destination temp file
-        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)//FIGURED BUG OUT , when you are changing a dict key pair, you need to follow Apples heirarchy for it to save.
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
         CGImageDestinationFinalize(destination)
         
         //check that it's been saved
         let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
         let newproperties: NSDictionary = testImage.properties as NSDictionary
         print("after modification \(newproperties)") //look at "Exif" dict key for comparison
-         
         
-        
-        //create a UIImage with the modified data and try saving it to the Captioned Album on the actual phone
-        //let captioned_image = UIImage(data: imageDestData as Data)!
-        //photoLibrary.saveImage(image: captioned_image)//saves the captioned image
-        
-        
-        photoLibrary.saveImageData(imageData: imageDestData as Data) //saves data correctly
-        
-        
-        /*saves the captioned image (NOT WORKING PROPERLY)
-          Seems that when we create a UIImage using the modified data that perhaps the meta data we added does not persist or our method of saving the image does not conserve this meta data?
-         IMPORTANT NOTE, when we check the image properties in this method we do so by getting the image's jpegData bitmap data first, this might not conserve our added metadata even
-         if we actually do change it(can't find documentation on it) so we need to check the image on the computer user the inspector tools.
-        */
+        photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image using modified meta data
         
        //might have to release the source and destination object(not sure )
         

@@ -36,6 +36,14 @@ struct PhotoPickerModel {
         mediaType = .photo
     }
     
+    init(with photo: UIImage, photo_url: URL ) {
+        self.url = photo_url
+        id = UUID().uuidString
+        self.photo = photo
+        mediaType = .photo
+    }
+    
+    
     init() {
         id = ""
     }
@@ -52,6 +60,12 @@ struct PhotoPickerModel {
         mediaType = .livePhoto
     }
     
+    init(with livePhoto: PHLivePhoto, photo_url: URL) {
+        self.url = photo_url
+        id = UUID().uuidString
+        self.livePhoto = livePhoto
+        mediaType = .livePhoto
+    }
     
     mutating func delete() {
         switch mediaType {
