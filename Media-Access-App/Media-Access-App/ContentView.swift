@@ -286,54 +286,40 @@ struct ContentView: View {
     private func saveCaptionThenSaveToCaptioned() { 
         
         //grab current image UIImage
-        var test: UIImage
-        var test_url : URL?
-        test_url = (curItem?.url)
-        test = (curItem?.photo)!
+        var current_photo: UIImage
+        current_photo = (curItem?.photo)!
         
-        print(test_url!)
+        var current_image_properties = (curItem?.image_properties)!
+        
+      
+        
+        /*
+            Robert Note: In the future we need to look through Apples keys documentation and pick one that suits our caption goal. "User comment" is not a very good choice.
+         
+         */
         
         
         //get the image data
-        let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
-        
-        do {
-            let imageDataFromURL: Data = try Data(contentsOf: test_url!) //location might not exist, could be changed each session
-            let imageSourceURL: CGImageSource = CGImageSourceCreateWithData(imageDataFromURL as CFData, nil)!
-            
-            let imageProperties_URL = CGImageSourceCopyPropertiesAtIndex(imageSourceURL, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
-            print("this is the image properties when getting photo from URL \(imageProperties_URL)")
-        }
-        catch{
-            print("bad stuff happened")
-            
-        }
-        
+        let imageData: Data = current_photo.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
+
         
         //Source Code
         //the image source is basically a file that holds the images info
         
         let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
-        print(test_url! as CFURL)
-   //     let imageSourceFromURL = CGImageSourceCreateWithURL( test_url! as CFURL, nil)!
-       // let imageProperties_URL = CGImageSourceCopyPropertiesAtIndex(imageSourceFromURL, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
         
-        
-        let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        let imageProperties = current_image_properties as NSDictionary //return properties of image at a specificied location in image source.
         
         //modify the data
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyExifDictionary as String] as? NSMutableDictionary)! //mutable dictionary copy
+        let IPTCDictionary: NSMutableDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)!
         
-        print("before modification \(EXIFDictionary)") //check if changed before modification
+        print("before modification \(mutable)") //check if changed before modification
         
         //modify copy of image meta data
-        EXIFDictionary[kCGImagePropertyExifUserComment as String] = currentCaption //saves correctly because follows Apples key Hierarchy
-    
-        /*
-            Robert Note: In the future we need to look through Apples keys documentation and pick one that suits our caption goal. "User comment" is not a very good choice.
-         
-         */
+        IPTCDictionary["ArtworkContentDescription"] = currentCaption
+        
+      
         
         
         //Destination Code
@@ -350,15 +336,16 @@ struct ContentView: View {
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
         CGImageDestinationFinalize(destination)
         
+        
+        //testing code
         //check that it's been saved
-        let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
-        let newproperties: NSDictionary = testImage.properties as NSDictionary
-        print("after modification \(newproperties)") //look at "Exif" dict key for comparison
+        //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
+        //let newproperties: NSDictionary = testImage.properties as NSDictionary
+        //print("after modification \(newproperties)") //changes are in IPTC section
+        //
+        
         
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image using modified meta data
-        
-       //might have to release the source and destination object(not sure )
-        
         
     }
         

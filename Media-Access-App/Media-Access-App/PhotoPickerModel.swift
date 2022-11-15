@@ -27,7 +27,7 @@ struct PhotoPickerModel {
     var url: URL?
     var livePhoto: PHLivePhoto?
     var mediaType: MediaType = .photo
-    
+    var image_properties: CFDictionary? = nil
     
     //constructor functions
     init(with photo: UIImage) {
@@ -38,6 +38,13 @@ struct PhotoPickerModel {
     
     init(with photo: UIImage, photo_url: URL ) {
         self.url = photo_url
+        id = UUID().uuidString
+        self.photo = photo
+        mediaType = .photo
+    }
+    
+    init(with photo: UIImage, photo_properties: CFDictionary ) {
+        self.image_properties = photo_properties
         id = UUID().uuidString
         self.photo = photo
         mediaType = .photo
@@ -62,6 +69,13 @@ struct PhotoPickerModel {
     
     init(with livePhoto: PHLivePhoto, photo_url: URL) {
         self.url = photo_url
+        id = UUID().uuidString
+        self.livePhoto = livePhoto
+        mediaType = .livePhoto
+    }
+    
+    init(with livePhoto: PHLivePhoto, photo_properties: CFDictionary) {
+        self.image_properties = photo_properties
         id = UUID().uuidString
         self.livePhoto = livePhoto
         mediaType = .livePhoto
