@@ -318,15 +318,22 @@ struct ContentView: View {
         
         //modify the data
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
-        let IPTCDictionary: NSMutableDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)!
+        var IPTCDictionary: NSMutableDictionary? = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
         
-        print("before modification \(mutable)") //check if changed before modification
+        if(IPTCDictionary == nil)
+        {
+            mutable[kCGImagePropertyIPTCDictionary as String] =  NSMutableDictionary()
+            IPTCDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
+        }
+        
+        //print("before modification \(mutable)") //check if changed before modification
+        
+        
         
         //modify copy of image meta data
-        IPTCDictionary["ArtworkContentDescription"] = currentCaption
+        IPTCDictionary!["ArtworkContentDescription"] = currentCaption
         
-      
-        
+
         
         //Destination Code
         //an image destination is basically a file we create to store new modified image info to
@@ -336,7 +343,6 @@ struct ContentView: View {
         
         let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination
 
-        
         
         //add the modified meta data to the image destination temp file
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
