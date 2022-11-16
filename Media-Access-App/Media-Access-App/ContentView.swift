@@ -297,28 +297,23 @@ struct ContentView: View {
         
         let current_image_properties = (curItem?.image_properties)!
         
-      
-        
-        /*
-            Robert Note: In the future we need to look through Apples keys documentation and pick one that suits our caption goal. "User comment" is not a very good choice.
-         
-         */
         
         
-        //get the image data
+        //get jpegData of the image to create a imgsource with
         let imageData: Data = current_photo.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
 
         
         //Source Code
         //the image source is basically a file that holds the images info
         
-        let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object. Data objects are typically used for raw data storage.
+        let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //imageSource temp file
         
-        let imageProperties = current_image_properties as NSDictionary //return properties of image at a specificied location in image source.
+        let imageProperties = current_image_properties as NSDictionary //get the image that we're trying to captions properties
         
         //modify the data
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
-        var IPTCDictionary: NSMutableDictionary? = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
+        var IPTCDictionary: NSMutableDictionary? = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary) //access the {IPTC} dict thats inside
+        
         
         if(IPTCDictionary == nil)
         {
@@ -326,8 +321,12 @@ struct ContentView: View {
             IPTCDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
         }
         
-        //print("before modification \(mutable)") //check if changed before modification
         
+        
+        //*****************************************************************************
+        //testing code
+        //print("before modification \(mutable)") //check if changed before modification
+        //******************************************************************************
         
         
         //modify copy of image meta data
@@ -349,21 +348,23 @@ struct ContentView: View {
         CGImageDestinationFinalize(destination)
         
         
+        
+        ///******************************************************
         //testing code
         //check that it's been saved
         //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
         //let newproperties: NSDictionary = testImage.properties as NSDictionary
         //print("after modification \(newproperties)") //changes are in IPTC section
         //
+        //*******************************************************
         
-        
-        photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image using modified meta data
+        photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
         
     }
     
     
     
-    private func setCaptionFromSelectedPhoto() {
+    private func setCaptionFromSelectedPhoto() { //when user selects image to caption, if it exists, fill the caption field with the images current caption
         
         let current_image_properties = (curItem?.image_properties)!
         let imageProperties = current_image_properties as NSDictionary //return properties of image at a specificied location in image source.
@@ -392,12 +393,6 @@ struct ContentView: View {
 
     
 }
-
-
-
-
-
-
 
 
 
