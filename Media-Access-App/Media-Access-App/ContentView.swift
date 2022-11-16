@@ -9,6 +9,11 @@ import SwiftUI
 import AVKit
 import UIKit
 
+enum MyError: Error {
+    case runtimeError(String)
+}
+
+
 struct ContentView: View {
     
     
@@ -150,14 +155,15 @@ struct ContentView: View {
                 List(mediaItems.items, id: \.id) { item in
                     ZStack(alignment: .topLeading) {
                         if item.mediaType == .photo {
-                            Image(uiImage: item.photo ?? UIImage())
+                              Image(uiImage: item.photo ?? UIImage())
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .onTapGesture(count:1) {
                                     curItem = item
                                     curItemID = item.id
-                                    currentCaption = "Enter Your Caption"
+                                    setCaptionFromSelectedPhoto()
                                 }
+                          
                             
                         } else if item.mediaType == .video {
                             if let url = item.url {
@@ -289,7 +295,7 @@ struct ContentView: View {
         var current_photo: UIImage
         current_photo = (curItem?.photo)!
         
-        var current_image_properties = (curItem?.image_properties)!
+        let current_image_properties = (curItem?.image_properties)!
         
       
         
@@ -348,9 +354,43 @@ struct ContentView: View {
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image using modified meta data
         
     }
+    
+    
+    
+    private func setCaptionFromSelectedPhoto() {
         
+        let current_image_properties = (curItem?.image_properties)!
+        let imageProperties = current_image_properties as NSDictionary //return properties of image at a specificied location in image source.
+       
+        let IPTCDictionary: NSMutableDictionary? = (imageProperties[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
+        if(IPTCDictionary == nil)
+        { //IPTCDictionary not set
+            
+           currentCaption = "Enter Your Caption"
+            return
+        }
+        
+        let potential_caption = IPTCDictionary!["ArtworkContentDescription"]
+        
+        if(potential_caption == nil)
+        {
+            
+           currentCaption = "Enter Your Caption"
+            return;
+        }
+        
+         currentCaption = IPTCDictionary!["ArtworkContentDescription"]! as! String // we can modify this to put the images caption here if it already exists
+        
+
+    }
+
     
 }
+
+
+
+
+
 
 
 
