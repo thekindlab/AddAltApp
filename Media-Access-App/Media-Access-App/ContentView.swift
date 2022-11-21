@@ -107,22 +107,43 @@ struct ContentView: View {
                             .background(Color.red)
                             .clipShape(Capsule())
                 
+                
+                
                             //CORE DATA TEST CODE
                 
                             /*
                             //  print local storage Button for testing
                             Button(action: {
+                                
                                 let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
                                 //this just prints out the caption for all of the saved data
                                
                             }, label: {
-                                Text("Print Local Storage").foregroundColor(Color.white)
+                                Text("Print Storage").foregroundColor(Color.white)
                             })
                             .frame(width: 100.0, height: 30.0)
                             .background(Color.blue)
                             .clipShape(Capsule())
                             //  print local storage Button for testing
-                            */
+                            
+                
+                            // delete local stroage button for testing
+                            Button(action: {
+                                
+                                //deletes all image data
+                                CoreDataManager.shared.deleteAllImageData()
+                                
+                                //this just prints out the caption for all of the saved data
+                               
+                            }, label: {
+                                Text(" Del Storage").foregroundColor(Color.white)
+                            })
+                            .frame(width: 100.0, height: 30.0)
+                            .background(Color.purple)
+                            .clipShape(Capsule())
+                            //  delete local stroage button for testing
+                            
+                             */
                 
                             //CORE DATA TEST CODE
                 
@@ -340,11 +361,12 @@ struct ContentView: View {
         }
         
         
-        
+        //CAPTION TEST CODE
         //*****************************************************************************
-        //testing code
         //print("before modification \(mutable)") //check if changed before modification
         //******************************************************************************
+        //CAPTION TEST CODE
+        
         
         
         //modify copy of image meta data
@@ -366,9 +388,10 @@ struct ContentView: View {
         CGImageDestinationFinalize(destination)
         
         
+        //CAPTION TEST CODE
         
-        ///******************************************************
-        //testing code
+        //******************************************************
+        
         //check that it's been saved
         //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
         //let newproperties: NSDictionary = testImage.properties as NSDictionary
@@ -376,16 +399,21 @@ struct ContentView: View {
         //
         //*******************************************************
         
+        //CAPTION TEST CODE
+        
+        
+        
         
         
         //CORE DATA TEST CODE
-        
+        //*******************************************************
             /*
              -add basic Photo entity to local storage using the caption to fill the attribute.
-             
+             -this is probably where we're going to end up changing some of the Core Data for an image
              */
+        
         //CoreDataManager.shared.testAddNewImage(new_caption: currentCaption)
-             
+        //*******************************************************
         
         //CORE DATA TEST CODE
         
