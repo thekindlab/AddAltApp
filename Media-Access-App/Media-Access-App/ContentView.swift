@@ -143,11 +143,11 @@ struct ContentView: View {
                             .clipShape(Capsule())
                             //  delete local stroage button for testing
                             
-                             */
+                             
                 
                             //CORE DATA TEST CODE
                 
-                
+                             */
                 
                             //submit button
                             Button(action: {
