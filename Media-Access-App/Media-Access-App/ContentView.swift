@@ -26,7 +26,9 @@ struct ContentView: View {
     @State private var curItem: PhotoPickerModel? //struct that is data structure for one photo
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
-
+    @State private var timeToCaption: Time
+    
+    
     var body: some View {
         
         //App View Stack    (what the user sees on startup )
@@ -114,7 +116,6 @@ struct ContentView: View {
                             /*
                             //  print local storage Button for testing
                             Button(action: {
-                                
                                 let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
                                 //this just prints out the caption for all of the saved data
                                
@@ -143,11 +144,11 @@ struct ContentView: View {
                             .clipShape(Capsule())
                             //  delete local stroage button for testing
                             
-                             
+                             */
                 
                             //CORE DATA TEST CODE
                 
-                             */
+                             
                 
                             //submit button
                             Button(action: {
@@ -296,7 +297,7 @@ struct ContentView: View {
             
             //Photo picker
             .sheet(isPresented: $showSheet, content: {
-                PhotoPicker(mediaItems: mediaItems) { didSelectItem in
+                PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
                     // Handle didSelectItems value here...
                     showSheet = false
                     
@@ -451,6 +452,55 @@ struct ContentView: View {
          currentCaption = IPTCDictionary!["ArtworkContentDescription"]! as! String // we can modify this to put the images caption here if it already exists
         
 
+    }
+    
+    private func savePhotoMetaDataLocally()
+    { //used to save Photo information to Core Data
+        
+        let caption_date = getCurrentDate()
+        let caption_date_epoch = Date().timeIntervalSinceReferenceDate
+        let caption = currentCaption
+        let caption_length = currentCaption.count
+        let time_to_caption = FinishCaptionTime - startCaptionTime
+        let photos_tags = "not finished"
+        
+        
+    }
+    
+    private func exportLocalData()
+    {
+        
+        
+        //TODO
+    }
+    
+    private func getCurrentDate() -> String
+    { //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
+        // get the current date and time
+        let currentDateTime = Date()
+
+        // get the user's calendar
+        let userCalendar = Calendar.current
+
+        // choose which date and time components are needed
+        let requestedComponents: Set<Calendar.Component> = [
+            .year,
+            .month,
+            .day,
+            .hour,
+            .minute,
+            .second
+        ]
+
+        // get the components
+        let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDateTime)
+
+        
+        let current_date = String(dateTimeComponents.year!) + "/"  + String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
+        
+        
+        
+        return current_date
     }
 
     
