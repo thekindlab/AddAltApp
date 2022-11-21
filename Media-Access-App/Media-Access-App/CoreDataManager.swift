@@ -86,32 +86,76 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     //Helper methods for modifying Core Data
-    func addNewImage()
+    func addNewImage() throws
     {
         
         
         //NEED TO IMPLEMENT
     }
     
-    func removeImage()
+    func removeImage() throws
     {
         
         //NEED TO IMPLEMENT
     }
     
-    func modifyImage()
+    func modifyImage() throws
     {
         
         
         //NEED TO IMPLEMENT
     }
     
+    func loadAllImageData() -> [Photo]?
+    { //return array of Photos stored in Local Storage
+        
+        
+        
+        return nil;
+        //NEED TO IMPLEMENT
+    }
     
     
     
     //test code to see if it works.
     
+    func testAddNewImage(new_caption: String)  async throws
+    {
+        let context = CoreDataManager.shared.backgroundContext() //get private context
+        
+        try await context.perform {
+                let entity = Photo.entity() //get entity component of Photo entity
+                let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
+                photo.caption = new_caption
+                try context.save()
+            }
+        
+        
+        
+    }
     
+    func testLoadAllSavedImages() -> [Photo]?
+    {
+        
+        let mainContext = CoreDataManager.shared.mainContext
+            let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        
+            do {
+                let results = try mainContext.fetch(fetchRequest)
+                for saved_photo in results{
+                    
+                    print(saved_photo.caption as Any)
+                }
+                
+                return results
+            }
+            catch {
+                debugPrint(error)
+            }
+        
+        
+        return nil;
+    }
     
     
     
