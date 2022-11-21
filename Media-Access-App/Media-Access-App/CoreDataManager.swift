@@ -22,7 +22,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
      
      example code:
      
-     CoreDataManager.shared.(function that modifies Core Data) <-use this style to modify core data using this class
+     CoreDataManager.shared.(function that modifies Core Data) <-use this style to modify core data using this class in the ContentView or other code files
     */
     
     
