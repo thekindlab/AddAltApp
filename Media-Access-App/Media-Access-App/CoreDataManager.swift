@@ -41,7 +41,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
              */
         
         
-            let container = NSPersistentContainer(name: "Media-Access-App") // <- encapsulates the apps Core Data Stack
+            let container = NSPersistentContainer(name: "Local_User_Data") // <- encapsulates the apps Core Data Stack
         
             container.loadPersistentStores(completionHandler: { _, error in //load any persistent locally stored data
                 
@@ -119,15 +119,25 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     //test code to see if it works.
     
-    func testAddNewImage(new_caption: String)  async throws
+    func testAddNewImage(new_caption: String)
     {
         let context = CoreDataManager.shared.backgroundContext() //get private context
         
-        try await context.perform {
-                let entity = Photo.entity() //get entity component of Photo entity
-                let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
-                photo.caption = new_caption
-                try context.save()
+          context.performAndWait {
+            
+              do{
+                  let entity = Photo.entity() //get entity component of Photo entity
+                  let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
+                  photo.caption = new_caption
+                  try context.save()
+                  print("context saved to local storage")
+              }
+              catch{
+                  
+                  debugPrint(error)
+              }
+              
+              
             }
         
         

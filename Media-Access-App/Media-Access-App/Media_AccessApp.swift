@@ -11,6 +11,7 @@ import SwiftUI
 
 @main
 struct Media_AccessApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

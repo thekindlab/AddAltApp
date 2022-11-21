@@ -106,7 +106,25 @@ struct ContentView: View {
                             .frame(width: 100.0, height: 30.0)
                             .background(Color.red)
                             .clipShape(Capsule())
-                            //  Cancel Button
+                
+                            //CORE DATA TEST CODE
+                
+                            /*
+                            //  print local storage Button for testing
+                            Button(action: {
+                                let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
+                                //this just prints out the caption for all of the saved data
+                               
+                            }, label: {
+                                Text("Print Local Storage").foregroundColor(Color.white)
+                            })
+                            .frame(width: 100.0, height: 30.0)
+                            .background(Color.blue)
+                            .clipShape(Capsule())
+                            //  print local storage Button for testing
+                            */
+                
+                            //CORE DATA TEST CODE
                 
                 
                 
@@ -289,7 +307,7 @@ struct ContentView: View {
     }
     
     
-    private func saveCaptionThenSaveToCaptioned() { 
+    private func saveCaptionThenSaveToCaptioned()  {
         
         //grab current image UIImage
         var current_photo: UIImage
@@ -357,6 +375,22 @@ struct ContentView: View {
         //print("after modification \(newproperties)") //changes are in IPTC section
         //
         //*******************************************************
+        
+        
+        
+        //CORE DATA TEST CODE
+        
+            /*
+             -add basic Photo entity to local storage using the caption to fill the attribute.
+             
+             */
+        //CoreDataManager.shared.testAddNewImage(new_caption: currentCaption)
+             
+        
+        //CORE DATA TEST CODE
+        
+        
+        
         
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
         
