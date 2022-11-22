@@ -112,7 +112,7 @@ struct ContentView: View {
                 
                 
                             //CORE DATA TEST CODE
-                
+                            /*
                             
                             //  print local storage Button for testing
                             Button(action: {
@@ -148,8 +148,8 @@ struct ContentView: View {
                 
                             //CORE DATA TEST CODE
                 
-                             
-                
+                            */
+                            
                             //submit button
                             Button(action: {
                                 
@@ -297,6 +297,8 @@ struct ContentView: View {
              (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
              
              */
+            
+            
             //Camera sheet
             .sheet(isPresented: self.$showCamera) {
                 ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
@@ -368,16 +370,7 @@ struct ContentView: View {
             mutable[kCGImagePropertyIPTCDictionary as String] =  NSMutableDictionary()
             IPTCDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
         }
-        
-        
-        //CAPTION TEST CODE
-        //*****************************************************************************
-        //print("before modification \(mutable)") //check if changed before modification
-        //******************************************************************************
-        //CAPTION TEST CODE
-        
-        
-        
+                
         //modify copy of image meta data
         IPTCDictionary!["ArtworkContentDescription"] = currentCaption
         
@@ -395,20 +388,6 @@ struct ContentView: View {
         //add the modified meta data to the image destination temp file
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
         CGImageDestinationFinalize(destination)
-        
-        
-        //CAPTION TEST CODE
-        
-        //******************************************************
-        
-        //check that it's been saved
-        //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
-        //let newproperties: NSDictionary = testImage.properties as NSDictionary
-        //print("after modification \(newproperties)") //changes are in IPTC section
-        //
-        //*******************************************************
-        
-        //CAPTION TEST CODE
         
         
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
@@ -444,6 +423,8 @@ struct ContentView: View {
 
     }
     
+    
+    
     private func savePhotoMetaDataLocally()
     { //used to save Photo information to Core Data
         
@@ -459,8 +440,9 @@ struct ContentView: View {
        
     }
     
+    
     private func exportLocalData()
-    {
+    {//should be function for exporting all of the local data to a remote csv file or google drive type deal. 
         
         
         //TODO

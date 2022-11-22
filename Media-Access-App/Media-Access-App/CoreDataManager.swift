@@ -204,47 +204,6 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    
-    func testAddNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
-    {
-        let context = CoreDataManager.shared.backgroundContext() //get private context
-        
-          context.performAndWait {
-            
-              do{
-                  let entity = Photo.entity() //get entity component of Photo entity
-                  let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
-                  
-                  //set photo attributes
-                  photo.caption = new_caption
-                  
-                  //notes on adding Arrays as Attributes, use transformable. PRETTY DANGEROUS.
-                  //WHEN I ADDED NIL TRANSFORMABLE CRASHED WHOLE PROGRAM HAD TO DELETE DATABASE TO GET WORKING AGAIN
-                  //BE VERY VERY CAREFUL WITH TRANSFORMABLE / DONT PUSH BROKEN PROGRAM DATABASE TO REMOTE PLEASE
-                  
-                  photo.tags = photo_tags[0] //need to figure later how to turn tags
-                  photo.caption_date_epoch  = photo_caption_date_epoch
-                  photo.caption_length = photo_caption_length
-                  photo.time_to_caption = time_to_caption
-                  photo.caption_date = photo_caption_date
-                  
-                  try context.save()
-                  print("context saved to local storage")
-              }
-              catch{
-                  
-                  debugPrint(error)
-              }
-              
-              
-            }
-        
-        
-        
-    }
-    
-    
-    
     func testLoadAllSavedImages() -> [Photo]? //some test code for printing out all the images contents
     {
         
