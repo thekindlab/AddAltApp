@@ -453,9 +453,7 @@ struct ContentView: View {
         let caption_length = currentCaption.count
         let photos_tags = "not finished"
         let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
-        print("This is the start time \(timeToCaption.getStartCaptionTime())")
-        print("this is the finish time \(timeToCaption.getFinishCaptionTime())")
-        
+
         CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), photo_tags: [photos_tags], time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
         //save the Photo meta data to Core Data with all the desired properties
        
