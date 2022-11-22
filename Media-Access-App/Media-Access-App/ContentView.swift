@@ -443,8 +443,40 @@ struct ContentView: View {
     
     private func exportLocalData()
     {//should be function for exporting all of the local data to a remote csv file or google drive type deal. 
+        /*
+        let sFileName = "localData.csv"
         
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let documentURL = URL(fileURLWithPath:
+            documentDirectoryPath).appendingPathComponent(sFileName)
         
+        let output = OutputStream.toMemory()
+        
+        //let csvWriter = CHCSVWriter(outputStream: output, encoding:
+        //    String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
+            
+        csvWriter?.writeField("PHOTO_ID")
+        csvWriter?.writeField("PHOTO_TIME")
+        csvWriter?.writeField("CAPTION")
+        csvWriter?.writeField("CAPTION_LENGTH")
+        csvWriter?.writeField("CAPTION_TIME")
+        //add more headers later
+        csvWriter?.finishLINE()
+
+        var arrOfImageData = [[String]]()
+
+        arrOfImageData.append(["", "", "", "", ""])
+        
+        for(elements) in arrOfImageData.enumerated()
+        {
+            csvWriter?.writeField(elements.element[0])
+        }
+        
+        csvWriter?.closeStream()
+        */
+        //should be used to send to a server
+        //(BOOL)writeToURL:(NSString *)url
+        //    atomically:(BOOL)useAuxiliaryFile;
         //TODO
     }
     
