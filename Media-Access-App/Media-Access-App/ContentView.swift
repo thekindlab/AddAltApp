@@ -186,7 +186,19 @@ struct ContentView: View {
                             .background(Color.green)
                             .clipShape(Capsule())
                             //submit button
-                                      
+                
+                            Button(action: {
+                                
+                               //show the Tag screenw
+                               
+                            }, label: {
+                                Text(" Tag").foregroundColor(Color.white)
+                            })
+                            .frame(width: 100.0, height: 30.0)
+                            .background(Color.purple)
+                            .clipShape(Capsule())
+                
+                
                         }
                         .padding(.bottom, 15.0)
             //Clear & Submit button Stack

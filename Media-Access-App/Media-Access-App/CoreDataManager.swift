@@ -98,7 +98,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
-    { // see testAddNewImage() to see comments about this
+    {
         
         
         /*
@@ -118,8 +118,8 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                       let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
                       
                       //set photo attributes
-                      photo.caption = new_caption
-                      photo.tags = photo_tags[0] //need to figure later how to turn tags into array thats being saved
+                      photo.caption              = new_caption
+                      photo.tags                = photo_tags[0] //need to figure later how to turn tags into array thats being saved
                       photo.caption_length      = photo_caption_length
                       photo.caption_date        = photo_caption_date
                       photo.caption_date_epoch  = photo_caption_date_epoch
