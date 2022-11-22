@@ -97,7 +97,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , photo_caption_quality: Double = 0.0, time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE") throws
+    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
     { // see testAddNewImage() to see comments about this
         
         
@@ -108,32 +108,30 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
          
          */
         
-        
         let context = CoreDataManager.shared.backgroundContext() //get private context
         
           context.performAndWait { // -> in future change to .perform() for async functionality (DON'T CHANGE NOW)
               
-              do{
-                  
-                  let entity = Photo.entity() //get entity component of Photo entity
-                  let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
-                  
-                  //set photo attributes
-                  photo.caption = new_caption
-                  photo.tags = photo_tags[0] //need to figure later how to turn tags into array thats being saved
-                  photo.caption_quality = photo_caption_quality
-                  photo.caption_length = photo_caption_length
-                  photo.caption_date = photo_caption_date
-                  photo.time_to_caption = time_to_caption
-                  
-                  try context.save()
+                  do{
+                      
+                      let entity = Photo.entity() //get entity component of Photo entity
+                      let photo = Photo(entity: entity, insertInto: context) //create new Photo entity
+                      
+                      //set photo attributes
+                      photo.caption = new_caption
+                      photo.tags = photo_tags[0] //need to figure later how to turn tags into array thats being saved
+                      photo.caption_length      = photo_caption_length
+                      photo.caption_date        = photo_caption_date
+                      photo.caption_date_epoch  = photo_caption_date_epoch
+                      photo.time_to_caption     = time_to_caption
+                      
+                      try context.save()
 
-              }
-              catch{
-                  
-                  debugPrint(error)
-              }
-              
+                  }
+                  catch{
+                      
+                      debugPrint(error)
+                  }
               
             }
         
@@ -207,7 +205,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    func testAddNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , photo_caption_quality: Double = 0.0, time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE")
+    func testAddNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
     {
         let context = CoreDataManager.shared.backgroundContext() //get private context
         
@@ -225,7 +223,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                   //BE VERY VERY CAREFUL WITH TRANSFORMABLE / DONT PUSH BROKEN PROGRAM DATABASE TO REMOTE PLEASE
                   
                   photo.tags = photo_tags[0] //need to figure later how to turn tags
-                  photo.caption_quality = photo_caption_quality
+                  photo.caption_date_epoch  = photo_caption_date_epoch
                   photo.caption_length = photo_caption_length
                   photo.time_to_caption = time_to_caption
                   photo.caption_date = photo_caption_date
@@ -257,13 +255,13 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                 let results = try mainContext.fetch(fetchRequest)
                 for saved_photo in results{
                     
-                    //print all saved meta data
+                    //print some saved meta data
                     print("This is the images caption \(saved_photo.caption as Any)")
                     print("This is the images caption length \(saved_photo.caption_length as Any)");
-                    print("This is the images caption quality \(saved_photo.caption_quality as Any)")
                     print("This is the images time to caption \(saved_photo.time_to_caption as Any)")
                     print("This is the image tags [not finished yet] \(saved_photo.tags as Any)")
-                    print()
+                    print("This is the date the image was captioned \(String(describing: saved_photo.caption_date))")
+                    print("This is the date in epoch that the image was captioned \(saved_photo.caption_date_epoch)")
                 }
                 
                 return results

@@ -26,7 +26,7 @@ struct ContentView: View {
     @State private var curItem: PhotoPickerModel? //struct that is data structure for one photo
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
-    @State private var timeToCaption: Time
+    @State private var timeToCaption = Time()
     
     
     var body: some View {
@@ -113,7 +113,7 @@ struct ContentView: View {
                 
                             //CORE DATA TEST CODE
                 
-                            /*
+                            
                             //  print local storage Button for testing
                             Button(action: {
                                 let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
@@ -144,7 +144,7 @@ struct ContentView: View {
                             .clipShape(Capsule())
                             //  delete local stroage button for testing
                             
-                             */
+                             
                 
                             //CORE DATA TEST CODE
                 
@@ -158,10 +158,18 @@ struct ContentView: View {
                                     
                                 }
                                 
-                                if(curItem != nil) { //if we still have photos to save
-                                
-                                    saveCaptionThenSaveToCaptioned()
-
+                                if(curItem != nil) { //if we have a photo to save
+                                    
+                                    
+                                    timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
+                                    
+                                    //Core Data save
+                                    savePhotoMetaDataLocally()
+                                    //Local library save
+                                    saveCaptionedPhotoToLibrary()
+                                                
+                                    timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate) //reset new start time for next caption
+                                    
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -329,7 +337,7 @@ struct ContentView: View {
     }
     
     
-    private func saveCaptionThenSaveToCaptioned()  {
+    private func saveCaptionedPhotoToLibrary()  {
         
         //grab current image UIImage
         var current_photo: UIImage
@@ -403,24 +411,6 @@ struct ContentView: View {
         //CAPTION TEST CODE
         
         
-        
-        
-        
-        //CORE DATA TEST CODE
-        //*******************************************************
-            /*
-             -add basic Photo entity to local storage using the caption to fill the attribute.
-             -this is probably where we're going to end up changing some of the Core Data for an image
-             */
-        
-        //CoreDataManager.shared.testAddNewImage(new_caption: currentCaption)
-        //*******************************************************
-        
-        //CORE DATA TEST CODE
-        
-        
-        
-        
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
         
     }
@@ -461,10 +451,14 @@ struct ContentView: View {
         let caption_date_epoch = Date().timeIntervalSinceReferenceDate
         let caption = currentCaption
         let caption_length = currentCaption.count
-        let time_to_caption = FinishCaptionTime - startCaptionTime
         let photos_tags = "not finished"
+        let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
+        print("This is the start time \(timeToCaption.getStartCaptionTime())")
+        print("this is the finish time \(timeToCaption.getFinishCaptionTime())")
         
-        
+        CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), photo_tags: [photos_tags], time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
+        //save the Photo meta data to Core Data with all the desired properties
+       
     }
     
     private func exportLocalData()

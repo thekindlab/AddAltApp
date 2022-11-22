@@ -12,30 +12,35 @@ import UIKit
 
 class Time: ObservableObject {
     
-     @State private var startCaptionTime = 0.0
-     @State private var FinishCaptionTime = 0.0
+     private var startCaptionTime = 0.0
+     private var FinishCaptionTime = 0.0
+    
+    init()
+    {
+        
+        
+    }
     
      func setStartCaptionTime(newStartTime: Double = 0.0)
     {
         self.startCaptionTime = newStartTime
-        
     }
     
     func setFinishCaptionTime(newFinishTime: Double = 0.0)
     {
-        FinishCaptionTime = newFinishTime
+        self.FinishCaptionTime = newFinishTime
         
     }
     
     func getFinishCaptionTime() -> Double
     {
-        return FinishCaptionTime
+        return self.FinishCaptionTime
         
     }
     
     func getStartCaptionTime() ->Double
     {
-        return startCaptionTime
+        return self.startCaptionTime
         
     }
     
