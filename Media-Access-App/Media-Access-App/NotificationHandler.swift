@@ -15,6 +15,13 @@ import UserNotifications
 class NotificationHandler
 
 {
+    init(){
+        
+        askPermission()
+        //I think we should probably set up weekly notifications on first startup of the app.
+        //also can think of sending notification to caption after 
+    }
+    
     func askPermission()
     {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){

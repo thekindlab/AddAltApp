@@ -27,9 +27,14 @@ struct ContentView: View {
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
     @State private var timeToCaption = Time()
+    @State private var notificationManager = NotificationHandler()
+    
+    
     
     
     var body: some View {
+        
+        
         
         //App View Stack    (what the user sees on startup )
         VStack {
@@ -49,7 +54,7 @@ struct ContentView: View {
                 Image("Media-Access")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    
+                
             } else { //if we have a curItem figure out how to display it
                 if curItem?.mediaType == .photo {
                     Image(uiImage: curItem?.photo ?? UIImage())
@@ -94,7 +99,6 @@ struct ContentView: View {
                             //  Cancel Button
                             Button(action: {
                                 print("Cancelled")
-                                
                                 if(currentCaption == "Enter Your Caption") {
                                     currentCaption = ""
                                 }
@@ -152,7 +156,6 @@ struct ContentView: View {
                             
                             //submit button
                             Button(action: {
-                                
                                 //On press
                                 if(curItem?.mediaType == .photo) { //save the current photo
                                     
