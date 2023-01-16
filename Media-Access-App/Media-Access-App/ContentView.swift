@@ -9,6 +9,9 @@ import SwiftUI
 import AVKit
 import UIKit
 
+enum MyError: Error {
+    case runtimeError(String)
+}
 
 
 struct ContentView: View {
@@ -112,17 +115,13 @@ struct ContentView: View {
                                 
                                 //On press
                                 if(curItem?.mediaType == .photo) { //save the current photo
-                                    photoLibrary.saveImage(image: (curItem?.photo)!)
                                     
                                 }
+                                
                                 if(curItem != nil) { //if we still have photos to save
-                                    /*
-                                     (BUG)
-                                     not working currently, does not save caption to the library.
-                                     
-                                     
-                                     */
+                                
                                     saveCaptionThenSaveToCaptioned()
+
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -156,14 +155,15 @@ struct ContentView: View {
                 List(mediaItems.items, id: \.id) { item in
                     ZStack(alignment: .topLeading) {
                         if item.mediaType == .photo {
-                            Image(uiImage: item.photo ?? UIImage())
+                              Image(uiImage: item.photo ?? UIImage())
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .onTapGesture(count:1) {
                                     curItem = item
                                     curItemID = item.id
-                                    currentCaption = "Enter Your Caption"
+                                    setCaptionFromSelectedPhoto()
                                 }
+                          
                             
                         } else if item.mediaType == .video {
                             if let url = item.url {
@@ -289,70 +289,110 @@ struct ContentView: View {
     }
     
     
-    /*
-     (BUG) The saveCaptionThenSaveToCaptioned function does not work correctly. It will change the UserComment but not save it to the library.
-     
-     
-     
-     
-     */
-    //Ideas: Make a  save(CIImage) in func CPA class <- prev team notes
-    private func saveCaptionThenSaveToCaptioned() {
+    private func saveCaptionThenSaveToCaptioned() { 
         
+        //grab current image UIImage
+        var current_photo: UIImage
+        current_photo = (curItem?.photo)!
         
-        var test: UIImage //image objects to represent image data of all kinds
-        test = (curItem?.photo)!
+        let current_image_properties = (curItem?.image_properties)!
         
         
         
-        
-        let imageData: Data = test.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
-        let cgImgSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //Creates an image source that reads from a Core Foundation data object.
-        //Data objects are typically used for raw data storage.
+        //get jpegData of the image to create a imgsource with
+        let imageData: Data = current_photo.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
 
-        let uti: CFString = CGImageSourceGetType(cgImgSource)! //The uniform type identifier of the image source container.
-        let dataWithEXIF: NSMutableData = NSMutableData(data: imageData) //They are typically used for data storage and are also useful in Distributed Objects applications, where data contained in data objects can be copied or moved between applications.
         
-        let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)! //image destination that writes to a Core Foundation mutable data object
+        //Source Code
+        //the image source is basically a file that holds the images info
         
-        let imageProperties = CGImageSourceCopyPropertiesAtIndex(cgImgSource, 0, nil)! as NSDictionary //return properties of image at a specificied location in image source.
+        let imageSource: CGImageSource = CGImageSourceCreateWithData(imageData as CFData, nil)! //imageSource temp file
         
+        let imageProperties = current_image_properties as NSDictionary //get the image that we're trying to captions properties
         
+        //modify the data
         let mutable: NSMutableDictionary = imageProperties.mutableCopy() as! NSMutableDictionary //create a mutable copy in the form of a dictionary
-
-        let EXIFDictionary: NSMutableDictionary = (mutable[kCGImagePropertyFileContentsDictionary as String] as? NSMutableDictionary)!//A dictionary of key-value pairs for an image that uses Exchangeable Image File Format
-        //previous teams test code for changing the caption of a picture
-
-        print("before modification \(EXIFDictionary)")
+        var IPTCDictionary: NSMutableDictionary? = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary) //access the {IPTC} dict thats inside
         
-        //save to User Comment, not sure it's where we want to save it
-        //but it does work!!! Need to save the image to test if it works
-        EXIFDictionary[kCGImageAuxiliaryDataInfoDataDescription as String] = currentCaption //index the dict at UserComment and set it to currentCaption, I don't think this should be done doesnt make sense for screen reader
-        //this seems like what we want, but nothing shows up in the "after modification" print statement
-       // EXIFDictionary[kCGImagePropertyPNGDescription as String] = currentCaption //index at png descript and set to currentCaption
-        //kCGImageAuxiliaryDataInfoDataDescription <- maybe try this?
         
-        //store the new dict settings?
-        mutable[kCGImagePropertyFileContentsDictionary as String] = EXIFDictionary //resetting the dictionary?
+        if(IPTCDictionary == nil)
+        {
+            mutable[kCGImagePropertyIPTCDictionary as String] =  NSMutableDictionary()
+            IPTCDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
+        }
+        
+        
+        
+        //*****************************************************************************
+        //testing code
+        //print("before modification \(mutable)") //check if changed before modification
+        //******************************************************************************
+        
+        
+        //modify copy of image meta data
+        IPTCDictionary!["ArtworkContentDescription"] = currentCaption
+        
 
-        CGImageDestinationAddImageFromSource(destination, cgImgSource, 0, (mutable as CFDictionary))
+        
+        //Destination Code
+        //an image destination is basically a file we create to store new modified image info to
+        
+        let uti: CFString = CGImageSourceGetType(imageSource)! //The uniform type identifier of the image source container.
+        let imageDestData: NSMutableData = NSMutableData(data: imageData) //create an Mutable Data object (when destination change, this is where the data will be changed)
+        
+        let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination
+
+        
+        //add the modified meta data to the image destination temp file
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
         CGImageDestinationFinalize(destination)
-
-        //test image, check if
-        let testImage: CIImage = CIImage(data: dataWithEXIF as Data, options: nil)! //try testing if the changes were saved
         
         
-        let newproperties: NSDictionary = testImage.properties as NSDictionary
-        print("after modification \(newproperties)")
         
-        photoLibrary.saveImage(image: UIImage(ciImage: testImage))
+        ///******************************************************
+        //testing code
+        //check that it's been saved
+        //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
+        //let newproperties: NSDictionary = testImage.properties as NSDictionary
+        //print("after modification \(newproperties)") //changes are in IPTC section
+        //
+        //*******************************************************
         
+        photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
         
     }
+    
+    
+    
+    private func setCaptionFromSelectedPhoto() { //when user selects image to caption, if it exists, fill the caption field with the images current caption
         
+        let current_image_properties = (curItem?.image_properties)!
+        let imageProperties = current_image_properties as NSDictionary //return properties of image at a specificied location in image source.
+       
+        let IPTCDictionary: NSMutableDictionary? = (imageProperties[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
+        if(IPTCDictionary == nil)
+        { //IPTCDictionary not set
+            
+           currentCaption = "Enter Your Caption"
+            return
+        }
+        
+        let potential_caption = IPTCDictionary!["ArtworkContentDescription"]
+        
+        if(potential_caption == nil)
+        {
+            
+           currentCaption = "Enter Your Caption"
+            return;
+        }
+        
+         currentCaption = IPTCDictionary!["ArtworkContentDescription"]! as! String // we can modify this to put the images caption here if it already exists
+        
+
+    }
+
     
 }
-
 
 
 

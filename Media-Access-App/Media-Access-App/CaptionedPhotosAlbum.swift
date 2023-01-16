@@ -89,23 +89,31 @@ class CaptionedPhotoAlbum: NSObject { //Class Captioned PhotoAlbum inherits from
         return nil
     }
 
-    func saveImage(image: UIImage) {
+    func saveImageData(imageData: Data)
+    {
+       
         if assetCollection == nil {
+            print("error upstream")
             return                          // if there was an error upstream, skip the save
         }
 
+        
         PHPhotoLibrary.shared().performChanges({
-            let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                let assetRequest = PHAssetCreationRequest.forAsset()
+                assetRequest.addResource(with: .photo, data: imageData, options: nil)
             
+                let assetPlaceHolder = assetRequest.placeholderForCreatedAsset
+                let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.assetCollection)
+                let enumeration: NSArray = [assetPlaceHolder!]
+                albumChangeRequest!.addAssets(enumeration)
             
-            let assetPlaceHolder = assetChangeRequest.placeholderForCreatedAsset
-            
-            
-            let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.assetCollection)
-            let enumeration: NSArray = [assetPlaceHolder!]
-            albumChangeRequest!.addAssets(enumeration)
-            
-
-        }, completionHandler: nil)
+            }, completionHandler: { success, error in
+                print("Finished adding the asset to the album. \(success ? "Success": String(describing: error))")
+ 
+            })
+        
+        
     }
+    
+
 }

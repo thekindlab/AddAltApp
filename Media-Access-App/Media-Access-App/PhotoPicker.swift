@@ -18,6 +18,8 @@ struct PhotoPicker: UIViewControllerRepresentable {
     @ObservedObject var mediaItems: PickedMediaItems
     var didFinishPicking: (_ didSelectItems: Bool) -> Void
     
+    
+    //makes a UI View Controller
     func makeUIViewController(context: Context) -> PHPickerViewController { //constructs a Photo Picker Controller
         
         var config = PHPickerConfiguration()
@@ -48,33 +50,76 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            
+            
             photoPicker.didFinishPicking(!results.isEmpty)
             
-            guard !results.isEmpty else {
+            
+            guard !results.isEmpty else { //if no pictures picked, return
                 return
             }
             
             
-            for result in results {
+            
+            let g = DispatchGroup()
+            
+            
+            for result in results { //for each photo chosen from library.
+                
+                g.enter()
+                
                 let itemProvider = result.itemProvider
                 
+                var image_properties: CFDictionary?
                 
-                guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first,
+                guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first, //get the images type identifier
                       let utType = UTType(typeIdentifier)
                 else { continue }
                 
+                itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { (url, error) in //get the more verbose image properties using the image URL from a temp file
+                    
+                    guard let file_url = url else {return }
+                
+                    //get the image properties from the images URL
+                    do {
+                        let imageDataFromURL: Data = try Data(contentsOf: file_url) //create a data object from the URL of the temp file
+                        let imageSourceURL: CGImageSource = CGImageSourceCreateWithData(imageDataFromURL as CFData, nil)!
+                        
+                        image_properties = CGImageSourceCopyPropertiesAtIndex(imageSourceURL, 0, nil)! as NSDictionary //return verbose properties for the image using a temp image URL
+                    }
+                    catch{
+                        print("\(error)")
+                    }
+                    
+                    
+                    g.leave()
+                    
+                }
+                
+                
+                
+                //dangerous!! could result in deadlock, need to implement dispatch.async in case this fails and never leaves.
+                g.wait()
+                
+    
+                
                 if utType.conforms(to: .image) {
-                    self.getPhoto(from: itemProvider, isLivePhoto: false)
+                    self.getPhoto(from: itemProvider, isLivePhoto: false, image_properties: image_properties!)
                 } else if utType.conforms(to: .movie) {
                     self.getVideo(from: itemProvider, typeIdentifier: typeIdentifier)
                 } else {
-                    self.getPhoto(from: itemProvider, isLivePhoto: true)
+                    self.getPhoto(from: itemProvider, isLivePhoto: true, image_properties: image_properties!)
                 }
+                
+                g.notify(queue: .main) {
+                        // completed here
+                    }
+                
             }
         }
         
         
-        private func getPhoto(from itemProvider: NSItemProvider, isLivePhoto: Bool) {
+        private func getPhoto(from itemProvider: NSItemProvider, isLivePhoto: Bool, image_properties: CFDictionary) {
             let objectType: NSItemProviderReading.Type = !isLivePhoto ? UIImage.self : PHLivePhoto.self
             
             if itemProvider.canLoadObject(ofClass: objectType) {
@@ -82,17 +127,17 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if let error = error {
                         print(error.localizedDescription)
                     }
-                    
+                    //here we need to get URL info I think
                     if !isLivePhoto {
                         if let image = object as? UIImage {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image)) //append a new PhotoPickerModel object to list of picked media
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image, photo_properties: image_properties)) //append a new PhotoPickerModel object to list of picked media
                             }
                         }
                     } else {
                         if let livePhoto = object as? PHLivePhoto {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto))
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto, photo_properties: image_properties))
                             }
                         }
                     }

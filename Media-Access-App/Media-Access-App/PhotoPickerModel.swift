@@ -27,7 +27,7 @@ struct PhotoPickerModel {
     var url: URL?
     var livePhoto: PHLivePhoto?
     var mediaType: MediaType = .photo
-    
+    var image_properties: CFDictionary? = nil
     
     //constructor functions
     init(with photo: UIImage) {
@@ -35,6 +35,21 @@ struct PhotoPickerModel {
         self.photo = photo
         mediaType = .photo
     }
+    
+    init(with photo: UIImage, photo_url: URL ) {
+        self.url = photo_url
+        id = UUID().uuidString
+        self.photo = photo
+        mediaType = .photo
+    }
+    
+    init(with photo: UIImage, photo_properties: CFDictionary ) {
+        self.image_properties = photo_properties
+        id = UUID().uuidString
+        self.photo = photo
+        mediaType = .photo
+    }
+    
     
     init() {
         id = ""
@@ -52,6 +67,19 @@ struct PhotoPickerModel {
         mediaType = .livePhoto
     }
     
+    init(with livePhoto: PHLivePhoto, photo_url: URL) {
+        self.url = photo_url
+        id = UUID().uuidString
+        self.livePhoto = livePhoto
+        mediaType = .livePhoto
+    }
+    
+    init(with livePhoto: PHLivePhoto, photo_properties: CFDictionary) {
+        self.image_properties = photo_properties
+        id = UUID().uuidString
+        self.livePhoto = livePhoto
+        mediaType = .livePhoto
+    }
     
     mutating func delete() {
         switch mediaType {
@@ -78,7 +106,7 @@ class PickedMediaItems: ObservableObject {
     //functions for manipulating array of photos
     var size: Int = 0
     
-    func getSize() -> Int {
+    func getSize() -> Int { //what is the purpose of this code? not used anywhere I don't think
         return size
     }
     
@@ -90,6 +118,7 @@ class PickedMediaItems: ObservableObject {
     func del(index: Int) {
         
         items.remove(at: index)
+        size -= 1
     }
     
     
@@ -100,6 +129,7 @@ class PickedMediaItems: ObservableObject {
         }
         
         items.removeAll()
+        size = 0
     }
     
 
@@ -113,14 +143,14 @@ class PickedMediaItems: ObservableObject {
         }
     }
     
-    func getNext(item: String) -> PhotoPickerModel {
+    func getNext(item: String) -> PhotoPickerModel { //need to rewrite code, seems badly written. Should implement size variable I believe. 
         if(items.count == 1) {
             //returns an empty PhotoPickerModel
             return PhotoPickerModel()
         }
         for (index, _) in items.enumerated() {
             if(item == items[index].id) {
-                if(!(index > items.count-1)) {
+                if(!(index > items.count-2)) {
                     return items[index+1]
                 }
                 else {
