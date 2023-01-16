@@ -114,36 +114,36 @@ struct ContentView: View {
                             //CORE DATA TEST CODE
                             /*
                             
-                            //  print local storage Button for testing
-                            Button(action: {
-                                let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
-                                //this just prints out the caption for all of the saved data
-                               
-                            }, label: {
-                                Text("Print Storage").foregroundColor(Color.white)
-                            })
-                            .frame(width: 100.0, height: 30.0)
-                            .background(Color.blue)
-                            .clipShape(Capsule())
-                            //  print local storage Button for testing
-                            
-                
-                            // delete local stroage button for testing
-                            Button(action: {
+                                //  print local storage Button for testing
+                                Button(action: {
+                                    let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
+                                    //this just prints out the caption for all of the saved data
+                                   
+                                }, label: {
+                                    Text("Print Storage").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.blue)
+                                .clipShape(Capsule())
+                                //  print local storage Button for testing
                                 
-                                //deletes all image data
-                                CoreDataManager.shared.deleteAllImageData()
+                    
+                                // delete local stroage button for testing
+                                Button(action: {
+                                    
+                                    //deletes all image data
+                                    CoreDataManager.shared.deleteAllImageData()
+                                    
+                                    //this just prints out the caption for all of the saved data
+                                   
+                                }, label: {
+                                    Text(" Del Storage").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.purple)
+                                .clipShape(Capsule())
+                                //  delete local stroage button for testing
                                 
-                                //this just prints out the caption for all of the saved data
-                               
-                            }, label: {
-                                Text(" Del Storage").foregroundColor(Color.white)
-                            })
-                            .frame(width: 100.0, height: 30.0)
-                            .background(Color.purple)
-                            .clipShape(Capsule())
-                            //  delete local stroage button for testing
-                            
                              
                 
                             //CORE DATA TEST CODE
@@ -167,8 +167,9 @@ struct ContentView: View {
                                     savePhotoMetaDataLocally()
                                     //Local library save
                                     saveCaptionedPhotoToLibrary()
-                                                
-                                    timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate) //reset new start time for next caption
+                                    
+                                    //reset new start time for next caption
+                                    timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
                                     
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
@@ -186,18 +187,7 @@ struct ContentView: View {
                             .background(Color.green)
                             .clipShape(Capsule())
                             //submit button
-                
-                            Button(action: {
-                                
-                               //show the Tag screenw
-                               
-                            }, label: {
-                                Text(" Tag").foregroundColor(Color.white)
-                            })
-                            .frame(width: 100.0, height: 30.0)
-                            .background(Color.purple)
-                            .clipShape(Capsule())
-                
+            
                 
                         }
                         .padding(.bottom, 15.0)
@@ -444,10 +434,9 @@ struct ContentView: View {
         let caption_date_epoch = Date().timeIntervalSinceReferenceDate
         let caption = currentCaption
         let caption_length = currentCaption.count
-        let photos_tags = "not finished"
         let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
 
-        CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), photo_tags: [photos_tags], time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
+        CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
         //save the Photo meta data to Core Data with all the desired properties
        
     }

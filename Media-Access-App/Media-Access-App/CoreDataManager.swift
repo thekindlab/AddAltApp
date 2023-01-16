@@ -97,7 +97,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0, photo_tags: [String] = ["no tags"] , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
+    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0 , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
     {
         
         
@@ -119,7 +119,6 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                       
                       //set photo attributes
                       photo.caption              = new_caption
-                      photo.tags                = photo_tags[0] //need to figure later how to turn tags into array thats being saved
                       photo.caption_length      = photo_caption_length
                       photo.caption_date        = photo_caption_date
                       photo.caption_date_epoch  = photo_caption_date_epoch
@@ -218,7 +217,6 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                     print("This is the images caption \(saved_photo.caption as Any)")
                     print("This is the images caption length \(saved_photo.caption_length as Any)");
                     print("This is the images time to caption \(saved_photo.time_to_caption as Any)")
-                    print("This is the image tags [not finished yet] \(saved_photo.tags as Any)")
                     print("This is the date the image was captioned \(String(describing: saved_photo.caption_date))")
                     print("This is the date in epoch that the image was captioned \(saved_photo.caption_date_epoch)")
                 }
