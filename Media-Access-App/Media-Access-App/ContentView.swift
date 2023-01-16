@@ -26,7 +26,9 @@ struct ContentView: View {
     @State private var curItem: PhotoPickerModel? //struct that is data structure for one photo
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
-
+    @State private var timeToCaption = Time()
+    
+    
     var body: some View {
         
         //App View Stack    (what the user sees on startup )
@@ -106,10 +108,48 @@ struct ContentView: View {
                             .frame(width: 100.0, height: 30.0)
                             .background(Color.red)
                             .clipShape(Capsule())
-                            //  Cancel Button
                 
                 
                 
+                            //CORE DATA TEST CODE
+                            /*
+                            
+                                //  print local storage Button for testing
+                                Button(action: {
+                                    let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
+                                    //this just prints out the caption for all of the saved data
+                                   
+                                }, label: {
+                                    Text("Print Storage").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.blue)
+                                .clipShape(Capsule())
+                                //  print local storage Button for testing
+                                
+                    
+                                // delete local stroage button for testing
+                                Button(action: {
+                                    
+                                    //deletes all image data
+                                    CoreDataManager.shared.deleteAllImageData()
+                                    
+                                    //this just prints out the caption for all of the saved data
+                                   
+                                }, label: {
+                                    Text(" Del Storage").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.purple)
+                                .clipShape(Capsule())
+                                //  delete local stroage button for testing
+                                
+                             
+                
+                            //CORE DATA TEST CODE
+                
+                            */
+                            
                             //submit button
                             Button(action: {
                                 
@@ -118,10 +158,19 @@ struct ContentView: View {
                                     
                                 }
                                 
-                                if(curItem != nil) { //if we still have photos to save
-                                
-                                    saveCaptionThenSaveToCaptioned()
-
+                                if(curItem != nil) { //if we have a photo to save
+                                    
+                                    
+                                    timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
+                                    
+                                    //Core Data save
+                                    savePhotoMetaDataLocally()
+                                    //Local library save
+                                    saveCaptionedPhotoToLibrary()
+                                    
+                                    //reset new start time for next caption
+                                    timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
+                                    
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)
                                     if(nextItem.id != "") {
@@ -138,7 +187,8 @@ struct ContentView: View {
                             .background(Color.green)
                             .clipShape(Capsule())
                             //submit button
-                                      
+            
+                
                         }
                         .padding(.bottom, 15.0)
             //Clear & Submit button Stack
@@ -249,6 +299,8 @@ struct ContentView: View {
              (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
              
              */
+            
+            
             //Camera sheet
             .sheet(isPresented: self.$showCamera) {
                 ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
@@ -257,7 +309,7 @@ struct ContentView: View {
             
             //Photo picker
             .sheet(isPresented: $showSheet, content: {
-                PhotoPicker(mediaItems: mediaItems) { didSelectItem in
+                PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
                     // Handle didSelectItems value here...
                     showSheet = false
                     
@@ -289,7 +341,7 @@ struct ContentView: View {
     }
     
     
-    private func saveCaptionThenSaveToCaptioned() { 
+    private func saveCaptionedPhotoToLibrary()  {
         
         //grab current image UIImage
         var current_photo: UIImage
@@ -320,15 +372,7 @@ struct ContentView: View {
             mutable[kCGImagePropertyIPTCDictionary as String] =  NSMutableDictionary()
             IPTCDictionary = (mutable[kCGImagePropertyIPTCDictionary as String] as? NSMutableDictionary)
         }
-        
-        
-        
-        //*****************************************************************************
-        //testing code
-        //print("before modification \(mutable)") //check if changed before modification
-        //******************************************************************************
-        
-        
+                
         //modify copy of image meta data
         IPTCDictionary!["ArtworkContentDescription"] = currentCaption
         
@@ -347,16 +391,6 @@ struct ContentView: View {
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
         CGImageDestinationFinalize(destination)
         
-        
-        
-        ///******************************************************
-        //testing code
-        //check that it's been saved
-        //let testImage: CIImage = CIImage(data: imageDestData as Data, options: nil)! //imageDestData is where dest changes occur
-        //let newproperties: NSDictionary = testImage.properties as NSDictionary
-        //print("after modification \(newproperties)") //changes are in IPTC section
-        //
-        //*******************************************************
         
         photoLibrary.saveImageData(imageData: imageDestData as Data) //save the image to the phone's library using the modified meta data
         
@@ -389,6 +423,91 @@ struct ContentView: View {
          currentCaption = IPTCDictionary!["ArtworkContentDescription"]! as! String // we can modify this to put the images caption here if it already exists
         
 
+    }
+    
+    
+    
+    private func savePhotoMetaDataLocally()
+    { //used to save Photo information to Core Data
+        
+        let caption_date = getCurrentDate()
+        let caption_date_epoch = Date().timeIntervalSinceReferenceDate
+        let caption = currentCaption
+        let caption_length = currentCaption.count
+        let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
+
+        CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
+        //save the Photo meta data to Core Data with all the desired properties
+       
+    }
+    
+    
+    private func exportLocalData()
+    {//should be function for exporting all of the local data to a remote csv file or google drive type deal. 
+        /*
+        let sFileName = "localData.csv"
+        
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let documentURL = URL(fileURLWithPath:
+            documentDirectoryPath).appendingPathComponent(sFileName)
+        
+        let output = OutputStream.toMemory()
+        
+        //let csvWriter = CHCSVWriter(outputStream: output, encoding:
+        //    String.Encoding.utf8.rawValue, delimiter: ",".utf16.first!)
+            
+        csvWriter?.writeField("PHOTO_ID")
+        csvWriter?.writeField("PHOTO_TIME")
+        csvWriter?.writeField("CAPTION")
+        csvWriter?.writeField("CAPTION_LENGTH")
+        csvWriter?.writeField("CAPTION_TIME")
+        //add more headers later
+        csvWriter?.finishLINE()
+
+        var arrOfImageData = [[String]]()
+
+        arrOfImageData.append(["", "", "", "", ""])
+        
+        for(elements) in arrOfImageData.enumerated()
+        {
+            csvWriter?.writeField(elements.element[0])
+        }
+        
+        csvWriter?.closeStream()
+        */
+        //should be used to send to a server
+        //(BOOL)writeToURL:(NSString *)url
+        //    atomically:(BOOL)useAuxiliaryFile;
+        //TODO
+    }
+    
+    private func getCurrentDate() -> String
+    { //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
+        // get the current date and time
+        let currentDateTime = Date()
+
+        // get the user's calendar
+        let userCalendar = Calendar.current
+
+        // choose which date and time components are needed
+        let requestedComponents: Set<Calendar.Component> = [
+            .year,
+            .month,
+            .day,
+            .hour,
+            .minute,
+            .second
+        ]
+
+        // get the components
+        let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDateTime)
+
+        
+        let current_date = String(dateTimeComponents.year!) + "/"  + String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
+        
+        
+        
+        return current_date
     }
 
     

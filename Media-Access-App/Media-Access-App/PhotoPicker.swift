@@ -12,10 +12,14 @@
 import SwiftUI
 import PhotosUI
 
+
+
 struct PhotoPicker: UIViewControllerRepresentable {
     typealias UIViewControllerType = PHPickerViewController
     
     @ObservedObject var mediaItems: PickedMediaItems
+    @ObservedObject var captionTimeControl: Time
+    
     var didFinishPicking: (_ didSelectItems: Bool) -> Void
     
     
@@ -131,7 +135,12 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if !isLivePhoto {
                         if let image = object as? UIImage {
                             DispatchQueue.main.async {
-                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image, photo_properties: image_properties)) //append a new PhotoPickerModel object to list of picked media
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image, photo_properties: image_properties)) //append a newPhotoPickerModel object to list of picked media
+                                
+                                let start_time = Date().timeIntervalSinceReferenceDate
+                                self.photoPicker.captionTimeControl.setStartCaptionTime(newStartTime: start_time)
+                                
+                                
                             }
                         }
                     } else {

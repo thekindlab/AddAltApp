@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		733D0508292C273300837208 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733D0507292C273300837208 /* Time.swift */; };
+		735A40EE292B1A78001EFDB8 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735A40ED292B1A78001EFDB8 /* CoreDataManager.swift */; };
+		735A40F4292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */; };
 		73C4D8DA28F481820085CE17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 73C4D8D928F481820085CE17 /* Assets.xcassets */; };
 		73C4D8DD28F481820085CE17 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 73C4D8DC28F481820085CE17 /* Preview Assets.xcassets */; };
 		73C4D8E728F481820085CE17 /* Media_Access_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D8E628F481820085CE17 /* Media_Access_AppTests.swift */; };
@@ -40,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		733D0507292C273300837208 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		735A40ED292B1A78001EFDB8 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		735A40F3292B4EB0001EFDB8 /* Local_User_Data.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Local_User_Data.xcdatamodel; sourceTree = "<group>"; };
 		73C4D8D228F481810085CE17 /* Media-Access-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media-Access-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73C4D8D928F481820085CE17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		73C4D8DC28F481820085CE17 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 		73C4D8D428F481810085CE17 /* Media-Access-App */ = {
 			isa = PBXGroup;
 			children = (
+				735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */,
 				73C4D90428F4825E0085CE17 /* CaptionedPhotosAlbum.swift */,
 				73C4D90A28F4825E0085CE17 /* ContentView.swift */,
 				73C4D90528F4825E0085CE17 /* Coordinator.swift */,
@@ -120,6 +127,8 @@
 				73C4D8D928F481820085CE17 /* Assets.xcassets */,
 				73C4D8DB28F481820085CE17 /* Preview Content */,
 				73C4D90128F4825D0085CE17 /* Media-Access-App-Bridging-Header.h */,
+				735A40ED292B1A78001EFDB8 /* CoreDataManager.swift */,
+				733D0507292C273300837208 /* Time.swift */,
 			);
 			path = "Media-Access-App";
 			sourceTree = "<group>";
@@ -280,7 +289,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				735A40F4292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld in Sources */,
 				73C4D90E28F4825E0085CE17 /* Coordinator.swift in Sources */,
+				733D0508292C273300837208 /* Time.swift in Sources */,
 				73C4D90D28F4825E0085CE17 /* CaptionedPhotosAlbum.swift in Sources */,
 				73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */,
 				73C4D90C28F4825E0085CE17 /* PhotoPicker.swift in Sources */,
@@ -288,6 +299,7 @@
 				73C4D90B28F4825E0085CE17 /* Media_AccessApp.swift in Sources */,
 				73C4D90F28F4825E0085CE17 /* ImagePickerView.swift in Sources */,
 				73C4D91028F4825E0085CE17 /* LivePhotoView.swift in Sources */,
+				735A40EE292B1A78001EFDB8 /* CoreDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +627,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				735A40F3292B4EB0001EFDB8 /* Local_User_Data.xcdatamodel */,
+			);
+			currentVersion = 735A40F3292B4EB0001EFDB8 /* Local_User_Data.xcdatamodel */;
+			path = Local_User_Data.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 73C4D8CA28F481810085CE17 /* Project object */;
 }
