@@ -136,6 +136,39 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
+    func addNewStartupInfo(firstUse:Bool = true, captionNumber: Int, dayUse:Int)
+    {
+        
+        deleteStartupData() //delete the startup data and replace more current data. 
+        
+        
+        let context = CoreDataManager.shared.backgroundContext()
+        
+        context.performAndWait {
+            
+            do{
+                
+                let entity = Startup.entity()
+                let dataOnStartup = Startup(entity: entity, insertInto: context)
+                
+                dataOnStartup.dayOfUse =  Int64(dayUse);
+                dataOnStartup.firstUse = firstUse
+                dataOnStartup.numberOfCaptions = Int64(captionNumber);
+                
+                try context.save()
+                
+            }
+            catch
+            {
+                
+                debugPrint(error)
+            }
+            
+        }
+        
+        
+    }
+    
     func removeImage(imageID: String = "") throws
     {
         
@@ -167,6 +200,27 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
+    func loadStartUp() -> [Startup]?
+    {
+        
+        let mainContext = CoreDataManager.shared.mainContext
+        let fetchRequest: NSFetchRequest<Startup> = Startup.fetchRequest()
+        
+        do{
+            
+            let result = try mainContext.fetch(fetchRequest)
+            return result
+        }
+        catch{
+            
+            debugPrint(error)
+        }
+        
+        return nil;
+        
+        
+    }
+    
     
     func deleteAllImageData()
     {//deletes all Photos entity stored in Local_User_Data
@@ -187,6 +241,30 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         }
         
         print("deleted all locally stored image data")
+    }
+    
+    func deleteStartupData()
+    {//deletes the startup data
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Startup")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let myContext = CoreDataManager.shared.mainContext
+        
+        
+        do {
+            
+            try myContext.execute(deleteRequest)
+            try myContext.save()
+            
+        } catch let error as NSError {
+            
+            debugPrint(error)
+        }
+        
+        print("deleted all locally stored Startup data")
+        
+        
+        
     }
     
     

@@ -18,6 +18,46 @@ class NotificationHandler
     init(){
         
         askPermission()
+        
+        //
+        let startupDataWrapper = CoreDataManager.shared.loadStartUp()
+        
+        
+        if(startupDataWrapper == nil)
+        {
+            
+            
+        }
+        else
+        {
+            
+            let startUpData = (startupDataWrapper!)
+            
+            if(startUpData.count > 0 )
+            { //there exists some startup data to use
+                
+                print(startUpData[0].firstUse)
+            }
+            else
+            {
+                
+            CoreDataManager.shared.addNewStartupInfo(captionNumber: 0, dayUse: 1) //should probably be doing this in like a StartupHandler Class
+                
+                
+            }
+            
+            
+           
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         //I think we should probably set up weekly notifications on first startup of the app.
         //also can think of sending notification to caption after 
     }
