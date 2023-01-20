@@ -20,36 +20,7 @@ class NotificationHandler
         askPermission()
         
         //
-        let startupDataWrapper = CoreDataManager.shared.loadStartUp()
-        
-        
-        if(startupDataWrapper == nil)
-        {
-            
-            
-        }
-        else
-        {
-            
-            let startUpData = (startupDataWrapper!)
-            
-            if(startUpData.count > 0 )
-            { //there exists some startup data to use
-                
-                print(startUpData[0].firstUse)
-            }
-            else
-            {
-                
-            CoreDataManager.shared.addNewStartupInfo(captionNumber: 0, dayUse: 1) //should probably be doing this in like a StartupHandler Class
-                
-                
-            }
-            
-            
-           
-            
-        }
+       
         
         
         
@@ -118,6 +89,12 @@ class NotificationHandler
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
         
+        
+        
+    }
+    
+    func scheduleWeeklyAppNotifications()
+    {
         
         
     }
