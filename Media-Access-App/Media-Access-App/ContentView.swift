@@ -28,7 +28,7 @@ struct ContentView: View {
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
     @State private var timeToCaption = Time()
     @State private var notificationManager = NotificationHandler()
-    
+    @State private var startupManager = StartupHandler(notif_handler : NotificationHandler())
     
     
     
@@ -115,16 +115,16 @@ struct ContentView: View {
                 
                 
                 
-                            //CORE DATA TEST CODE
+                            //notif Scheduler test code
+                           
                             /*
-                            
                                 //  print local storage Button for testing
                                 Button(action: {
-                                    let saved_photos = CoreDataManager.shared.testLoadAllSavedImages()
+                                    self.notificationManager.sendNotification(date: Date(), type: "time", timeInterval: 10.0, title: "new Notif", body: "new notif body")
                                     //this just prints out the caption for all of the saved data
                                    
                                 }, label: {
-                                    Text("Print Storage").foregroundColor(Color.white)
+                                    Text("schedule new").foregroundColor(Color.white)
                                 })
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.blue)
@@ -136,23 +136,22 @@ struct ContentView: View {
                                 Button(action: {
                                     
                                     //deletes all image data
-                                    CoreDataManager.shared.deleteAllImageData()
+                                    self.notificationManager.removeAppNotifications()
                                     
                                     //this just prints out the caption for all of the saved data
                                    
                                 }, label: {
-                                    Text(" Del Storage").foregroundColor(Color.white)
+                                    Text(" stop all schedule notifications").foregroundColor(Color.white)
                                 })
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.purple)
                                 .clipShape(Capsule())
                                 //  delete local stroage button for testing
                                 
-                             
+                             */
                 
-                            //CORE DATA TEST CODE
+                            //Notification scheduling test code. 
                 
-                            */
                             
                             //submit button
                             Button(action: {

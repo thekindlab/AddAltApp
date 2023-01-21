@@ -10,11 +10,13 @@ import Foundation
 
 class StartupHandler
 {
+    private var notif_handler:NotificationHandler?
     
     init(notif_handler: NotificationHandler)
     {
+        self.notif_handler = notif_handler
         checkFirstAppUse()
-        
+      
     }
     
     
@@ -43,7 +45,8 @@ class StartupHandler
             { //no startup data available, lets create some. 
                 
                 handleNoStartupData() //create a new Startup Core Data entity
-                
+                notif_handler?.removeAppNotifications()
+                notif_handler?.scheduleWeeklyAppNotifications()
                 
             }
             
@@ -63,7 +66,7 @@ class StartupHandler
     
     func updateStartupInformation()
     {
-        
+    
         
     }
     

@@ -19,18 +19,6 @@ class NotificationHandler
         
         askPermission()
         
-        //
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        //I think we should probably set up weekly notifications on first startup of the app.
-        //also can think of sending notification to caption after 
     }
     
     func askPermission()
@@ -95,6 +83,15 @@ class NotificationHandler
     
     func scheduleWeeklyAppNotifications()
     {
+        print("we are trying to schedule weekly notifications")
+    
+        
+    }
+    
+    func removeAppNotifications()
+    {
+        
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         
     }
