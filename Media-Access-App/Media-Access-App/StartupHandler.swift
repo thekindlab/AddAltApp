@@ -57,9 +57,16 @@ class StartupHandler
     
     func handleNoStartupData()
     {
-        
+        var number_of_captions = 0;
         let image_data = CoreDataManager.shared.loadAllImageData()
-        let number_of_captions = image_data!.count
+        
+        if(image_data != nil)
+        {
+            number_of_captions = image_data!.count
+            
+        }
+        
+        
 
         CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date() )
 

@@ -135,11 +135,49 @@ class NotificationHandler
         printAllScheduledNotifications()
     }
     
-    func schedulingNotificationAlgorithm()
+    func schedulingFrequencyNotificationAlgorithm()
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
+        
+        let startup_Info = CoreDataManager.shared.loadStartUp()
+        var app_usage_stat = 0.0
+        let usage_minimum = 0.4
+        if(startup_Info == nil)
+        {
+            print("error loading startup info")
+        }
+        else
+        {
+            if(startup_Info!.count < 1)
+            {
+                print("no startup information exists")
+            }
+            else
+            {
+                let current_startup_Info = startup_Info![0]
+                
+                let daysOfUse = current_startup_Info.daysOfUse
+                let numberOfCaptions = current_startup_Info.numberOfCaptions
+                
+                if(numberOfCaptions != 0 && daysOfUse != 0)
+                {
+                    app_usage_stat = Double(numberOfCaptions)/Double(daysOfUse)
+                    
+                    if(app_usage_stat < usage_minimum)
+                    {
+                        
+                        //schedule for some day in near future.
+                    }
+                    
+                }
+                
+            }
+            
+        }
         
         
     }
+    
+    
     
     func printAllScheduledNotifications()
     {
