@@ -21,6 +21,7 @@ class NotificationHandler
         
     }
     
+    //get permission for notifications from user. NOTE this will only show up the first time a user uses an app.
     func askPermission()
     {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){
@@ -42,7 +43,7 @@ class NotificationHandler
         
     }
     
-    
+    //Basic Notification Scheduling tools
     func sendNotification(date: Date, type: String, timeInterval:Double, title:String, body: String)
     {
         
@@ -98,6 +99,7 @@ class NotificationHandler
         UNUserNotificationCenter.current().add(request)
     }
     
+    //Scheduling Procedures
     func scheduleWeeklyAppNotifications(title:String, body:String, day:Int, min: Int, hour: Int)
     {
         
@@ -119,17 +121,18 @@ class NotificationHandler
     {
         let title = "Welcome To [App Title]!"
         let body = "Help make the internet more accessible by adding alt-text to your images."
-        let time = 10.0
+        let time = (60.0) *  (30)
         sendNotification(date: Date(), type: "time" , timeInterval: time, title: title, body: body)
-        
+        //schedule a Welcome Notification for 30 minutes after first use.
     
     }
     
-    func scheduleFirstUseNotifications()
+    func FirstUseNotificationProcedure()
     {
         self.removeAppNotifications()
         self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
         self.scheduleWelcomeNotification()
+        printAllScheduledNotifications()
     }
     
     func schedulingNotificationAlgorithm()
@@ -143,7 +146,7 @@ class NotificationHandler
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (notficiations) in
 
                     for localNotification in notficiations {
-
+                        print("Scheduled Local Notification")
                         print(localNotification)
 
                     }

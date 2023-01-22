@@ -46,9 +46,7 @@ class StartupHandler
                 
                 handleNoStartupData() //create a new Startup Core Data entity
                 
-                
-                notif_handler?.removeAppNotifications()
-                notif_handler?.scheduleWeeklyAppNotifications(title: "notif title", body: "notif body", day: 2, min: 30, hour: 15)
+                notif_handler?.FirstUseNotificationProcedure()
                 
             }
             
@@ -62,13 +60,54 @@ class StartupHandler
         
         let image_data = CoreDataManager.shared.loadAllImageData()
         let number_of_captions = image_data!.count
-        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, dayUse: 0, dateOfFirstUse: Date() )
-        
+
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date() )
+
     }
     
     func updateStartupInformation()
     {
-    
+        checkFirstAppUse() //check if no Startup Data is avaiable
+        
+        let existingStartupInfo = CoreDataManager.shared.loadStartUp()![0]
+        let image_data = CoreDataManager.shared.loadAllImageData()
+        
+        
+        var dateOfFirstUse =  existingStartupInfo.dateOfFirstUse
+        var daysOfUse:Int;
+        var number_of_captions = 0
+        
+        
+        if(image_data == nil)
+        {
+            
+            number_of_captions = 0
+        }
+        else
+        {
+            
+            number_of_captions = image_data!.count
+        }
+        
+        
+        
+        if(dateOfFirstUse != nil)
+        {
+            daysOfUse = Int((Date().timeIntervalSince(dateOfFirstUse!))/(60.0*60*24))
+            //convert the difference in dates in seconds to the difference in days stored as an Int
+           
+        }
+        else
+        {
+            daysOfUse = 0
+           
+        }
+        
+        
+        
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: daysOfUse, dateOfFirstUse: dateOfFirstUse!)
+        
+        
         
     }
     
