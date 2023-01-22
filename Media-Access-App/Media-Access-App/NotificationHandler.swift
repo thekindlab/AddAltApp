@@ -43,7 +43,7 @@ class NotificationHandler
     }
     
     
-    func sendNotification(date: Date, type: String, timeInterval:Double, title:String, body: String, shouldRepeat: Bool = false)
+    func sendNotification(dateComponents: DateComponents, type: String, timeInterval:Double, title:String, body: String)
     {
         
         
@@ -54,12 +54,12 @@ class NotificationHandler
         
         if type == "date"
         {
-            let dateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
-            trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: shouldRepeat)
+            
+            trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             
         }
         else if type == "time" {
-            trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: shouldRepeat)
+            trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
             
         }
         
@@ -81,18 +81,62 @@ class NotificationHandler
         
     }
     
-    func scheduleWeeklyAppNotifications()
+    func sendNotificationWeekly(triggerDate: DateComponents, title:String, body: String, shouldRepeat: Bool = true)
     {
-        print("we are trying to schedule weekly notifications")
-    
+        var trigger: UNNotificationTrigger?
         
+        trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: shouldRepeat)
+        
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = UNNotificationSound.default
+        
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleWeeklyAppNotifications(title:String, body:String, day:Int, min: Int, hour: Int)
+    {
+        
+        print("Scheduling Weekly Notifications")
+        
+        //EX) Schedule notifications every Monday, at 3:30PM,  day = 2, min = 30, hour = 15
+        var date = DateComponents()
+        date.calendar = Calendar.current
+        
+        date.weekday = day
+        date.hour = hour
+        date.minute = min
+        
+        sendNotificationWeekly(triggerDate: date, title: title , body: body, shouldRepeat: true)
+        
+    }
+    
+    func schedulingNotificationAlgorithm()
+    {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
+        
+        
+    }
+    
+    func printAllScheduledNotifications()
+    {
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (notficiations) in
+
+                    for localNotification in notficiations {
+
+                        print(localNotification)
+
+                    }
+                })
     }
     
     func removeAppNotifications()
     {
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
         
     }
     

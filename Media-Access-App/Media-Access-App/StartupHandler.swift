@@ -42,11 +42,11 @@ class StartupHandler
                 print(startUpData[0].firstUse)
             }
             else
-            { //no startup data available, lets create some. 
+            { //no startup data available, => let's create some.
                 
                 handleNoStartupData() //create a new Startup Core Data entity
                 notif_handler?.removeAppNotifications()
-                notif_handler?.scheduleWeeklyAppNotifications()
+                notif_handler?.scheduleWeeklyAppNotifications(title: "notif title", body: "notif body", day: 2, min: 30, hour: 15)
                 
             }
             
