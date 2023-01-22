@@ -43,7 +43,7 @@ class NotificationHandler
     }
     
     
-    func sendNotification(dateComponents: DateComponents, type: String, timeInterval:Double, title:String, body: String)
+    func sendNotification(date: Date, type: String, timeInterval:Double, title:String, body: String)
     {
         
         
@@ -54,7 +54,7 @@ class NotificationHandler
         
         if type == "date"
         {
-            
+            let dateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
             trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             
         }
@@ -115,6 +115,23 @@ class NotificationHandler
         
     }
     
+    func scheduleWelcomeNotification()
+    {
+        let title = "Welcome To [App Title]!"
+        let body = "Help make the internet more accessible by adding alt-text to your images."
+        let time = 10.0
+        sendNotification(date: Date(), type: "time" , timeInterval: time, title: title, body: body)
+        
+    
+    }
+    
+    func scheduleFirstUseNotifications()
+    {
+        self.removeAppNotifications()
+        self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
+        self.scheduleWelcomeNotification()
+    }
+    
     func schedulingNotificationAlgorithm()
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
         
@@ -132,6 +149,8 @@ class NotificationHandler
                     }
                 })
     }
+    
+    
     
     func removeAppNotifications()
     {
