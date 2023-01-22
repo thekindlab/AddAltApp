@@ -58,7 +58,7 @@ struct CaptioningHistory: View{
             
             ScrollView{
                 ForEach(CoreDataManager.shared.loadAllImageData()!) { caption_history in
-                    let caption = caption_history.caption! + " hello"
+
                     
                     HStack(spacing: 16)
                     {
@@ -273,21 +273,7 @@ struct ContentView: View {
                      */
                     //Notification scheduling test code.
                     
-                    Button(action: {
-                    
-                    //deletes all image data
-                        CoreDataManager.shared.deleteAllImageData()
-                    
-                    //this just prints out the caption for all of the saved data
-                    
-                    }, label: {
-                    Text(" del image storage").foregroundColor(Color.white)
-                    })
-                    .frame(width: 100.0, height: 30.0)
-                    .background(Color.purple)
-                    .clipShape(Capsule())
-                    //  delete local stroage button for testing
-                    
+                
                     
                     //submit button
                     Button(action: {
