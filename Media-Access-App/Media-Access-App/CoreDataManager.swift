@@ -136,7 +136,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
-    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, dayUse:Int, dateOfFirstUse: Date)
+    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date)
     {
         
         deleteStartupData() //delete the startup data and replace more current data. 
@@ -151,7 +151,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                 let entity = Startup.entity()
                 let dataOnStartup = Startup(entity: entity, insertInto: context)
                 
-                dataOnStartup.daysOfUse =  Int64(dayUse);
+                dataOnStartup.daysOfUse =  Int64(daysUsed);
                 dataOnStartup.firstUse = firstUse
                 dataOnStartup.numberOfCaptions = Int64(captionNumber);
                 dataOnStartup.dateOfFirstUse = dateOfFirstUse; 

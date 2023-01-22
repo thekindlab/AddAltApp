@@ -137,7 +137,7 @@ class NotificationHandler
     
     func schedulingFrequencyNotificationAlgorithm()
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
-        
+        print("running scheduling freq algo")
         let startup_Info = CoreDataManager.shared.loadStartUp()
         var app_usage_stat = 0.0
         let usage_minimum = 0.4
@@ -166,6 +166,7 @@ class NotificationHandler
                     {
                         
                         //schedule for some day in near future.
+                        print("applying scheduling algo")
                     }
                     
                 }

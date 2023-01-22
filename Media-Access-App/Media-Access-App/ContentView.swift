@@ -116,22 +116,36 @@ struct ContentView: View {
                 
                 
                             //notif Scheduler test code
-                           
-                            /*
+                           /*
+                            
                                 //  print local storage Button for testing
                                 Button(action: {
-                                    self.notificationManager.sendNotification(date: Date(), type: "time", timeInterval: 10.0, title: "new Notif", body: "new notif body")
+                                    
+                                   
                                     //this just prints out the caption for all of the saved data
                                    
                                 }, label: {
-                                    Text("schedule new").foregroundColor(Color.white)
+                                    Text("test DayCalc").foregroundColor(Color.white)
                                 })
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.blue)
                                 .clipShape(Capsule())
                                 //  print local storage Button for testing
-                                
-                    
+                                                
+                                Button(action: {
+                                    
+                                    CoreDataManager.shared.deleteStartupData()
+                                    //this just prints out the caption for all of the saved data
+                                   
+                                }, label: {
+                                    Text("RESET STARTUP").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.blue)
+                                .clipShape(Capsule())
+                                //  print local storage Button for testing
+                
+                
                                 // delete local stroage button for testing
                                 Button(action: {
                                     
@@ -148,8 +162,8 @@ struct ContentView: View {
                                 .clipShape(Capsule())
                                 //  delete local stroage button for testing
                                 
-                             */
-                
+                             
+                */
                             //Notification scheduling test code. 
                 
                             
@@ -172,6 +186,13 @@ struct ContentView: View {
                                     
                                     //reset new start time for next caption
                                     timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
+                                    
+                                    //update Startup Info
+                                    startupManager.updateStartupInformation()
+                                    
+                                    //Apply Notification Algo
+                                    notificationManager.schedulingFrequencyNotificationAlgorithm()
+                                     
                                     
                                     let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                     mediaItems.getDeleteItem(item: curItemID)

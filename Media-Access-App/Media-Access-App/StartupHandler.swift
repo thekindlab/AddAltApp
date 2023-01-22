@@ -80,7 +80,7 @@ class StartupHandler
         let image_data = CoreDataManager.shared.loadAllImageData()
         
         
-        var dateOfFirstUse =  existingStartupInfo.dateOfFirstUse
+        let dateOfFirstUse =  existingStartupInfo.dateOfFirstUse
         var daysOfUse:Int;
         var number_of_captions = 0
         
@@ -100,7 +100,7 @@ class StartupHandler
         
         if(dateOfFirstUse != nil)
         {
-            daysOfUse = Int((Date().timeIntervalSince(dateOfFirstUse!))/(60.0*60*24))
+            daysOfUse = abs(Int((Date().timeIntervalSince(dateOfFirstUse!))/(60.0*60*24)))
             //convert the difference in dates in seconds to the difference in days stored as an Int
            
         }
