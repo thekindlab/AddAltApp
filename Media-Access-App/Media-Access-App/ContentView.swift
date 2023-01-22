@@ -2,7 +2,7 @@
 //  ItemsView.swift
 //  PHPickerDemo
 //
-//  Created by Gabriel Theodoropoulos.
+//  
 //
 
 import SwiftUI
@@ -13,8 +13,54 @@ enum MyError: Error {
     case runtimeError(String)
 }
 
+struct Settings: View{
+    
+    var body: some View{
+        
+        Text("Settings").bold().padding(.top, 50.0)
+        
+        List{
+                NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
+                NavigationLink(destination: Settings()){ Text("Captioning History")} //would be cools to have and easy to implement
+                NavigationLink(destination: Settings()){Text("Caption Guide")} //we need to have this
+                NavigationLink(destination: Contact()){Text("Contact")}
+
+            }
+    }
+    
+}
+
+struct AboutPage: View{
+    
+    var body: some View{
+        
+        Text("AboutPage").bold().padding(.top, 50.0)
+        
+        //write a couple paragraphs for explaining our research
+        
+    }
+    
+}
+
+struct Contact: View{
+    
+    var body: some View{
+        
+        Text("Contact").bold().padding(.top, 50.0)
+        
+        //write a contactable email for any questions or concerns
+        
+    }
+    
+}
+
 
 struct ContentView: View {
+    
+    //Navigation Variable
+    @State private var navigateTo = ""
+    @State private var isActive = false
+    
     
     
     //Global Variables
@@ -37,313 +83,322 @@ struct ContentView: View {
         
         
         //App View Stack    (what the user sees on startup )
-        VStack {
+        
+        NavigationView {
             
             
             
-            //Header
-            Text("Media Accessibility")
-                            .font(.headline)
-                            .fontWeight(.regular)
-                            .padding(.bottom, 100.0)
-            //Header
-            
-            
-            //current image chosen
-            if curItem == nil { //explanation photo
-                Image("Media-Access")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+            VStack {
                 
-            } else { //if we have a curItem figure out how to display it
-                if curItem?.mediaType == .photo {
-                    Image(uiImage: curItem?.photo ?? UIImage())
+                //navigation to Settings page
+                NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                
+                
+                //Header
+                Text("Media Accessibility")
+                    .font(.headline)
+                    .fontWeight(.regular)
+                    .padding(.bottom, 100.0)
+                //Header
+                
+                
+                //current image chosen
+                if curItem == nil { //explanation photo
+                    Image("Media-Access")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                     
-                        
-                    
-                } else if curItem?.mediaType == .video {
-                    if let url = curItem?.url {
-                        VideoPlayer(player: AVPlayer(url: url))
-                            .frame(minHeight: 200)
-                    } else { EmptyView() }
-                    
-                } else {
-                    if let livePhoto = curItem?.livePhoto {
-                        LivePhotoView(livePhoto: livePhoto)
-                            .frame(minHeight: 200)
-                    } else { EmptyView() }
-                }
-            }
-            //current image chosen
-            
-            
-            
-            //Text editor input object
-            TextEditor(text: $currentCaption)
-                .frame(width: 350, height: 80, alignment: .center)
-                .cornerRadius(3.0)
-                .onTapGesture(count: 1) {
-                    clearEditor()
-                }
-                .foregroundColor(Color.gray)
-                .border(Color.black, width: 1)
-            //Text editor input object
-            
-            
-            //Clear & Submit button Stack
-            HStack {
-                
-                
-                            //  Cancel Button
-                            Button(action: {
-                                print("Cancelled")
-                                if(currentCaption == "Enter Your Caption") {
-                                    currentCaption = ""
-                                }
-                                else {
-                                    currentCaption = "Enter Your Caption"
-                                }
-                                
-                            }, label: {
-                                Text("Clear").foregroundColor(Color.white)
-                            })
-                            .frame(width: 100.0, height: 30.0)
-                            .background(Color.red)
-                            .clipShape(Capsule())
-                
-                
-                
-                            //notif Scheduler test code
-                           /*
-                            
-                                //  print local storage Button for testing
-                                Button(action: {
-                                    
-                                   
-                                    //this just prints out the caption for all of the saved data
-                                   
-                                }, label: {
-                                    Text("test DayCalc").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.blue)
-                                .clipShape(Capsule())
-                                //  print local storage Button for testing
-                                                
-                                Button(action: {
-                                    
-                                    CoreDataManager.shared.deleteStartupData()
-                                    //this just prints out the caption for all of the saved data
-                                   
-                                }, label: {
-                                    Text("RESET STARTUP").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.blue)
-                                .clipShape(Capsule())
-                                //  print local storage Button for testing
-                
-                
-                                // delete local stroage button for testing
-                                Button(action: {
-                                    
-                                    //deletes all image data
-                                    self.notificationManager.removeAppNotifications()
-                                    
-                                    //this just prints out the caption for all of the saved data
-                                   
-                                }, label: {
-                                    Text(" stop all schedule notifications").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.purple)
-                                .clipShape(Capsule())
-                                //  delete local stroage button for testing
-                                
-                             
-                */
-                            //Notification scheduling test code. 
-                
-                            
-                            //submit button
-                            Button(action: {
-                                //On press
-                                if(curItem?.mediaType == .photo) { //save the current photo
-                                    
-                                }
-                                
-                                if(curItem != nil) { //if we have a photo to save
-                                    
-                                    
-                                    timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
-                                    
-                                    //Core Data save
-                                    savePhotoMetaDataLocally()
-                                    //Local library save
-                                    saveCaptionedPhotoToLibrary()
-                                    
-                                    //reset new start time for next caption
-                                    timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
-                                    
-                                    //update Startup Info
-                                    startupManager.updateStartupInformation()
-                                    
-                                    //Apply Notification Algo
-                                    notificationManager.schedulingFrequencyNotificationAlgorithm()
-                                     
-                                    
-                                    let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
-                                    mediaItems.getDeleteItem(item: curItemID)
-                                    if(nextItem.id != "") {
-                                        curItem = nextItem
-                                    } else {
-                                        curItem = nil
-                                    }
-                                    currentCaption = "Enter Your Caption"
-                                }
-                            }, label: {
-                                Text("Submit").foregroundColor(Color.white)
-                            })
-                            .frame(width: 100.0, height: 30.0)
-                            .background(Color.green)
-                            .clipShape(Capsule())
-                            //submit button
-            
-                
-                        }
-                        .padding(.bottom, 15.0)
-            //Clear & Submit button Stack
-            
-            
-            
-            
-            //Navigation for handeling photos that are being captioned
-            NavigationView {
-                
-                
-                
-                //list of media items looking to be captioned
-                List(mediaItems.items, id: \.id) { item in
-                    ZStack(alignment: .topLeading) {
-                        if item.mediaType == .photo {
-                              Image(uiImage: item.photo ?? UIImage())
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .onTapGesture(count:1) {
-                                    curItem = item
-                                    curItemID = item.id
-                                    setCaptionFromSelectedPhoto()
-                                }
-                          
-                            
-                        } else if item.mediaType == .video {
-                            if let url = item.url {
-                                VideoPlayer(player: AVPlayer(url: url))
-                                    .frame(minHeight: 200)
-                            } else { EmptyView() }
-                        } else {
-                            if let livePhoto = item.livePhoto {
-                                LivePhotoView(livePhoto: livePhoto)
-                                    .frame(minHeight: 200)
-                            } else { EmptyView() }
-                        }
-                                            
-                        Image(systemName: getMediaImageName(using: item))
+                } else { //if we have a curItem figure out how to display it
+                    if curItem?.mediaType == .photo {
+                        Image(uiImage: curItem?.photo ?? UIImage())
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                            .padding(4)
-                            .background(Color.black.opacity(0.5))
-                            .foregroundColor(.white)
+                        
+                        
+                        
+                    } else if curItem?.mediaType == .video {
+                        if let url = curItem?.url {
+                            VideoPlayer(player: AVPlayer(url: url))
+                                .frame(minHeight: 200)
+                        } else { EmptyView() }
+                        
+                    } else {
+                        if let livePhoto = curItem?.livePhoto {
+                            LivePhotoView(livePhoto: livePhoto)
+                                .frame(minHeight: 200)
+                        } else { EmptyView() }
                     }
                 }
-                //list of media items looking to be captioned
+                //current image chosen
                 
                 
                 
+                //Text editor input object
+                TextEditor(text: $currentCaption)
+                    .frame(width: 350, height: 80, alignment: .center)
+                    .cornerRadius(3.0)
+                    .onTapGesture(count: 1) {
+                        clearEditor()
+                    }
+                    .foregroundColor(Color.gray)
+                    .border(Color.black, width: 1)
+                //Text editor input object
+                
+                
+                //Clear & Submit button Stack
+                HStack {
                     
-                
-                
-                // "queue buttons" location
-                .toolbar {
                     
-                    
-                    //Trash button
-                    ToolbarItem(placement: .navigation) {
-                        Button(action:
-                        //what happens when you click the button
-                        {let nextItem = mediaItems.getNext(item: curItemID)
-                            
-                        mediaItems.getDeleteItem(item: curItemID)
-                        if(nextItem.id != "") {
-                            curItem = nextItem
-                        } else {
-                            curItem = nil
+                    //  Cancel Button
+                    Button(action: {
+                        print("Cancelled")
+                        if(currentCaption == "Enter Your Caption") {
+                            currentCaption = ""
                         }
-                        currentCaption = "Enter Your Caption"
-                        }){Image (systemName: "trash")
-                            .foregroundColor(.red)
+                        else {
+                            currentCaption = "Enter Your Caption"
                         }
                         
-                    }
-                    //Trash button
-                    
-                    
-                    //Camera button
-                    ToolbarItem(placement: .principal) {
-                        Button(action:
-                                {self.showCamera.toggle()})
-                        {Image (systemName: "camera")}
-                    }
-                    //Camera button
+                    }, label: {
+                        Text("Clear").foregroundColor(Color.white)
+                    })
+                    .frame(width: 100.0, height: 30.0)
+                    .background(Color.red)
+                    .clipShape(Capsule())
                     
                     
                     
-                    //Photo library
-                    ToolbarItem(placement: .primaryAction) {
-                        Button(action:
-                                {showSheet = true})
-                        {Image (systemName: "photo")}
-                    }
-                    //Photo library
+                    //notif Scheduler test code
+                    /*
+                     
+                     //  print local storage Button for testing
+                     Button(action: {
+                     
+                     
+                     //this just prints out the caption for all of the saved data
+                     
+                     }, label: {
+                     Text("test DayCalc").foregroundColor(Color.white)
+                     })
+                     .frame(width: 100.0, height: 30.0)
+                     .background(Color.blue)
+                     .clipShape(Capsule())
+                     //  print local storage Button for testing
+                     
+                     Button(action: {
+                     
+                     CoreDataManager.shared.deleteStartupData()
+                     //this just prints out the caption for all of the saved data
+                     
+                     }, label: {
+                     Text("RESET STARTUP").foregroundColor(Color.white)
+                     })
+                     .frame(width: 100.0, height: 30.0)
+                     .background(Color.blue)
+                     .clipShape(Capsule())
+                     //  print local storage Button for testing
+                     
+                     
+                     // delete local stroage button for testing
+                     Button(action: {
+                     
+                     //deletes all image data
+                     self.notificationManager.removeAppNotifications()
+                     
+                     //this just prints out the caption for all of the saved data
+                     
+                     }, label: {
+                     Text(" stop all schedule notifications").foregroundColor(Color.white)
+                     })
+                     .frame(width: 100.0, height: 30.0)
+                     .background(Color.purple)
+                     .clipShape(Capsule())
+                     //  delete local stroage button for testing
+                     
+                     
+                     */
+                    //Notification scheduling test code.
+                    
+                    
+                    //submit button
+                    Button(action: {
+                        //On press
+                        if(curItem?.mediaType == .photo) { //save the current photo
+                            
+                        }
+                        
+                        if(curItem != nil) { //if we have a photo to save
+                            
+                            
+                            timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
+                            
+                            //Core Data save
+                            savePhotoMetaDataLocally()
+                            //Local library save
+                            saveCaptionedPhotoToLibrary()
+                            
+                            //reset new start time for next caption
+                            timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
+                            
+                            //update Startup Info
+                            startupManager.updateStartupInformation()
+                            
+                            //Apply Notification Algo
+                            notificationManager.schedulingFrequencyNotificationAlgorithm()
+                            
+                            
+                            let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
+                            mediaItems.getDeleteItem(item: curItemID)
+                            if(nextItem.id != "") {
+                                curItem = nextItem
+                            } else {
+                                curItem = nil
+                            }
+                            currentCaption = "Enter Your Caption"
+                        }
+                    }, label: {
+                        Text("Submit").foregroundColor(Color.white)
+                    })
+                    .frame(width: 100.0, height: 30.0)
+                    .background(Color.green)
+                    .clipShape(Capsule())
+                    //submit button
+                    
+                    
                 }
-                // "queue buttons" location
+                .padding(.bottom, 15.0)
+                //Clear & Submit button Stack
                 
-            }
-            
-            
-            
-            //sheets that popup when something is pressed
-            
-            
-            /*
-             (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
-             
-             */
-            
-            
-            //Camera sheet
-            .sheet(isPresented: self.$showCamera) {
-                ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
-            }
-            //Camera sheet
-            
-            //Photo picker
-            .sheet(isPresented: $showSheet, content: {
-                PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
-                    // Handle didSelectItems value here...
-                    showSheet = false
+                
+                
+                
+                //Navigation for handeling photos that are being captioned
+                NavigationView {
+                    
+                    
+                    
+                    //list of media items looking to be captioned
+                    List(mediaItems.items, id: \.id) { item in
+                        ZStack(alignment: .topLeading) {
+                            if item.mediaType == .photo {
+                                Image(uiImage: item.photo ?? UIImage())
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .onTapGesture(count:1) {
+                                        curItem = item
+                                        curItemID = item.id
+                                        setCaptionFromSelectedPhoto()
+                                    }
+                                
+                                
+                            } else if item.mediaType == .video {
+                                if let url = item.url {
+                                    VideoPlayer(player: AVPlayer(url: url))
+                                        .frame(minHeight: 200)
+                                } else { EmptyView() }
+                            } else {
+                                if let livePhoto = item.livePhoto {
+                                    LivePhotoView(livePhoto: livePhoto)
+                                        .frame(minHeight: 200)
+                                } else { EmptyView() }
+                            }
+                            
+                            Image(systemName: getMediaImageName(using: item))
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 24, height: 24)
+                                .padding(4)
+                                .background(Color.black.opacity(0.5))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    //list of media items looking to be captioned
+                    
+                    
+                    
+                    
+                    
+                    
+                    // "queue buttons" location
+                    .toolbar {
+                        
+                        
+                        //Trash button
+                        ToolbarItem(placement: .navigation) {
+                            Button(action:
+                                    //what happens when you click the button
+                                   {let nextItem = mediaItems.getNext(item: curItemID)
+                                
+                                mediaItems.getDeleteItem(item: curItemID)
+                                if(nextItem.id != "") {
+                                    curItem = nextItem
+                                } else {
+                                    curItem = nil
+                                }
+                                currentCaption = "Enter Your Caption"
+                            }){Image (systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                            
+                        }
+                        //Trash button
+                        
+                        
+                        //Camera button
+                        ToolbarItem(placement: .principal) {
+                            Button(action:
+                                    {self.showCamera.toggle()})
+                            {Image (systemName: "camera")}
+                        }
+                        //Camera button
+                        
+                        
+                        
+                        //Photo library
+                        ToolbarItem(placement: .primaryAction) {
+                            Button(action:
+                                    {showSheet = true})
+                            {Image (systemName: "photo")}
+                        }
+                        //Photo library
+                    }
+                    // "queue buttons" location
                     
                 }
-            })
-            //Photo picker
+                
+                
+                
+                //sheets that popup when something is pressed
+                
+                
+                /*
+                 (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
+                 
+                 */
+                
+                
+                //Camera sheet
+                .sheet(isPresented: self.$showCamera) {
+                    ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
+                }
+                //Camera sheet
+                
+                //Photo picker
+                .sheet(isPresented: $showSheet, content: {
+                    PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
+                        // Handle didSelectItems value here...
+                        showSheet = false
+                        
+                    }
+                })
+                //Photo picker
+                
+                
+                
+                //End of View Stack
+            }
             
-        //End of View Stack
         }
-        
-        
         
     }
     
