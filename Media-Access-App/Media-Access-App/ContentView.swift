@@ -21,7 +21,7 @@ struct Settings: View{
         
         List{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
-                NavigationLink(destination: Settings()){ Text("Captioning History")} //would be cools to have and easy to implement
+                NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: Settings()){Text("Caption Guide")} //we need to have this
                 NavigationLink(destination: Contact()){Text("Contact")}
 
@@ -37,9 +37,63 @@ struct AboutPage: View{
         Text("AboutPage").bold().padding(.top, 50.0)
         
         //write a couple paragraphs for explaining our research
+         }
+    
+}
+
+struct CaptioningHistory: View{
+    
+   
+    
+    var body: some View {
         
+        VStack{
+            
+        Text("Caption History").bold().padding(.top, 50.0)
+        
+            if(CoreDataManager.shared.loadAllImageData()!.count < 1)
+            {
+                Text("It looks like you haven't captioned anything.").padding(.top, 50.0)
+            }
+            
+            ScrollView{
+                ForEach(CoreDataManager.shared.loadAllImageData()!) { caption_history in
+                    let caption = caption_history.caption! + " hello"
+                    
+                    HStack(spacing: 16)
+                    {
+                        VStack(alignment: .leading, spacing: 8)
+                        {
+                            Text(caption_history.caption!)
+                                .font(.title3.bold())
+                            Text("Date: \(caption_history.caption_date!)" )
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Text(" It took \(String(round(caption_history.time_to_caption, to:4)))s to caption this photo. ").font(.system(size:12))
+                            Text("The caption was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
+                            
+                        }
+                        
+                        Spacer()
+                        
+                        Image(uiImage: UIImage(data: caption_history.image_data!)!).resizable().scaledToFill().frame(width:96, height:88).clipped().cornerRadius(10)
+                        
+                        
+                    }.padding(.bottom, 25.0).padding(.horizontal)
+                    
+                    Divider()
+                }
+            }
+        }
     }
     
+        func round(_ num: Double, to places: Int) -> Double {
+            let p = log10(abs(num))
+            let f = pow(10, p.rounded() - Double(places) + 1)
+            let rnum = (num / f).rounded() * f
+
+            return rnum
+        }
 }
 
 struct Contact: View{
@@ -218,6 +272,21 @@ struct ContentView: View {
                      
                      */
                     //Notification scheduling test code.
+                    
+                    Button(action: {
+                    
+                    //deletes all image data
+                        CoreDataManager.shared.deleteAllImageData()
+                    
+                    //this just prints out the caption for all of the saved data
+                    
+                    }, label: {
+                    Text(" del image storage").foregroundColor(Color.white)
+                    })
+                    .frame(width: 100.0, height: 30.0)
+                    .background(Color.purple)
+                    .clipShape(Capsule())
+                    //  delete local stroage button for testing
                     
                     
                     //submit button
@@ -508,13 +577,17 @@ struct ContentView: View {
     private func savePhotoMetaDataLocally()
     { //used to save Photo information to Core Data
         
+        var current_photo: UIImage
+        current_photo = (curItem?.photo)!
+        
+        var photo_data = current_photo.jpegData(compressionQuality: 0.2)!
         let caption_date = getCurrentDate()
         let caption_date_epoch = Date().timeIntervalSinceReferenceDate
         let caption = currentCaption
         let caption_length = currentCaption.count
         let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
 
-        CoreDataManager.shared.addNewImage(new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
+        CoreDataManager.shared.addNewImage(image_data:  photo_data, new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
         //save the Photo meta data to Core Data with all the desired properties
        
     }

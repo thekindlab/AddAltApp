@@ -5,10 +5,12 @@
         <attribute name="caption_date" optional="YES" attributeType="String"/>
         <attribute name="caption_date_epoch" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="caption_length" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image_data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="time_to_caption" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Startup" representedClassName="Startup" syncable="YES" codeGenerationType="class">
-        <attribute name="dayOfUse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dateOfFirstUse" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="daysOfUse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="firstUse" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="numberOfCaptions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>

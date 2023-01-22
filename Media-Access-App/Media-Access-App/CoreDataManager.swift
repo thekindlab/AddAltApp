@@ -97,7 +97,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0 , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
+    func addNewImage(image_data: Data, new_caption: String = "new_caption", photo_caption_length: Int16  = 0 , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
     {
         
         
@@ -123,7 +123,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                       photo.caption_date        = photo_caption_date
                       photo.caption_date_epoch  = photo_caption_date_epoch
                       photo.time_to_caption     = time_to_caption
-                      
+                      photo.image_data = image_data
                       try context.save()
 
                   }
