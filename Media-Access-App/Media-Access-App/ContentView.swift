@@ -8,6 +8,7 @@
 import SwiftUI
 import AVKit
 import UIKit
+import MessageUI
 
 enum MyError: Error {
     case runtimeError(String)
@@ -479,8 +480,23 @@ struct ContentView: View {
         //(BOOL)writeToURL:(NSString *)url
         //    atomically:(BOOL)useAuxiliaryFile;
         //TODO
+
+        let emailViewController = configuredMailComposeViewController()
+        if MFMailComposeViewController.canSendMail() {
+            self.presentViewController(emailViewController, animated: true, completion: nil)
+        }
     }
-    
+    private func configuredMailComposeViewController() -> MFMailComposeViewController {
+        let emailController = MFMailComposeViewController()
+        emailController.mailComposeDelegate = self
+        emailController.setSubject("CSV Export")
+        emailController.setMessageBody("", isHTML: false)
+
+        // Attaching the .CSV file to the email.
+        emailController.addAttachmentData(NSData(contentsOfFile: "localData")!, mimeType: "text/csv", fileName: "localData.csv")
+
+        return emailController
+    }
     private func getCurrentDate() -> String
     { //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
         // get the current date and time
