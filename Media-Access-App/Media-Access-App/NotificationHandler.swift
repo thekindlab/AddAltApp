@@ -135,6 +135,8 @@ class NotificationHandler
         printAllScheduledNotifications()
     }
     
+    
+    /*
     func schedulingFrequencyNotificationAlgorithm()
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
         print("running scheduling freq algo")
@@ -178,7 +180,7 @@ class NotificationHandler
         
     }
     
-    
+    */
     
     func printAllScheduledNotifications()
     {

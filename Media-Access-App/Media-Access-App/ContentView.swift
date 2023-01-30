@@ -22,10 +22,18 @@ struct Settings: View{
         List{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
-                NavigationLink(destination: Settings()){Text("Caption Guide")} //we need to have this
+                NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
                 NavigationLink(destination: Contact()){Text("Contact")}
 
             }
+    }
+    
+}
+
+struct CaptionGuide : View{
+    var body: some View{
+        Text("CaptionGuide")
+        
     }
     
 }
@@ -297,9 +305,7 @@ struct ContentView: View {
                             
                             //update Startup Info
                             startupManager.updateStartupInformation()
-                            
-                            //Apply Notification Algo
-                            notificationManager.schedulingFrequencyNotificationAlgorithm()
+                           
                             
                             
                             let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
