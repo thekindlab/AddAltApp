@@ -8,10 +8,15 @@
 import SwiftUI
 import AVKit
 import UIKit
+import MessageUI
+
 
 enum MyError: Error {
     case runtimeError(String)
 }
+
+
+
 
 struct Settings: View{
     
@@ -23,7 +28,7 @@ struct Settings: View{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-                NavigationLink(destination: Contact()){Text("Contact")}
+                NavigationLink(destination: Contact(emailBody: "", senderName: "", recieveResponse: false)){Text("Contact")}
 
             }
     }
@@ -104,24 +109,163 @@ struct CaptioningHistory: View{
         }
 }
 
+struct MailView: UIViewControllerRepresentable
+{ //NEED TO TEST ON AN ACTUAL DEVICE, CANNOT TEST IN SIMULATOR
+    @Environment(\.presentationMode) var presentation
+    @Binding var result: Result<MFMailComposeResult, Error>?
+    @Binding  var emailBody: String
+    @Binding  var senderName :String
+    @Binding  var recieveResponse: Bool
+    @Binding  var recieveEmail: String
+    
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate{
+        @Binding var presentation: PresentationMode
+        @Binding var result: Result<MFMailComposeResult, Error>?
+        
+        
+        init(presentation: Binding<PresentationMode>,
+             result: Binding<Result<MFMailComposeResult, Error>?>)
+                {
+                    _presentation = presentation
+                    _result = result
+                    
+                }
+        
+        
+        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+            
+            defer{
+                $presentation.wrappedValue.dismiss()
+                
+            }
+            
+            guard error == nil else
+            {
+                self.result = .failure(error!)
+                return
+            }
+            
+            self.result = .success(result)
+            
+        }
+        
+        
+        
+        
+        
+        
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(presentation: presentation, result: $result)
+    }
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<MailView>) -> some MFMailComposeViewController {
+        
+        let viewController = MFMailComposeViewController()
+        viewController.mailComposeDelegate = context.coordinator
+        viewController.setToRecipients([recieveEmail])
+        if(recieveResponse)
+        {
+            emailBody = emailBody + " \n I want to recieve a Response!"
+            
+        }
+        
+        viewController.setMessageBody(emailBody, isHTML: true)
+        return viewController
+        
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        
+    }
+    
+    
+    
+    
+}
+
 struct Contact: View{
     
+    @State  var recipientEmail = "bowenr4@wwu.edu"
+    @State  var emailBody: String
+    @State  var senderName: String
+    @State  var recieveResponse: Bool
+    
+    @State var result: Result<MFMailComposeResult, Error>? = nil
+    @State var isShowingMailView = false
     var body: some View{
         
-        Text("Contact").bold().padding(.top, 50.0)
+        
+        Text("Contact").bold().padding(.top, 10.0)
+        
+        HStack(alignment: .top)
+        {
+            VStack(alignment: .center, spacing: 16){
+                
+                VStack( spacing: 8){
+                    
+                    Divider()
+                    HStack(spacing:16){
+                        Text("Name")
+                        
+                        TextField(text: $senderName, prompt: Text("Optional"))
+                        {
+                            Text("Name")
+                        }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled()
+                    }
+                    Divider()
+                    
+                    VStack(spacing:16)
+                    {
+                        Text("Message")
+                        TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
+                            .cornerRadius(10.0)
+                            .foregroundColor(Color.black).border(Color.gray, width:0.5)
+                        
+                    }.padding(.top, 20).padding(.bottom,20)
+                    Divider()
+                    
+                    Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
+                    Divider()
+                    
+                }
+                
+                VStack(alignment: .center)
+                {
+                    Button(action: {
+                        self.isShowingMailView.toggle()
+                    }, label: {
+                        Text(" Send Message").foregroundColor(Color.white)
+                    })
+                    .frame(width: 200.00, height: 33.0)
+                    .background(Color.blue)
+                    .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
+                    {
+                        
+                        MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
+                    }
+                }
+                
+                
+                
+                
+            }.padding(.bottom, 25.0).padding(.horizontal)
+            
+        }
+        
         
         //write a contactable email for any questions or concerns
         
     }
     
+
+    
+    
 }
 
 
 struct ContentView: View {
-    
-    //Navigation Variable
-    @State private var navigateTo = ""
-    @State private var isActive = false
     
     
     
@@ -572,7 +716,7 @@ struct ContentView: View {
         var current_photo: UIImage
         current_photo = (curItem?.photo)!
         
-        var photo_data = current_photo.jpegData(compressionQuality: 0.2)!
+        let photo_data = current_photo.jpegData(compressionQuality: 0.2)!
         let caption_date = getCurrentDate()
         let caption_date_epoch = Date().timeIntervalSinceReferenceDate
         let caption = currentCaption
