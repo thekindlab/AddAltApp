@@ -28,7 +28,7 @@ struct Settings: View{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-                NavigationLink(destination: Contact(emailBody: "", senderName: "", recieveResponse: false)){Text("Contact")}
+                NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", recieveResponse: false)){Text("Contact")}
 
             }
     }
@@ -47,10 +47,10 @@ struct AboutPage: View{
     
     var body: some View{
         
-        Text("AboutPage").bold().padding(.top, 50.0)
+        Text("AboutPage").bold().padding(.top, 50.0).frame(alignment: .topLeading)
         
         //write a couple paragraphs for explaining our research
-         }
+    }
     
 }
 
@@ -110,7 +110,7 @@ struct CaptioningHistory: View{
 }
 
 struct MailView: UIViewControllerRepresentable
-{ //NEED TO TEST ON AN ACTUAL DEVICE, CANNOT TEST IN SIMULATOR
+{//NEED TO TEST ON A PHYSICAL DEVICE. CANNOT TEST ON A SIMULATOR
     @Environment(\.presentationMode) var presentation
     @Binding var result: Result<MFMailComposeResult, Error>?
     @Binding  var emailBody: String
@@ -194,14 +194,18 @@ struct Contact: View{
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
+    @State var text_color = Color.gray
+    
     var body: some View{
         
         
-        Text("Contact").bold().padding(.top, 10.0)
+        
         
         HStack(alignment: .top)
         {
+            
             VStack(alignment: .center, spacing: 16){
+                Text("Contact Us").bold()
                 
                 VStack( spacing: 8){
                     
@@ -216,12 +220,17 @@ struct Contact: View{
                     }
                     Divider()
                     
-                    VStack(spacing:16)
+                    VStack(alignment: .leading, spacing:16)
                     {
                         Text("Message")
                         TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
                             .cornerRadius(10.0)
-                            .foregroundColor(Color.black).border(Color.gray, width:0.5)
+                            .foregroundColor(text_color).border(Color.gray, width:0.5).onTapGesture {
+                                
+                                clearEditor()
+                                    
+                                    
+                            }
                         
                     }.padding(.top, 20).padding(.bottom,20)
                     Divider()
@@ -247,6 +256,7 @@ struct Contact: View{
                     }
                 }
                 
+                Spacer()
                 
                 
                 
@@ -257,6 +267,13 @@ struct Contact: View{
         
         //write a contactable email for any questions or concerns
         
+    }
+    
+    private func clearEditor() {
+        text_color = Color.black
+        if(emailBody == "Something Is Wrong!") {
+            emailBody = ""
+        }
     }
     
 
