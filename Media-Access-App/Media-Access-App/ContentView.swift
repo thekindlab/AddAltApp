@@ -195,7 +195,8 @@ struct Contact: View{
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
     @State var text_color = Color.gray
-    
+    @State var button_color = !MFMailComposeViewController.canSendMail() ? Color.gray : Color.blue
+    @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
         
         
@@ -248,14 +249,18 @@ struct Contact: View{
                         Text(" Send Message").foregroundColor(Color.white)
                     })
                     .frame(width: 200.00, height: 33.0)
-                    .background(Color.blue)
+                    .background(button_color)
                     .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
                     {
                         
                         MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
                     }
                 }
-                
+                if(can_mail)
+                {
+                    Divider()
+                    Text("It Looks like email is not setup")
+                }
                 Spacer()
                 
                 
