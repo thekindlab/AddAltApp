@@ -47,8 +47,58 @@ struct AboutPage: View{
     
     var body: some View{
         
-        Text("AboutPage").bold().padding(.top, 50.0).frame(alignment: .topLeading)
-        
+        VStack(alignment: .center, spacing: 16){
+            Text("About Us").bold().font(.title)
+            
+            VStack( spacing: 8){
+                
+                VStack(alignment: .leading){
+                    
+                    
+                    
+                    Divider()
+                    Text("Spring 2022 - Winter 2023 Research Group").fontWeight(.bold).font(.title)
+                    
+                    
+                    ScrollView(.horizontal)
+                    {
+                        HStack(spacing:10){
+                            Text("Yasmine Elglaly").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
+                            Text("Robert Bowen").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
+                            Text("Braxton Eidem").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
+                            Text("Charlie Koenig").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
+                            Text("Keagan Cantrell").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
+                        }
+                    }
+                    
+                    
+                    Divider()
+                    
+                    Text("Background").fontWeight(.bold).font(.title)
+                    ScrollView{
+                        
+                        
+                        VStack(alignment: .center)
+                        {
+                            
+                            
+                            
+                            
+                        
+                        
+                        Text("A professor at the Western Washington University had an idea for a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. The application would be an extension of a phone’s native camera app and would prompt the user to add an alt-text or caption to every picture taken by the camera. If the user chooses to use the application, they can then record or type a short description of the image. The application will then save that description as text in the images’ alt-text metadata. When the user chooses to publish the image, that metadata will be included in the publishing, which then can be used by screen readers to make the internet more accessible to those who use screen readers to navigate the internet.The importance of this application is that it will spread awareness and create accessibility by adding descriptions to images. The importance in this is that people with disabilities suffer greatly when their lives depend on the internet. For example, people with disabilities may have jobs that rely on the internet, and if they cannot navigate the internet successfully then they could lose those jobs. Another goal of this application is to show people who are not technology experts that they can still help make an accessible environment for people with disabilities."
+                        ).fontWeight(.bold).font(.caption).foregroundColor(.gray).multilineTextAlignment(.center).lineSpacing(10).padding()
+                    }
+                }
+                Divider()
+                
+                }
+                
+                
+                
+            }
+            Spacer()
+        }
         //write a couple paragraphs for explaining our research
     }
     
