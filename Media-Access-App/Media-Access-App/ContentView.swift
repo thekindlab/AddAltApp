@@ -40,7 +40,7 @@ struct CaptionGuide : View{
         
         VStack(spacing: 8){
             
-            Text("CaptionGuide").fontWeight(.bold).font(.title)
+            Text("Caption Guide").fontWeight(.bold).font(.title)
             
             
             Divider()
@@ -164,7 +164,7 @@ struct AboutPage: View{
                 
                 
                 
-            }
+            }.padding()
             Spacer()
         }
         //write a couple paragraphs for explaining our research
