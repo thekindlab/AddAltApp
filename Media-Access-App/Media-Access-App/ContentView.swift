@@ -303,6 +303,22 @@ struct MailView: UIViewControllerRepresentable
     
 }
 
+
+struct Background<Content: View>: View {
+    private var content: Content
+
+    init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        Color.white
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.90)
+        .overlay(content)
+    }
+}
+
+
 struct Contact: View{
     
     @State  var recipientEmail = "bowenr4@wwu.edu"
@@ -317,77 +333,85 @@ struct Contact: View{
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
         
-        
-        
-        
-        HStack(alignment: .top)
-        {
+        Background{
             
-            VStack(alignment: .center, spacing: 16){
-                Text("Contact Us").bold()
+            
+            HStack(alignment: .top)
+            {
                 
-                VStack( spacing: 8){
+                
+                
+                VStack(alignment: .center, spacing: 16){
+                    Text("Contact Us").bold()
                     
-                    Divider()
-                    HStack(spacing:16){
-                        Text("Name")
+                    
+                    
+                    
+                    VStack( spacing: 8){
                         
-                        TextField(text: $senderName, prompt: Text("Optional"))
-                        {
+                        Divider()
+                        
+                        HStack(spacing:16){
                             Text("Name")
-                        }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled()
-                    }
-                    Divider()
-                    
-                    VStack(alignment: .leading, spacing:16)
-                    {
-                        Text("Message")
-                        TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
-                            .cornerRadius(10.0)
-                            .foregroundColor(text_color).border(Color.gray, width:0.5).onTapGesture {
-                                
-                                clearEditor()
+                            
+                            TextField(text: $senderName, prompt: Text("Optional"))
+                            {
+                                Text("name")
+                            }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled().padding(.leading,10)
+                        }
+                        Divider()
+                        
+                        VStack(alignment: .leading, spacing:16)
+                        {
+                            Text("Message")
+                            TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
+                                .cornerRadius(10.0)
+                                .foregroundColor(text_color).border(Color.gray, width:0.5).onTapGesture {
+                                    
+                                    clearEditor()
                                     
                                     
-                            }
+                                }
+                            
+                        }.padding(.top, 20).padding(.bottom,20)
+                        Divider()
                         
-                    }.padding(.top, 20).padding(.bottom,20)
-                    Divider()
-                    
-                    Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
-                    Divider()
-                    
-                }
-                
-                VStack(alignment: .center)
-                {
-                    Button(action: {
-                        self.isShowingMailView.toggle()
-                    }, label: {
-                        Text(" Send Message").foregroundColor(Color.white)
-                    })
-                    .frame(width: 200.00, height: 33.0)
-                    .background(button_color)
-                    .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
-                    {
+                        Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
+                        Divider()
                         
-                        MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
                     }
-                }
-                if(can_mail)
-                {
-                    Divider()
-                    Text("It Looks like email is not setup")
-                }
-                Spacer()
+                    
+                    VStack(alignment: .center)
+                    {
+                        Button(action: {
+                            self.isShowingMailView.toggle()
+                        }, label: {
+                            Text(" Send Message").foregroundColor(Color.white)
+                        })
+                        .frame(width: 200.00, height: 33.0)
+                        .background(button_color)
+                        .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
+                        {
+                            
+                            MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
+                        }
+                    }
+                    if(can_mail)
+                    {
+                        Divider()
+                        Text("It Looks like email is not setup")
+                    }
+                    Spacer()
+                    
+                    
+                    
+                }.padding(.bottom, 25.0).padding(.horizontal)
                 
-                
-                
-            }.padding(.bottom, 25.0).padding(.horizontal)
+            }
             
+        }.onTapGesture {
+            self.endEditing()
         }
-        
-        
         //write a contactable email for any questions or concerns
         
     }
@@ -399,11 +423,22 @@ struct Contact: View{
         }
     }
     
+    private func endEditing() {
+            UIApplication.shared.endEditing()
+        }
+    
+ 
+    
 
     
     
 }
 
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 struct ContentView: View {
     
