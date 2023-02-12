@@ -23,6 +23,8 @@
 		73C4D91028F4825E0085CE17 /* LivePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D90728F4825E0085CE17 /* LivePhotoView.swift */; };
 		73C4D91228F4825E0085CE17 /* PhotoPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D90928F4825E0085CE17 /* PhotoPickerModel.swift */; };
 		73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D90A28F4825E0085CE17 /* ContentView.swift */; };
+		73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCB29751F830004FC00 /* NotificationHandler.swift */; };
+		73FD7CCE297B57CC0004FC00 /* StartupHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		73C4D90828F4825E0085CE17 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73C4D90928F4825E0085CE17 /* PhotoPickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerModel.swift; sourceTree = "<group>"; };
 		73C4D90A28F4825E0085CE17 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		73FD7CCB29751F830004FC00 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 				73C4D90128F4825D0085CE17 /* Media-Access-App-Bridging-Header.h */,
 				735A40ED292B1A78001EFDB8 /* CoreDataManager.swift */,
 				733D0507292C273300837208 /* Time.swift */,
+				73FD7CCB29751F830004FC00 /* NotificationHandler.swift */,
+				73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */,
 			);
 			path = "Media-Access-App";
 			sourceTree = "<group>";
@@ -290,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				735A40F4292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld in Sources */,
+				73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */,
 				73C4D90E28F4825E0085CE17 /* Coordinator.swift in Sources */,
 				733D0508292C273300837208 /* Time.swift in Sources */,
 				73C4D90D28F4825E0085CE17 /* CaptionedPhotosAlbum.swift in Sources */,
@@ -298,6 +305,7 @@
 				73C4D91228F4825E0085CE17 /* PhotoPickerModel.swift in Sources */,
 				73C4D90B28F4825E0085CE17 /* Media_AccessApp.swift in Sources */,
 				73C4D90F28F4825E0085CE17 /* ImagePickerView.swift in Sources */,
+				73FD7CCE297B57CC0004FC00 /* StartupHandler.swift in Sources */,
 				73C4D91028F4825E0085CE17 /* LivePhotoView.swift in Sources */,
 				735A40EE292B1A78001EFDB8 /* CoreDataManager.swift in Sources */,
 			);
@@ -461,6 +469,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Media-Access-App/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera for taking photos";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Add Photos  to a new album";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -494,6 +503,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Media-Access-App/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera for taking photos";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Add Photos  to a new album";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
