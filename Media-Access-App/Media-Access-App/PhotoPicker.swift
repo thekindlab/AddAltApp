@@ -112,7 +112,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 } else if utType.conforms(to: .movie) {
                     self.getVideo(from: itemProvider, typeIdentifier: typeIdentifier)
                 } else {
-                    self.getPhoto(from: itemProvider, isLivePhoto: true, image_properties: image_properties!)
+                    self.getPhoto(from: itemProvider, isLivePhoto: true, image_properties: image_properties!) //BUG, apparently for some reason unwrapping live photos does not work. NEEDD TO FIX OR VERY BAD FOR LAUNCH. 
                 }
                 
                 g.notify(queue: .main) {
