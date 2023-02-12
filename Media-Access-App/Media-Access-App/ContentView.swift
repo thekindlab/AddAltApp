@@ -51,11 +51,11 @@ struct CaptionGuide : View{
                     
                 Text("Why Caption?").fontWeight(.bold).font(.title2)
                 
-                Text("People with visual disabilities can have difficulties interpreting visual information such as images, graphs, or tables. Adding a caption to your photo will allow individuals on the internet who use assistive technology to better understand what they are viewing.")
+                    Text("People with visual disabilities can have difficulties interpreting visual information such as images, graphs, or tables. Adding a caption to your photo will allow individuals on the internet who use assistive technology to better understand what they are viewing.").font(.body)
                 
                 Text("Spread Your Photo!").fontWeight(.bold).font(.title2)
                 
-                Text("In addition to making the internet more friendly towards visually impaired individuals, adding captions to photos can make it easier to find on the internet if posted.")
+                    Text("In addition to making the internet more friendly towards visually impaired individuals, adding captions to photos can make it easier to find on the internet if posted.").font(.body)
                 }.frame(height: 180)
                 
                 Divider()
@@ -68,29 +68,33 @@ struct CaptionGuide : View{
                     
                     ScrollView{
                         
-                        VStack{
+                        VStack(alignment:.leading){
                             
-                            Text("- Do make an effort ")
+                            Text(" - Be descriptive and concise (150  characters MAX).").padding(5).font(.body)
+                            Divider()
+                            Text(" - Focus on conveying the main concept of the image and what it's trying to accomplish.  ").padding(5).font(.body)
+                            
                             Divider()
                             
+                            Text(" - Do consider the both the image content and context. ").padding(5).font(.body)
                         }
                         
                         
-                    }.border(Color.green, width:3)
+                    }.border(Color.green, width:3).padding()
                     
                     Text("Don't's ").fontWeight(.semibold).font(.title3)
                     
                     ScrollView{
                         
-                        VStack{
+                        VStack(alignment:.leading){
                             
-                            Text("Don't include \"graphic of\", \" photo of\", or \"image of\" .")
+                            Text(" - Don't include \"graphic of\", \" photo of\", or \"image of\" .").padding(5).font(.body)
                             Divider()
-                            
+                            Text(" - Don't make assumptions: verify race, identity, gender of individuals in photo.").padding(5).font(.body)
                         }
                         
                         
-                    }.border(Color.red, width:3)
+                    }.border(Color.red, width:3).padding()
                     
                     
                 }
