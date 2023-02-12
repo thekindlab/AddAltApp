@@ -37,7 +37,71 @@ struct Settings: View{
 
 struct CaptionGuide : View{
     var body: some View{
-        Text("CaptionGuide")
+        
+        VStack(spacing: 8){
+            
+            Text("CaptionGuide").fontWeight(.bold).font(.title)
+            
+            
+            Divider()
+            
+            VStack(spacing: 20){
+                
+                ScrollView{
+                    
+                Text("Why Caption?").fontWeight(.bold).font(.title2)
+                
+                Text("People with visual disabilities can have difficulties interpreting visual information such as images, graphs, or tables. Adding a caption to your photo will allow individuals on the internet who use assistive technology to better understand what they are viewing.")
+                
+                Text("Spread Your Photo!").fontWeight(.bold).font(.title2)
+                
+                Text("In addition to making the internet more friendly towards visually impaired individuals, adding captions to photos can make it easier to find on the internet if posted.")
+                }.frame(height: 180)
+                
+                Divider()
+                
+                VStack(spacing: 12){
+                    
+                    Text("Best practices").fontWeight(.bold).font(.title2)
+                    
+                    Text("Do's ").fontWeight(.semibold).font(.title3)
+                    
+                    ScrollView{
+                        
+                        VStack{
+                            
+                            Text("- Do make an effort ")
+                            Divider()
+                            
+                        }
+                        
+                        
+                    }.border(Color.green, width:3)
+                    
+                    Text("Don't's ").fontWeight(.semibold).font(.title3)
+                    
+                    ScrollView{
+                        
+                        VStack{
+                            
+                            Text("Don't include \"graphic of\", \" photo of\", or \"image of\" .")
+                            Divider()
+                            
+                        }
+                        
+                        
+                    }.border(Color.red, width:3)
+                    
+                    
+                }
+                
+                
+                
+            }.padding()
+            
+         
+            
+        }
         
     }
     
