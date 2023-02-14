@@ -28,7 +28,7 @@ struct Settings: View{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-                NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", recieveResponse: false)){Text("Contact")}
+            NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
 
             }
     }
@@ -233,8 +233,8 @@ struct MailView: UIViewControllerRepresentable
     @Binding var result: Result<MFMailComposeResult, Error>?
     @Binding  var emailBody: String
     @Binding  var senderName :String
-    @Binding  var recieveResponse: Bool
     @Binding  var sendData: Bool
+    @Binding  var recieveResponse: Bool
     @Binding  var recieveEmail: String
     
     class Coordinator: NSObject, MFMailComposeViewControllerDelegate{
@@ -296,7 +296,7 @@ struct MailView: UIViewControllerRepresentable
         }
         
         viewController.setMessageBody(emailBody, isHTML: true)
-        viewController.addAttatchmentData(localData, mimeType: "text/csv", "userData.csv") //should name the file with a generic ID. \(userID) ?
+        //viewController.addAttatchmentData(localData, mimeType: "text/csv", "userData.csv") //should name the file with a generic ID. \(userID) ?
         return viewController
         
     }
@@ -315,8 +315,9 @@ struct Contact: View{
     @State  var recipientEmail = "bowenr4@wwu.edu"
     @State  var emailBody: String
     @State  var senderName: String
-    @State  var recieveResponse: Bool
     @State  var sendData: Bool
+    @State  var recieveResponse: Bool
+    
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -362,10 +363,8 @@ struct Contact: View{
                     }.padding(.top, 20).padding(.bottom,20)
                     Divider()
                     
-                    Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
-                    Divider()
-                    
-                    Toggle("Send App Usage Data", isOn: $sendData).padding(.top, 20).padding(.bottom,20)
+                    Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20)
+                    Toggle("Send App Data", isOn: $sendData).padding(.bottom,20)
                     Divider()
                 }
                 
@@ -381,7 +380,7 @@ struct Contact: View{
                     .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
                     {
                         
-                        MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
+                        MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, sendData: self.$sendData, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
                     }
                 }
                 if(can_mail)
@@ -919,17 +918,17 @@ struct ContentView: View {
 
         let emailViewController = configuredMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
-            self.presentViewController(emailViewController, animated: true, completion: nil)
+            //self.presentViewController(emailViewController, animated: true, completion: nil)
         }
     }
     private func configuredMailComposeViewController() -> MFMailComposeViewController {
         let emailController = MFMailComposeViewController()
-        emailController.mailComposeDelegate = self
+       // emailController.mailComposeDelegate = self
         emailController.setSubject("CSV Export")
         emailController.setMessageBody("", isHTML: false)
 
         // Attaching the .CSV file to the email.
-        emailController.addAttachmentData(NSData(contentsOfFile: "localData")!, mimeType: "text/csv", fileName: "localData.csv")
+        //emailController.addAttachmentData(NSData(contentsOfFile: "localData")!, mimeType: "text/csv", fileName: "localData.csv")
 
         return emailController
     }
