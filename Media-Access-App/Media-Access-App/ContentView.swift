@@ -296,6 +296,7 @@ struct MailView: UIViewControllerRepresentable
         }
         
         viewController.setMessageBody(emailBody, isHTML: true)
+        viewController.addAttatchmentData(localData, mimeType: "text/csv", "userData.csv") //should name the file with a generic ID. \(userID) ?
         return viewController
         
     }
