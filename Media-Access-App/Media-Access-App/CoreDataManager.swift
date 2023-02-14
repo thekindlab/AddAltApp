@@ -97,7 +97,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     
     
-    func addNewImage(new_caption: String = "new_caption", photo_caption_length: Int16  = 0 , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
+    func addNewImage(image_data: Data, new_caption: String = "new_caption", photo_caption_length: Int16  = 0 , time_to_caption: Double =  0.0, photo_caption_date: String = "DEFAULT DATE", photo_caption_date_epoch: Double = 0.0)
     {
         
         
@@ -123,7 +123,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                       photo.caption_date        = photo_caption_date
                       photo.caption_date_epoch  = photo_caption_date_epoch
                       photo.time_to_caption     = time_to_caption
-                      
+                      photo.image_data = image_data
                       try context.save()
 
                   }
@@ -133,6 +133,39 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                   }
               
             }
+        
+    }
+    
+    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date)
+    {
+        
+        deleteStartupData() //delete the startup data and replace more current data. 
+        
+        
+        let context = CoreDataManager.shared.backgroundContext()
+        
+        context.performAndWait {
+            
+            do{
+                
+                let entity = Startup.entity()
+                let dataOnStartup = Startup(entity: entity, insertInto: context)
+                
+                dataOnStartup.daysOfUse =  Int64(daysUsed);
+                dataOnStartup.firstUse = firstUse
+                dataOnStartup.numberOfCaptions = Int64(captionNumber);
+                dataOnStartup.dateOfFirstUse = dateOfFirstUse; 
+                try context.save()
+                
+            }
+            catch
+            {
+                
+                debugPrint(error)
+            }
+            
+        }
+        
         
     }
     
@@ -167,6 +200,27 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
+    func loadStartUp() -> [Startup]?
+    {
+        
+        let mainContext = CoreDataManager.shared.mainContext
+        let fetchRequest: NSFetchRequest<Startup> = Startup.fetchRequest()
+        
+        do{
+            
+            let result = try mainContext.fetch(fetchRequest)
+            return result
+        }
+        catch{
+            
+            debugPrint(error)
+        }
+        
+        return nil;
+        
+        
+    }
+    
     
     func deleteAllImageData()
     {//deletes all Photos entity stored in Local_User_Data
@@ -187,6 +241,30 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         }
         
         print("deleted all locally stored image data")
+    }
+    
+    func deleteStartupData()
+    {//deletes the startup data
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Startup")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let myContext = CoreDataManager.shared.mainContext
+        
+        
+        do {
+            
+            try myContext.execute(deleteRequest)
+            try myContext.save()
+            
+        } catch let error as NSError {
+            
+            debugPrint(error)
+        }
+        
+        print("deleted all locally stored Startup data")
+        
+        
+        
     }
     
     
