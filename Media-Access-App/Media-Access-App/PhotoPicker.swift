@@ -80,25 +80,35 @@ struct PhotoPicker: UIViewControllerRepresentable {
                       let utType = UTType(typeIdentifier)
                 else { continue }
                 
-                itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { (url, error) in //get the more verbose image properties using the image URL from a temp file
+                if(utType.conforms(to: .image))
+                { //if image, get image properties using URL
                     
-                    guard let file_url = url else {return }
-                
-                    //get the image properties from the images URL
-                    do {
-                        let imageDataFromURL: Data = try Data(contentsOf: file_url) //create a data object from the URL of the temp file
-                        let imageSourceURL: CGImageSource = CGImageSourceCreateWithData(imageDataFromURL as CFData, nil)!
+                    itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { (url, error) in //get the more verbose image properties using the image URL from a temp file
+                        //Bug HERE cannot load live photo, thinks it's a directory or something.
+                        guard let file_url = url else {return }
+
+                        //get the image properties from the images URL
+                        do {
+                            let imageDataFromURL: Data = try Data(contentsOf: file_url) //create a data object from the URL of the temp file
+                            let imageSourceURL: CGImageSource = CGImageSourceCreateWithData(imageDataFromURL as CFData, nil)!
+                            image_properties = CGImageSourceCopyPropertiesAtIndex(imageSourceURL, 0, nil)! as NSDictionary //return verbose properties for the image using a temp image URL
+                        }
+                        catch{
+                           print(" This is error \(error)")
+                       }
                         
-                        image_properties = CGImageSourceCopyPropertiesAtIndex(imageSourceURL, 0, nil)! as NSDictionary //return verbose properties for the image using a temp image URL
+                        
+                        g.leave()
+                        
                     }
-                    catch{
-                        print("\(error)")
-                    }
-                    
-                    
-                    g.leave()
                     
                 }
+                else
+                {
+                    
+                    g.leave()
+                }
+                
                 
                 
                 
@@ -109,10 +119,10 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 
                 if utType.conforms(to: .image) {
                     self.getPhoto(from: itemProvider, isLivePhoto: false, image_properties: image_properties!)
-                } else if utType.conforms(to: .movie) {
-                    self.getVideo(from: itemProvider, typeIdentifier: typeIdentifier)
-                } else {
-                    self.getPhoto(from: itemProvider, isLivePhoto: true, image_properties: image_properties!) //BUG, apparently for some reason unwrapping live photos does not work. NEEDD TO FIX OR VERY BAD FOR LAUNCH. 
+                } else if utType.conforms(to: .movie) { //if movie then don't do anything b/c we can't handle movies.
+                    return;
+                } else { //if live photo, treat is as an image w/o any image properties
+                    self.getPhoto(from: itemProvider, isLivePhoto: false)
                 }
                 
                 g.notify(queue: .main) {
@@ -147,6 +157,37 @@ struct PhotoPicker: UIViewControllerRepresentable {
                         if let livePhoto = object as? PHLivePhoto {
                             DispatchQueue.main.async {
                                 self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto, photo_properties: image_properties))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        private func getPhoto(from itemProvider: NSItemProvider, isLivePhoto: Bool) {
+            let objectType: NSItemProviderReading.Type = !isLivePhoto ? UIImage.self : PHLivePhoto.self
+            
+            if itemProvider.canLoadObject(ofClass: objectType) {
+                itemProvider.loadObject(ofClass: objectType) { object, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                    //here we need to get URL info I think
+                    if !isLivePhoto {
+                        if let image = object as? UIImage {
+                            DispatchQueue.main.async {
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: image)) //append a newPhotoPickerModel object to list of picked media
+                                
+                                let start_time = Date().timeIntervalSinceReferenceDate
+                                self.photoPicker.captionTimeControl.setStartCaptionTime(newStartTime: start_time)
+                                
+                                
+                            }
+                        }
+                    } else {
+                        if let livePhoto = object as? PHLivePhoto {
+                            DispatchQueue.main.async {
+                                self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: livePhoto))
                             }
                         }
                     }

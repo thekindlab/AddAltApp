@@ -670,7 +670,11 @@ struct ContentView: View {
                                                 .onTapGesture(count:1) {
                                                     curItem = item
                                                     curItemID = item.id
-                                                    setCaptionFromSelectedPhoto()
+                                                    
+                                                    if(item.image_properties != nil) //only set caption if image properties exist.
+                                                    {
+                                                        setCaptionFromSelectedPhoto()
+                                                    }
                                                 }
                                             
                                             
@@ -815,12 +819,26 @@ struct ContentView: View {
         var current_photo: UIImage
         current_photo = (curItem?.photo)!
         
-        let current_image_properties = (curItem?.image_properties)!
-        
-        
+        var current_image_properties: NSDictionary
         
         //get jpegData of the image to create a imgsource with
         let imageData: Data = current_photo.jpegData(compressionQuality: 0)! //Returns a data object that contains the image in JPEG format. At the lowest quality
+        
+        if(curItem?.image_properties != nil)
+        {
+            
+            current_image_properties = (curItem?.image_properties)!
+        }
+        else
+        {
+            let imageSourceData : CGImageSource = CGImageSourceCreateWithData( imageData as CFData, nil)!
+            current_image_properties = CGImageSourceCopyPropertiesAtIndex(imageSourceData, 0, nil)! as NSDictionary
+             
+        }
+        
+        
+        
+       
 
         
         //Source Code
