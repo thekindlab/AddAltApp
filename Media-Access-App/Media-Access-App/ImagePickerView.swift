@@ -12,7 +12,12 @@ import SwiftUI
 
 struct ImagePickerView: UIViewControllerRepresentable {
     
-    @Binding var selectedImage: UIImage?
+    
+    @Binding var curItem: PhotoPickerModel?
+    @ObservedObject var captionTimeControl: Time
+    
+    
+    
     @Environment(\.presentationMode) var isPresented
     var sourceType: UIImagePickerController.SourceType
         

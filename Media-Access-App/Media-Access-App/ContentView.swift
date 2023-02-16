@@ -766,7 +766,11 @@ struct ContentView: View {
                             
                             //Camera sheet
                             .sheet(isPresented: self.$showCamera) {
-                                ImagePickerView(selectedImage: self.$curImage, sourceType: .camera)
+                                ImagePickerView( curItem: $curItem,  captionTimeControl: timeToCaption, sourceType: .camera)
+                                
+                                    
+                                    
+                            
                             }
                             //Camera sheet
                             
