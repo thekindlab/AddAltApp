@@ -293,11 +293,17 @@ struct MailView: UIViewControllerRepresentable
         {
             emailBody = emailBody + " \n I want to send information about my app usage!"
             CoreDataManager.shared.createCSV()
+            let pathCSV = "workingTempPath"
+            if let fileData = NSData(contentsOfFile: pathCSV)
+            {
+                print("File data loaded.")
+                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+            }
             
         }
         
         viewController.setMessageBody(emailBody, isHTML: true)
-        //viewController.addAttatchmentData(localData, mimeType: "text/csv", "userData.csv") //should name the file with a generic ID. \(userID) ?
+         //should name the file with a generic ID. \(userID) ?
         return viewController
         
     }
