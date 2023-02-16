@@ -284,6 +284,8 @@ struct MailView: UIViewControllerRepresentable
         let viewController = MFMailComposeViewController()
         viewController.mailComposeDelegate = context.coordinator
         viewController.setToRecipients([recieveEmail])
+        
+        var pathCSV = ""
         if(recieveResponse)
         {
             emailBody = emailBody + " \n I want to recieve a Response!"
@@ -292,18 +294,23 @@ struct MailView: UIViewControllerRepresentable
         if(sendData)
         {
             emailBody = emailBody + " \n I want to send information about my app usage!"
-            CoreDataManager.shared.createCSV()
-            let pathCSV = "workingTempPath"
+            
+            pathCSV = CoreDataManager.shared.createCSV()
+            
+            
+        }
+        
+        viewController.setMessageBody(emailBody, isHTML: true)
+        
+        if(pathCSV != "")
+        {
             if let fileData = NSData(contentsOfFile: pathCSV)
             {
                 print("File data loaded.")
                 viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
             }
-            
         }
-        
-        viewController.setMessageBody(emailBody, isHTML: true)
-         //should name the file with a generic ID. \(userID) ?
+
         return viewController
         
     }

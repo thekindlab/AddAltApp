@@ -314,7 +314,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     //create CSV file
 
-    func createCSV()
+    func createCSV() -> String
     {
         var csvString = "CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_EPOCH\n"
         let mainContext = CoreDataManager.shared.mainContext
@@ -336,7 +336,6 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                     csvString = csvString.appending(dataString) 
                 }
                 
-                //return results
             }
             catch {
                 debugPrint(error)
@@ -348,11 +347,13 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
             print("PATH: \(path)")
             let fileURL = path.appendingPathComponent("CSVData.csv")
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+            let filePath = fileURL.path
+            return filePath
         } catch {
             print("error creating file")
         }
         
-        //return nil;
+        return ""
     }
     
     
