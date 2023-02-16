@@ -283,13 +283,27 @@ struct MailView: UIViewControllerRepresentable
         let viewController = MFMailComposeViewController()
         viewController.mailComposeDelegate = context.coordinator
         viewController.setToRecipients([recieveEmail])
+        
         if(recieveResponse)
-        {
-            emailBody = emailBody + " \n I want to recieve a Response!"
+        { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
+            
+            
+            let new_emailBody = emailBody + " \n , I want to recieve a Response!"
+            
+        
+            
+            viewController.setMessageBody(new_emailBody, isHTML: true)
             
         }
+        else
+        {
+            
+            
+            viewController.setMessageBody(emailBody, isHTML: true)
+        }
         
-        viewController.setMessageBody(emailBody, isHTML: true) //BUG THIS DOESN't actually add the I want to recieve a response until they've returned from view. Odd. 
+        
+        
         return viewController
         
     }
