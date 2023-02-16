@@ -326,7 +326,7 @@ struct Background<Content: View>: View {
     }
 
     var body: some View {
-        Color.white
+        Color.clear
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.90)
         .overlay(content)
     }
@@ -334,7 +334,7 @@ struct Background<Content: View>: View {
 
 
 struct Contact: View{
-    
+    @Environment(\.colorScheme) var colorScheme
     @State  var recipientEmail = "bowenr4@wwu.edu"
     @State  var emailBody: String
     @State  var senderName: String
@@ -342,12 +342,13 @@ struct Contact: View{
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
-    @State var text_color = Color.gray
+    @State var text_color =   Color.gray
     @State var button_color = !MFMailComposeViewController.canSendMail() ? Color.gray : Color.blue
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
         
-        Background{
+        VStack{
+            
             
             
             HStack(alignment: .top)
@@ -379,8 +380,8 @@ struct Contact: View{
                         {
                             Text("Message")
                             TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
-                                .cornerRadius(10.0)
-                                .foregroundColor(text_color).border(Color.gray, width:0.5).onTapGesture {
+                                .cornerRadius(10.0).foregroundColor(text_color)
+                                .border(Color.gray, width:0.5).onTapGesture {
                                     
                                     clearEditor()
                                     
@@ -420,18 +421,27 @@ struct Contact: View{
                     
                     
                 }.padding(.bottom, 25.0).padding(.horizontal)
-                
             }
-            
-        }.onTapGesture {
+        }.ignoresSafeArea(.keyboard, edges: [.bottom]).onTapGesture {
             self.endEditing()
-        }
-        //write a contactable email for any questions or concerns
+        }      //write a contactable email for any questions or concerns
         
     }
     
     private func clearEditor() {
-        text_color = Color.black
+        
+        
+        if(colorScheme == .dark)
+        {
+            
+            text_color = Color.white
+        }else
+        {
+            
+            text_color = Color.black
+        }
+        
+        
         if(emailBody == "Something Is Wrong!") {
             emailBody = ""
         }
