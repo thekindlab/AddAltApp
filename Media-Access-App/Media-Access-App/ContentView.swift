@@ -880,7 +880,7 @@ struct ContentView: View {
     
     
     private func exportLocalData()
-    {//should be function for exporting all of the local data to a remote csv file or google drive type deal. 
+    {
         /*
         let sFileName = "localData.csv"
         

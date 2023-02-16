@@ -312,7 +312,48 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     //TEST CODE
     
     
-    
+    //create CSV file
+
+    func createCSV()
+    {
+        var csvString = "CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_EPOCH\n"
+        let mainContext = CoreDataManager.shared.mainContext
+            let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        
+            do {
+                let results = try mainContext.fetch(fetchRequest)
+                for saved_photo in results{
+                    
+                    //save meta data in CSV string. Definitetly needs type adjusting
+                    let photoCaption = saved_photo.caption as Any
+                    let photoLength = saved_photosaved_photo.caption_length as Any
+                    let photoTimeToCaption = saved_photosaved_photo.time_to_caption as Any
+                    let photoDate = saved_photoString(describing: saved_photo.caption_date)
+                    let photoEpoch = saved_photosaved_photo.caption_date_epoch
+
+                    let dataString = "\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoEpoch)\n"
+                    print("DATA: \dataString)") //test printout
+                    csvString = csvString.appending(dataString) 
+                }
+                
+                //return results
+            }
+            catch {
+                debugPrint(error)
+            }
+        
+        let fileManager = FileManager.default
+        do {
+            let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            print("PATH: \(path)")
+            let fileURL = path.appendingPathComponent("CSVData.csv")
+            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print("error creating file")
+        }
+        
+        //return nil;
+    }
     
     
     
