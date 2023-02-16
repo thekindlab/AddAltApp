@@ -292,6 +292,7 @@ struct MailView: UIViewControllerRepresentable
         if(sendData)
         {
             emailBody = emailBody + " \n I want to send information about my app usage!"
+            CoreDataManager.shared.createCSV()
             
         }
         

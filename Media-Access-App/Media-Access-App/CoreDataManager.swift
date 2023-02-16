@@ -326,13 +326,13 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                     
                     //save meta data in CSV string. Definitetly needs type adjusting
                     let photoCaption = saved_photo.caption as Any
-                    let photoLength = saved_photosaved_photo.caption_length as Any
-                    let photoTimeToCaption = saved_photosaved_photo.time_to_caption as Any
-                    let photoDate = saved_photoString(describing: saved_photo.caption_date)
-                    let photoEpoch = saved_photosaved_photo.caption_date_epoch
+                    let photoLength = saved_photo.caption_length as Any
+                    let photoTimeToCaption = saved_photo.time_to_caption as Any
+                    let photoDate = String(describing: saved_photo.caption_date)
+                    let photoEpoch = saved_photo.caption_date_epoch
 
                     let dataString = "\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoEpoch)\n"
-                    print("DATA: \dataString)") //test printout
+                    print("DATA: \(dataString)") //test printout
                     csvString = csvString.appending(dataString) 
                 }
                 
