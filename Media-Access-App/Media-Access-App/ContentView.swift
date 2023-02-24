@@ -484,7 +484,7 @@ struct ContentView: View {
     
     
     //Global Variables
-    @State public var currentCaption: String = "Enter Your Caption"
+    @State public var currentCaption: String = "Add a photo and then add a caption. "
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
@@ -575,11 +575,11 @@ struct ContentView: View {
                                 //  Cancel Button
                                 Button(action: {
                                     print("Cancelled")
-                                    if(currentCaption == "Enter Your Caption") {
+                                    if(currentCaption == "Add a photo and then add a caption. ") {
                                         currentCaption = ""
                                     }
                                     else {
-                                        currentCaption = "Enter Your Caption"
+                                        currentCaption = "Add a photo and then add a caption. "
                                     }
                                     
                                 }, label: {
@@ -676,7 +676,7 @@ struct ContentView: View {
                                         } else {
                                             curItem = nil
                                         }
-                                        currentCaption = "Enter Your Caption"
+                                        currentCaption = "Add a photo and then add a caption. "
                                     }
                                 }, label: {
                                     Text("Submit").foregroundColor(Color.white)
@@ -761,9 +761,11 @@ struct ContentView: View {
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Enter Your Caption"
+                                            currentCaption = "Add a photo and then add a caption. "
                                         }){Image (systemName: "trash")
                                                 .foregroundColor(.red)
+                                            
+                                            Text("Remove").foregroundColor(.red)
                                         }
                                         
                                     }
@@ -774,7 +776,9 @@ struct ContentView: View {
                                     ToolbarItem(placement: .principal) {
                                         Button(action:
                                                 {self.showCamera.toggle()})
-                                        {Image (systemName: "camera")}
+                                        {Image (systemName: "camera")
+                                            Text("New")
+                                        }
                                     }
                                     //Camera button
                                     
@@ -784,7 +788,9 @@ struct ContentView: View {
                                     ToolbarItem(placement: .primaryAction) {
                                         Button(action:
                                                 {showSheet = true})
-                                        {Image (systemName: "photo")}
+                                        {Image (systemName: "photo")
+                                            Text("Add")
+                                        }
                                     }
                                     //Photo library
                                 }
@@ -850,7 +856,7 @@ struct ContentView: View {
     
     
     private func clearEditor() {
-        if(currentCaption == "Enter Your Caption") {
+        if(currentCaption == "Add a photo and then add a caption. ") {
             currentCaption = ""
         }
     }
@@ -936,7 +942,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Enter Your Caption"
+           currentCaption = "Add a photo and then add a caption. "
             return
         }
         
@@ -945,7 +951,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Enter Your Caption"
+           currentCaption = "Add a photo and then add a caption. "
             return;
         }
         
