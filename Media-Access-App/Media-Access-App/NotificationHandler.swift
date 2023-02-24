@@ -119,7 +119,7 @@ class NotificationHandler
     
     func scheduleWelcomeNotification()
     {
-        let title = "Welcome To [App Title]!"
+        let title = "Welcome To Accessibility App!"
         let body = "Help make the internet more accessible by adding alt-text to your images."
         let time = (60.0) *  (30)
         sendNotification(date: Date(), type: "time" , timeInterval: time, title: title, body: body)
