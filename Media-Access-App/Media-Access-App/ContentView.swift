@@ -28,7 +28,7 @@ struct Settings: View{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-                NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", recieveResponse: false)){Text("Contact")}
+            NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
 
             }
     }
@@ -233,6 +233,7 @@ struct MailView: UIViewControllerRepresentable
     @Binding var result: Result<MFMailComposeResult, Error>?
     @Binding  var emailBody: String
     @Binding  var senderName :String
+    @Binding  var sendData: Bool
     @Binding  var recieveResponse: Bool
     @Binding  var recieveEmail: String
     
@@ -284,6 +285,9 @@ struct MailView: UIViewControllerRepresentable
         viewController.mailComposeDelegate = context.coordinator
         viewController.setToRecipients([recieveEmail])
         
+
+        var pathCSV = ""
+
         if(recieveResponse)
         { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
             
@@ -304,6 +308,27 @@ struct MailView: UIViewControllerRepresentable
         
         
         
+
+        if(sendData)
+        {
+            emailBody = emailBody + " \n I want to send information about my app usage!"
+            
+            pathCSV = CoreDataManager.shared.createCSV()
+            
+            
+        }
+        
+        viewController.setMessageBody(emailBody, isHTML: true)
+        
+        if(pathCSV != "")
+        {
+            if let fileData = NSData(contentsOfFile: pathCSV)
+            {
+                print("File data loaded.")
+                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+            }
+        }
+
         return viewController
         
     }
@@ -325,7 +350,9 @@ struct Contact: View{
     @State  var recipientEmail = "bowenr4@wwu.edu"
     @State  var emailBody: String
     @State  var senderName: String
+    @State  var sendData: Bool
     @State  var recieveResponse: Bool
+    
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -334,86 +361,87 @@ struct Contact: View{
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
         
+    
         VStack{
-            
-            
-            
-            HStack(alignment: .top)
-            {
-                
-                
-                
-                VStack(alignment: .center, spacing: 16){
-                    Text("Contact Us").bold()
                     
                     
                     
-                    
-                    VStack( spacing: 8){
+                    HStack(alignment: .top)
+                    {
                         
-                        Divider()
                         
-                        HStack(spacing:16){
-                            Text("Name")
+                        
+                        VStack(alignment: .center, spacing: 16){
+                            Text("Contact Us").bold()
                             
-                            TextField(text: $senderName, prompt: Text("Optional"))
-                            {
-                                Text("name")
-                            }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled().padding(.leading,10)
-                        }
-                        Divider()
-                        
-                        VStack(alignment: .leading, spacing:16)
-                        {
-                            Text("Message")
-                            TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
-                                .cornerRadius(10.0).foregroundColor(text_color)
-                                .border(Color.gray, width:0.5).onTapGesture {
+                            
+                            
+                            
+                            VStack( spacing: 8){
+                                
+                                Divider()
+                                
+                                HStack(spacing:16){
+                                    Text("Name")
                                     
-                                    clearEditor()
-                                    
-                                    
+                                    TextField(text: $senderName, prompt: Text("Optional"))
+                                    {
+                                        Text("name")
+                                    }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled().padding(.leading,10)
                                 }
+                                Divider()
+                                
+                                VStack(alignment: .leading, spacing:16)
+                                {
+                                    Text("Message")
+                                    TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
+                                        .cornerRadius(10.0).foregroundColor(text_color)
+                                        .border(Color.gray, width:0.5).onTapGesture {
+                                            
+                                            clearEditor()
+                                            
+                                            
+                                        }
+                                    
+                                }.padding(.top, 20).padding(.bottom,20)
+                                Divider()
+                                
+                                Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
+                                Toggle("Send App Data", isOn: $sendData).padding(.bottom,20)
+                                Divider()
+                                
+                            }
                             
-                        }.padding(.top, 20).padding(.bottom,20)
-                        Divider()
-                        
-                        Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
-                        Divider()
-                        
-                    }
-                    
-                    VStack(alignment: .center)
-                    {
-                        Button(action: {
-                            self.isShowingMailView.toggle()
-                        }, label: {
-                            Text(" Send Message").foregroundColor(Color.white)
-                        })
-                        .frame(width: 200.00, height: 33.0)
-                        .background(button_color)
-                        .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
-                        {
+                            VStack(alignment: .center)
+                            {
+                                Button(action: {
+                                    self.isShowingMailView.toggle()
+                                }, label: {
+                                    Text(" Send Message").foregroundColor(Color.white)
+                                })
+                                .frame(width: 200.00, height: 33.0)
+                                .background(button_color)
+                                .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
+                                {
+                                    
+                                    MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, sendData: self.$sendData, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
+                                }
+                            }
+                            if(can_mail)
+                            {
+                                Divider()
+                                Text("It Looks like email is not setup")
+                            }
+                            Spacer()
                             
-                            MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
-                        }
+                            
+                            
+                        }.padding(.bottom, 25.0).padding(.horizontal)
                     }
-                    if(can_mail)
-                    {
-                        Divider()
-                        Text("It Looks like email is not setup")
+                }.ignoresSafeArea(.keyboard, edges: [.bottom]).onTapGesture {
+                    self.endEditing()
+                }      //write a contactable email for any questions or concerns
                     }
-                    Spacer()
-                    
-                    
-                    
-                }.padding(.bottom, 25.0).padding(.horizontal)
-            }
-        }.ignoresSafeArea(.keyboard, edges: [.bottom]).onTapGesture {
-            self.endEditing()
-        }      //write a contactable email for any questions or concerns
-        
-    }
     
     private func clearEditor() {
         
@@ -948,7 +976,7 @@ struct ContentView: View {
     
     
     private func exportLocalData()
-    {//should be function for exporting all of the local data to a remote csv file or google drive type deal. 
+    {
         /*
         let sFileName = "localData.csv"
         
@@ -984,8 +1012,23 @@ struct ContentView: View {
         //(BOOL)writeToURL:(NSString *)url
         //    atomically:(BOOL)useAuxiliaryFile;
         //TODO
+
+        let emailViewController = configuredMailComposeViewController()
+        if MFMailComposeViewController.canSendMail() {
+            //self.presentViewController(emailViewController, animated: true, completion: nil)
+        }
     }
-    
+    private func configuredMailComposeViewController() -> MFMailComposeViewController {
+        let emailController = MFMailComposeViewController()
+       // emailController.mailComposeDelegate = self
+        emailController.setSubject("CSV Export")
+        emailController.setMessageBody("", isHTML: false)
+
+        // Attaching the .CSV file to the email.
+        //emailController.addAttachmentData(NSData(contentsOfFile: "localData")!, mimeType: "text/csv", fileName: "localData.csv")
+
+        return emailController
+    }
     private func getCurrentDate() -> String
     { //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
         // get the current date and time
