@@ -513,8 +513,39 @@ struct ContentView: View {
                     .clipShape(Capsule())
                     
                     
+                    //daily notification
+
+                    Button(action: {
+                        let title = "Media Accessibility"
+                        let body = "Do you forget to caption a photo"
+                        
+                        // Specify the Seattle time zone
+                        let seattleTimeZone = TimeZone(identifier: "America/Los_Angeles")
+                        
+                        // Create a calendar instance and set the Seattle time zone
+                        var calendar = Calendar.current
+                        calendar.timeZone = seattleTimeZone!
+                        
+                        // Get the current date and time in the Seattle time zone
+                        let currentDate = Date()
+                        
+                        // Schedule the notification for 1 minute from the current time with the correct time zone
+                        let scheduledDate = calendar.date(byAdding: .minute, value: 1, to: currentDate)!
+                        
+                        self.notificationManager.sendNotification(date: scheduledDate, type: "date", timeInterval: 0, title: title, body: body)
+                        
+                        // Format and print the scheduled time in the Seattle time zone
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.timeZone = seattleTimeZone!
+                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZ"
+                        let formattedScheduledTime = dateFormatter.string(from: scheduledDate)
+                        
+                        print("Scheduled notification for: \(formattedScheduledTime)")
+                    }, label: {
+                        Text("Schedule Notification").foregroundColor(Color.black)
+                    })
                     
-                    //notif Scheduler test code
+                    
                     /*
                      
                      //  print local storage Button for testing
