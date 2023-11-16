@@ -201,6 +201,7 @@ class NotificationHandler
         self.removeAppNotifications()
         self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
         self.scheduleWelcomeNotification()
+        self.scheduleDailyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", hour: 13, minute: 30, timeZoneID: "America/Los_Angeles")
         printAllScheduledNotifications()
     }
     
