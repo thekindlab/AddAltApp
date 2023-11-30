@@ -319,9 +319,6 @@ struct MailView: UIViewControllerRepresentable
         
     }
     
-    
-    
-    
 }
 struct Contact: View{
     @Environment(\.colorScheme) var colorScheme
@@ -454,10 +451,13 @@ extension UIApplication {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
+extension String {
+    func capitalizedFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+}
+
 struct ContentView: View {
-    
-    
-    
     //Global Variables
     @State private var currentCaption: String = "Choose a photo first, and then add a caption for the photo. "
     @State private var showSheet = false
@@ -471,8 +471,6 @@ struct ContentView: View {
     @State private var timeToCaption = Time()
     @State private var notificationManager = NotificationHandler()
     @State private var startupManager = StartupHandler(notif_handler : NotificationHandler())
-    
-    
     
     var body: some View {
         
@@ -518,11 +516,32 @@ struct ContentView: View {
                                                 analyzeImage(image)
                                             }
                                     if !altTextSuggestion.isEmpty {
-                                        Text("Alt-Text Suggestion:")
-                                            .font(.caption)
-                                        Text(altTextSuggestion)
-                                            .font(.caption)
-                                            .padding()
+                                        VStack {
+                                            Spacer() // Pushes the content to the center vertically
+                                            
+                                            Text("Alt-Text Suggestion:")
+                                                .font(.caption)
+                                                .multilineTextAlignment(.center)
+                                            
+                                            HStack {
+                                                Spacer() // Pushes the content to the center horizontally
+                                                
+                                                Text(altTextSuggestion)
+                                                    .font(.caption)
+                                                
+                                                Button(action: {
+                                                    UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
+                                                }) {
+                                                    Image(systemName: "doc.on.doc") // System name for copy icon
+                                                }
+                                                .padding(.vertical, 10)
+                                                
+                                                Spacer() // Pushes the content to the center horizontally
+                                            }
+                                            
+                                            Spacer() // Pushes the content to the center vertically
+                                        }
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                                      }
                                     }
                                     
@@ -690,7 +709,6 @@ struct ContentView: View {
                                 // "queue buttons" location
                                 .toolbar {
                                     
-                                    
                                     //Trash button
                                     ToolbarItem(placement: .navigation) {
                                         Button(action:
@@ -733,6 +751,7 @@ struct ContentView: View {
                                         {Image (systemName: "photo")
                                             Text("Add")
                                         }
+                                        .disabled(curItem != nil) // Disable button if curItem is not nil
                                     }
                                     //Photo library
                                 }
@@ -845,9 +864,9 @@ struct ContentView: View {
                        let captions = description["captions"] as? [[String: Any]],
                        let firstCaption = captions.first,
                        let text = firstCaption["text"] as? String {
-                        self.altTextSuggestion = text
+                        self.altTextSuggestion = text.capitalizedFirstLetter() // Capitalize the first letter
                     } else {
-                        self.altTextSuggestion = "No description available. test 1"
+                        self.altTextSuggestion = "The alt-text sugestion is not available."
                     }
                 } catch {
                     print("Error parsing response: \(error)")
@@ -856,6 +875,7 @@ struct ContentView: View {
             }
         }.resume()
     }
+
     
     private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
