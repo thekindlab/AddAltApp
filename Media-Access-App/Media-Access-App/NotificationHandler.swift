@@ -192,14 +192,14 @@ class NotificationHandler
     {
         self.removeAppNotifications()
         self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
-        self.scheduleDailyAppNotifications(title: "Caption Me Daily!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", min: 16, hour: 13)
+        self.scheduleDailyAppNotifications(title: "Caption Me Daily!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", min: 35, hour: 13)
         self.scheduleWelcomeNotification()
         printAllScheduledNotifications()
     }
     
     
     /*
-    func schedulingFrequencyNotificationAlgorithm()
+    func schedulingFrequencyNotificationAlgorithm()s
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
         print("running scheduling freq algo")
         let startup_Info = CoreDataManager.shared.loadStartUp()
