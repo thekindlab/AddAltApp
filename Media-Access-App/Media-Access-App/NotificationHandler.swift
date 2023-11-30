@@ -104,33 +104,21 @@ class NotificationHandler
     }
     
     // Add this new method to your NotificationHandler class by Binh Ngo
-    func scheduleDailyNotification(hour: Int, minute: Int, timeZone: TimeZone, title: String, body: String) {
-        let center = UNUserNotificationCenter.current()
+    func sendNotificationDaily(triggerDate: DateComponents, title:String, body: String, shouldRepeat: Bool = true)
+    {
+        var trigger: UNNotificationTrigger?
         
-        // Create the content for the notification
+        trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: shouldRepeat)
+        
+        
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = UNNotificationSound.default
-
-        // Create the trigger for the notification with specific time and timezone
-        var dateComponents = DateComponents()
-        dateComponents.hour = hour
-        dateComponents.minute = minute
-        dateComponents.timeZone = timeZone
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
-        // Create the request for the notification
-        let identifier = UUID().uuidString
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        // Add the notification request to the notification center
-        center.add(request) { (error) in
-            if let error = error {
-                print("Error adding notification with identifier: \(identifier)")
-                print(error.localizedDescription)
-            }
-        }
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
     }
     
     func sendNotificationWeekly(triggerDate: DateComponents, title:String, body: String, shouldRepeat: Bool = true)
@@ -157,16 +145,20 @@ class NotificationHandler
      */
     
     // Scheduling Daily Notification Procedure by Binh Ngo
-    func scheduleDailyAppNotifications(title: String, body: String, hour: Int, minute: Int, timeZoneID: String) {
-        print("Scheduling Daily Notifications")
-
-        guard let timeZone = TimeZone(identifier: timeZoneID) else {
-            print("Invalid time zone identifier")
-            return
-        }
-
-        // Call the scheduleDailyNotification method with the time and time zone for Bellingham, WA
-        scheduleDailyNotification(hour: hour, minute: minute, timeZone: timeZone, title: title, body: body)
+    func scheduleDailyAppNotifications(title:String, body:String, min: Int, hour: Int)
+    {
+        
+        print("Scheduling Weekly Notifications")
+        
+        //EX) Schedule notifications every Monday, at 3:30PM,  day = 2, min = 30, hour = 15
+        var date = DateComponents()
+        date.calendar = Calendar.current
+        
+        date.hour = hour
+        date.minute = min
+        
+        sendNotificationDaily(triggerDate: date, title: title , body: body, shouldRepeat: true)
+        
     }
     
     func scheduleWeeklyAppNotifications(title:String, body:String, day:Int, min: Int, hour: Int)
@@ -200,8 +192,8 @@ class NotificationHandler
     {
         self.removeAppNotifications()
         self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
+        self.scheduleDailyAppNotifications(title: "Caption Me Daily!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", min: 16, hour: 13)
         self.scheduleWelcomeNotification()
-        self.scheduleDailyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", hour: 17, minute: 30, timeZoneID: "America/Los_Angeles")
         printAllScheduledNotifications()
     }
     
