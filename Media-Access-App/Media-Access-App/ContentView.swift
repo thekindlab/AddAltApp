@@ -2,22 +2,15 @@
 //  ItemsView.swift
 //  PHPickerDemo
 //
-//  
 //
-
+//
 import SwiftUI
 import AVKit
 import UIKit
 import MessageUI
-
-
 enum MyError: Error {
     case runtimeError(String)
 }
-
-
-
-
 struct Settings: View{
     
     var body: some View{
@@ -29,12 +22,10 @@ struct Settings: View{
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
             NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
-
             }
     }
     
 }
-
 struct CaptionGuide : View{
     var body: some View{
         
@@ -110,7 +101,6 @@ struct CaptionGuide : View{
     }
     
 }
-
 struct AboutPage: View{
     
     var body: some View{
@@ -171,7 +161,6 @@ struct AboutPage: View{
     }
     
 }
-
 struct CaptioningHistory: View{
     
    
@@ -189,7 +178,6 @@ struct CaptioningHistory: View{
             
             ScrollView{
                 ForEach(CoreDataManager.shared.loadAllImageData()!) { caption_history in
-
                     
                     HStack(spacing: 16)
                     {
@@ -222,11 +210,9 @@ struct CaptioningHistory: View{
             let p = log10(abs(num))
             let f = pow(10, p.rounded() - Double(places) + 1)
             let rnum = (num / f).rounded() * f
-
             return rnum
         }
 }
-
 struct MailView: UIViewControllerRepresentable
 {//NEED TO TEST ON A PHYSICAL DEVICE. CANNOT TEST ON A SIMULATOR
     @Environment(\.presentationMode) var presentation
@@ -285,9 +271,7 @@ struct MailView: UIViewControllerRepresentable
         viewController.mailComposeDelegate = context.coordinator
         viewController.setToRecipients([recieveEmail])
         
-
         var pathCSV = ""
-
         if(recieveResponse)
         { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
             
@@ -308,7 +292,6 @@ struct MailView: UIViewControllerRepresentable
         
         
         
-
         if(sendData)
         {
             emailBody = emailBody + " \n I want to send information about my app usage!"
@@ -328,7 +311,6 @@ struct MailView: UIViewControllerRepresentable
                 viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
             }
         }
-
         return viewController
         
     }
@@ -341,10 +323,6 @@ struct MailView: UIViewControllerRepresentable
     
     
 }
-
-
-
-
 struct Contact: View{
     @Environment(\.colorScheme) var colorScheme
     @State  var recipientEmail = "bowenr4@wwu.edu"
@@ -468,28 +446,26 @@ struct Contact: View{
     
  
     
-
     
     
 }
-
 extension UIApplication {
     func endEditing() {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
-
 struct ContentView: View {
     
     
     
     //Global Variables
-    @State public var currentCaption: String = "Add a photo and then add a caption. "
+    @State private var currentCaption: String = "Choose a photo first, and then add a caption for the photo. "
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
     @State private var curItemID: String = ""
     @State private var curItem: PhotoPickerModel? //struct that is data structure for one photo
+    @State private var altTextSuggestion: String = ""
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
     @State private var timeToCaption = Time()
@@ -501,7 +477,6 @@ struct ContentView: View {
     var body: some View {
         
         
-
         //App View Stack    (what the user sees on startup )
                 
                 NavigationView {
@@ -533,11 +508,23 @@ struct ContentView: View {
                                 
                             } else { //if we have a curItem figure out how to display it
                                 if curItem?.mediaType == .photo {
-                                    Image(uiImage: curItem?.photo ?? UIImage())
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                    
-                                    
+                                    if let image = curItem?.photo {
+                                        Image(uiImage: curItem?.photo ?? UIImage())
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 200, height: 200)
+                                            .onAppear {
+                                                // Perform image analysis when the image appears
+                                                analyzeImage(image)
+                                            }
+                                    if !altTextSuggestion.isEmpty {
+                                        Text("Alt-Text Suggestion:")
+                                            .font(.caption)
+                                        Text(altTextSuggestion)
+                                            .font(.caption)
+                                            .padding()
+                                     }
+                                    }
                                     
                                 } else if curItem?.mediaType == .video {
                                     if let url = curItem?.url {
@@ -552,6 +539,7 @@ struct ContentView: View {
                                     } else { EmptyView() }
                                 }
                             }
+                            
                             //current image chosen
                             
                             
@@ -565,6 +553,7 @@ struct ContentView: View {
                                 }
                                 .foregroundColor(Color.gray)
                                 .border(Color.black, width: 1)
+                        
                             //Text editor input object
                             
                             
@@ -592,54 +581,7 @@ struct ContentView: View {
                                 
                                 
                                 //notif Scheduler test code
-                                /*
-                                 
-                                 //  print local storage Button for testing
-                                 Button(action: {
-                                 
-                                 
-                                 //this just prints out the caption for all of the saved data
-                                 
-                                 }, label: {
-                                 Text("test DayCalc").foregroundColor(Color.white)
-                                 })
-                                 .frame(width: 100.0, height: 30.0)
-                                 .background(Color.blue)
-                                 .clipShape(Capsule())
-                                 //  print local storage Button for testing
-                                 
-                                 Button(action: {
-                                 
-                                 CoreDataManager.shared.deleteStartupData()
-                                 //this just prints out the caption for all of the saved data
-                                 
-                                 }, label: {
-                                 Text("RESET STARTUP").foregroundColor(Color.white)
-                                 })
-                                 .frame(width: 100.0, height: 30.0)
-                                 .background(Color.blue)
-                                 .clipShape(Capsule())
-                                 //  print local storage Button for testing
-                                 
-                                 
-                                 // delete local stroage button for testing
-                                 Button(action: {
-                                 
-                                 //deletes all image data
-                                 self.notificationManager.removeAppNotifications()
-                                 
-                                 //this just prints out the caption for all of the saved data
-                                 
-                                 }, label: {
-                                 Text(" stop all schedule notifications").foregroundColor(Color.white)
-                                 })
-                                 .frame(width: 100.0, height: 30.0)
-                                 .background(Color.purple)
-                                 .clipShape(Capsule())
-                                 //  delete local stroage button for testing
-                                 
-                                 
-                                 */
+                                
                                 //Notification scheduling test code.
                                 
                                 
@@ -836,7 +778,6 @@ struct ContentView: View {
                             self.endEditing()
                             
                         }
-
                     }
                 }
     }
@@ -861,7 +802,82 @@ struct ContentView: View {
         }
     }
     
+    private func analyzeImage(_ image: UIImage) {
+        let resizedImage = resizeImage(image, targetSize: CGSize(width: 3000, height: 2002))
+        
+        // Convert image to binary data
+        guard let imageData = resizedImage.jpegData(compressionQuality: 0.9) else {
+            print("Could not get JPEG representation of UIImage")
+            return
+        }
+        let apiKey = "c2b7be37ed4f4f9dab6b3bed64e91bce" // Securely stored API key
+        let endpoint = "https://api-vision-alt-text.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Description&language=en"
+        guard let url = URL(string: endpoint) else {
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.httpBody = imageData
+        URLSession.shared.dataTask(with: request) {data, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error analyzing the image: \(error)")
+                    self.altTextSuggestion = "Error analyzing the image."
+                    return
+                }
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    self.altTextSuggestion = "No HTTP response received."
+                    return
+                }
+                guard let data = data, httpResponse.statusCode == 200 else {
+                    print("HTTP Status Code: \(httpResponse.statusCode)")
+                    self.altTextSuggestion = "Error analyzing the image. Status Code: \(httpResponse.statusCode)"
+                    return
+                }
+                if let dataString = String(data: data, encoding: .utf8) {
+                    print("Response Data: \(dataString)")
+                }
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let description = json["description"] as? [String: Any],
+                       let captions = description["captions"] as? [[String: Any]],
+                       let firstCaption = captions.first,
+                       let text = firstCaption["text"] as? String {
+                        self.altTextSuggestion = text
+                    } else {
+                        self.altTextSuggestion = "No description available. test 1"
+                    }
+                } catch {
+                    print("Error parsing response: \(error)")
+                    self.altTextSuggestion = "Error analyzing the image."
+                }
+            }
+        }.resume()
+    }
     
+    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        // Determine what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if widthRatio > heightRatio {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(origin: CGPoint.zero, size: newSize)
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        print("Error parsing response. Resize image")
+        return newImage ?? image
+    }
     private func saveCaptionedPhotoToLibrary()  {
         
         //grab current image UIImage
@@ -888,7 +904,6 @@ struct ContentView: View {
         
         
        
-
         
         //Source Code
         //the image source is basically a file that holds the images info
@@ -911,7 +926,6 @@ struct ContentView: View {
         //modify copy of image meta data
         IPTCDictionary!["ArtworkContentDescription"] = currentCaption
         
-
         
         //Destination Code
         //an image destination is basically a file we create to store new modified image info to
@@ -920,7 +934,6 @@ struct ContentView: View {
         let imageDestData: NSMutableData = NSMutableData(data: imageData) //create an Mutable Data object (when destination change, this is where the data will be changed)
         
         let destination: CGImageDestination = CGImageDestinationCreateWithData((imageDestData as CFMutableData), uti, 1, nil)! //image destination
-
         
         //add the modified meta data to the image destination temp file
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutable)
@@ -957,7 +970,6 @@ struct ContentView: View {
         
          currentCaption = IPTCDictionary!["ArtworkContentDescription"]! as! String // we can modify this to put the images caption here if it already exists
         
-
     }
     
     
@@ -974,7 +986,6 @@ struct ContentView: View {
         let caption = currentCaption
         let caption_length = currentCaption.count
         let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
-
         CoreDataManager.shared.addNewImage(image_data:  photo_data, new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
         //save the Photo meta data to Core Data with all the desired properties
        
@@ -1002,9 +1013,7 @@ struct ContentView: View {
         csvWriter?.writeField("CAPTION_TIME")
         //add more headers later
         csvWriter?.finishLINE()
-
         var arrOfImageData = [[String]]()
-
         arrOfImageData.append(["", "", "", "", ""])
         
         for(elements) in arrOfImageData.enumerated()
@@ -1018,7 +1027,6 @@ struct ContentView: View {
         //(BOOL)writeToURL:(NSString *)url
         //    atomically:(BOOL)useAuxiliaryFile;
         //TODO
-
         let emailViewController = configuredMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
             //self.presentViewController(emailViewController, animated: true, completion: nil)
@@ -1029,20 +1037,16 @@ struct ContentView: View {
        // emailController.mailComposeDelegate = self
         emailController.setSubject("CSV Export")
         emailController.setMessageBody("", isHTML: false)
-
         // Attaching the .CSV file to the email.
         //emailController.addAttachmentData(NSData(contentsOfFile: "localData")!, mimeType: "text/csv", fileName: "localData.csv")
-
         return emailController
     }
     private func getCurrentDate() -> String
     { //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
         // get the current date and time
         let currentDateTime = Date()
-
         // get the user's calendar
         let userCalendar = Calendar.current
-
         // choose which date and time components are needed
         let requestedComponents: Set<Calendar.Component> = [
             .year,
@@ -1052,10 +1056,8 @@ struct ContentView: View {
             .minute,
             .second
         ]
-
         // get the components
         let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDateTime)
-
         
         let current_date = String(dateTimeComponents.year!) + "/"  + String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
         
@@ -1063,20 +1065,13 @@ struct ContentView: View {
         
         return current_date
     }
-
     
 }
-
-
-
-
 //how XCode loads the preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
-
-
 
 
