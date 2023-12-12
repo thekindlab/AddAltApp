@@ -459,7 +459,7 @@ extension String {
 
 struct ContentView: View {
     //Global Variables
-    @State private var currentCaption: String = "Choose a photo first, and then add a caption for the photo. "
+    @State private var currentCaption: String = "Choose one photo, then add a caption to the photo. "
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
@@ -471,6 +471,8 @@ struct ContentView: View {
     @State private var timeToCaption = Time()
     @State private var notificationManager = NotificationHandler()
     @State private var startupManager = StartupHandler(notif_handler : NotificationHandler())
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         
@@ -583,11 +585,11 @@ struct ContentView: View {
                                 //  Cancel Button
                                 Button(action: {
                                     print("Cancelled")
-                                    if(currentCaption == "Add a photo and then add a caption. ") {
+                                    if(currentCaption == "Choose one photo, then add a caption to the photo. ") {
                                         currentCaption = ""
                                     }
                                     else {
-                                        currentCaption = "Add a photo and then add a caption. "
+                                        currentCaption = "Choose one photo, then add a caption to the photo. "
                                     }
                                     
                                 }, label: {
@@ -611,6 +613,23 @@ struct ContentView: View {
                                     if(curItem?.mediaType == .photo) { //save the current photo
                                         
                                     }
+                                    // Check if the caption length is within the desired range
+                                   let captionLength = currentCaption.count
+                                    if captionLength < 15 || captionLength > 150 {
+                                            alertMessage = "Caption must be between 15 and 150 characters."
+                                            showAlert = true
+                                            return
+                                        }
+                                    
+                                   // Check if the caption contains invalid words
+                                   let invalidWords = ["image", "picture", "icon"]
+                                    for word in invalidWords {
+                                           if currentCaption.localizedCaseInsensitiveContains(word) {
+                                               alertMessage = "Caption should not include the words 'image', 'picture', or 'icon'."
+                                               showAlert = true
+                                               return
+                                           }
+                                       }
                                     
                                     if(curItem != nil) { //if we have a photo to save
                                         
@@ -637,7 +656,7 @@ struct ContentView: View {
                                         } else {
                                             curItem = nil
                                         }
-                                        currentCaption = "Add a photo and then add a caption. "
+                                        currentCaption = "Choose one photo, then add a caption to the photo. "
                                     }
                                 }, label: {
                                     Text("Submit").foregroundColor(Color.white)
@@ -645,8 +664,10 @@ struct ContentView: View {
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.green)
                                 .clipShape(Capsule())
-                                //submit button
-                                
+                                .alert(isPresented: $showAlert) {
+                                    Alert(title: Text("Invalid Caption"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                    //submit button
+                                }
                                 
                             }
                             .padding(.bottom, 15.0)
@@ -721,7 +742,7 @@ struct ContentView: View {
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Add a photo and then add a caption. "
+                                            currentCaption = "Choose one photo, then add a caption to the photo. "
                                         }){Image (systemName: "trash")
                                                 .foregroundColor(.red)
                                             
@@ -816,7 +837,7 @@ struct ContentView: View {
     
     
     private func clearEditor() {
-        if(currentCaption == "Add a photo and then add a caption. ") {
+        if(currentCaption == "Choose one photo, then add a caption to the photo. ") {
             currentCaption = ""
         }
     }
@@ -975,7 +996,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Add a photo and then add a caption. "
+           currentCaption = "Choose one photo, then add a caption to the photo. "
             return
         }
         
@@ -984,7 +1005,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Add a photo and then add a caption. "
+           currentCaption = "Choose one photo, then add a caption to the photo. "
             return;
         }
         

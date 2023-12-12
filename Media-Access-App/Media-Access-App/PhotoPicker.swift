@@ -28,7 +28,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
         
         var config = PHPickerConfiguration()
         config.filter = .any(of: [.images, .videos, .livePhotos])
-        config.selectionLimit = 0
+        config.selectionLimit = 1
         config.preferredAssetRepresentationMode = .current
         
         let controller = PHPickerViewController(configuration: config)
