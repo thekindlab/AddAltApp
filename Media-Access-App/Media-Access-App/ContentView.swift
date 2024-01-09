@@ -16,7 +16,6 @@ struct Settings: View{
     var body: some View{
         
         Text("Settings").bold().padding(.top, 50.0)
-        
         List{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
@@ -163,8 +162,6 @@ struct AboutPage: View{
 }
 struct CaptioningHistory: View{
     
-   
-    
     var body: some View {
         
         VStack{
@@ -256,9 +253,6 @@ struct MailView: UIViewControllerRepresentable
         
         
         
-        
-        
-        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -322,7 +316,7 @@ struct MailView: UIViewControllerRepresentable
 }
 struct Contact: View{
     @Environment(\.colorScheme) var colorScheme
-    @State  var recipientEmail = "bowenr4@wwu.edu"
+    @State  var recipientEmail = "nguye404@wwu.edu"
     @State  var emailBody: String
     @State  var senderName: String
     @State  var sendData: Bool
@@ -486,17 +480,25 @@ struct ContentView: View {
                     VStack {
                         
                         //navigation to Settings page
-                        NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                        //NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                        
+                        //navigation to Settings page
+                        NavigationLink(destination: Settings()) {
+                            Image(systemName: "line.horizontal.3")
+                            .font(.system(size: 30))
+                            .foregroundColor(.black)
+                        }
+                        .padding(.top, 20)
+                        .padding(.trailing, UIScreen.main.bounds.size.width * 1.5 / 2)
                         
                         VStack{
                             
                             
                             
                             //Header
-                            Text("Media Accessibility")
-                                .font(.headline)
-                                .fontWeight(.regular)
-                                .padding(.bottom, 100.0)
+                            Text("MEDIA ACCESIBILITY")
+                                .font(.system(size: 20,  weight: .bold))
+                                .padding(.bottom, 20.0)
                             //Header
                             
                             
@@ -505,6 +507,9 @@ struct ContentView: View {
                                 Image("Media-Access")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
+                                    .frame(width: 230, height: 230)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    .padding(.bottom, 20)
                                 
                             } else { //if we have a curItem figure out how to display it
                                 if curItem?.mediaType == .photo {
@@ -512,7 +517,9 @@ struct ContentView: View {
                                         Image(uiImage: curItem?.photo ?? UIImage())
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 200, height: 200)
+                                            .frame(width: 210, height: 210)
+                                            .padding(.bottom, 20)
+                                            .clipShape(RoundedRectangle(cornerRadius: 15))
                                             .onAppear {
                                                 // Perform image analysis when the image appears
                                                 analyzeImage(image)
@@ -568,13 +575,18 @@ struct ContentView: View {
                             //Text editor input object
                             TextEditor(text: $currentCaption)
                                 .frame(width: 350, height: 80, alignment: .center)
-                                .cornerRadius(3.0)
+                                .foregroundColor(Color.black)
+                                .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                )
                                 .onTapGesture(count: 1) {
                                     clearEditor()
                                 }
-                                .foregroundColor(Color.gray)
-                                .border(Color.black, width: 1)
-                        
+                                .padding(.bottom, 5.0)
+
+
                             //Text editor input object
                             
                             
@@ -593,11 +605,20 @@ struct ContentView: View {
                                     }
                                     
                                 }, label: {
-                                    Text("Clear").foregroundColor(Color.white)
+                                    HStack {
+                                        Image(systemName: "trash") // Check icon
+                                            .foregroundColor(.white)
+                                            .frame(width: 25, height: 25)
+                                            .background(Color.black)
+                                            .clipShape(Circle())
+                                        Text("CLEAR")
+                                            .bold() // Make the text bold
+                                            .foregroundColor(.white)
+                                    }
                                 })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.red)
-                                .clipShape(Capsule())
+                                .frame(width: 100.0, height: 33.0)
+                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                                 
                                 
                                 
@@ -659,17 +680,28 @@ struct ContentView: View {
                                         currentCaption = "Choose one photo, then add a caption to the photo. "
                                     }
                                 }, label: {
-                                    Text("Submit").foregroundColor(Color.white)
+                                    HStack {
+                                        Image(systemName: "checkmark") // Check icon
+                                            .foregroundColor(.white)
+                                            .frame(width: 25, height: 25)
+                                            .background(Color.black)
+                                            .clipShape(Circle())
+                                        Text("SAVE")
+                                            .bold() // Make the text bold
+                                            .foregroundColor(.white)
+                                    }
                                 })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.green)
-                                .clipShape(Capsule())
+                                .frame(width: 100.0, height: 33.0)
+                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Invalid Caption"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                                     //submit button
                                 }
                                 
+                                
                             }
+                            .padding(.trailing, 20.0)
                             .padding(.bottom, 15.0)
                             //Clear & Submit button Stack
                             
@@ -729,13 +761,11 @@ struct ContentView: View {
                                 
                                 // "queue buttons" location
                                 .toolbar {
-                                    
                                     //Trash button
                                     ToolbarItem(placement: .navigation) {
                                         Button(action:
                                                 //what happens when you click the button
                                                {let nextItem = mediaItems.getNext(item: curItemID)
-                                            
                                             mediaItems.getDeleteItem(item: curItemID)
                                             if(nextItem.id != "") {
                                                 curItem = nextItem
@@ -744,11 +774,10 @@ struct ContentView: View {
                                             }
                                             currentCaption = "Choose one photo, then add a caption to the photo. "
                                         }){Image (systemName: "trash")
-                                                .foregroundColor(.red)
+                                                .foregroundColor(.black)
                                             
-                                            Text("Remove").foregroundColor(.red)
+                                            Text("REMOVE").foregroundColor(.black)
                                         }
-                                        
                                     }
                                     //Trash button
                                     
@@ -758,7 +787,8 @@ struct ContentView: View {
                                         Button(action:
                                                 {self.showCamera.toggle()})
                                         {Image (systemName: "camera")
-                                            Text("New")
+                                            .foregroundColor(.black)
+                                            Text("NEW").foregroundColor(.black)
                                         }
                                     }
                                     //Camera button
@@ -770,7 +800,8 @@ struct ContentView: View {
                                         Button(action:
                                                 {showSheet = true})
                                         {Image (systemName: "photo")
-                                            Text("Add")
+                                                .foregroundColor(.black)
+                                            Text("OPEN").foregroundColor(.black)
                                         }
                                         .disabled(curItem != nil) // Disable button if curItem is not nil
                                     }
