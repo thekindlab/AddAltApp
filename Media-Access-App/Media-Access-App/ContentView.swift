@@ -30,72 +30,79 @@ struct CaptionGuide : View{
         
         VStack(spacing: 8){
             
-            Text("Caption Guide").fontWeight(.bold).font(.title)
+            Text("Alt Text Caption Guide").fontWeight(.bold).font(.title)
             
+            //Divider()
             
-            Divider()
-            
-            VStack(spacing: 20){
+            VStack(spacing: 10){
                 
                 ScrollView{
                     
-                Text("Why Caption?").fontWeight(.bold).font(.title2)
-                
-                    Text("People with visual disabilities can have difficulties interpreting visual information such as images, graphs, or tables. Adding a caption to your photo will allow individuals on the internet who use assistive technology to better understand what they are viewing.").font(.body)
-                
-                Text("Spread Your Photo!").fontWeight(.bold).font(.title2)
-                
-                    Text("In addition to making the internet more friendly towards visually impaired individuals, adding captions to photos can make it easier to find on the internet if posted.").font(.body)
-                }.frame(height: 180)
-                
-                Divider()
-                
-                VStack(spacing: 12){
+                    Image("Media-Access")
+                           .resizable()
+                           .scaledToFit()
+                           .frame(width: 150, height: 150) // Adjust dimensions as needed
                     
-                    Text("Best practices").fontWeight(.bold).font(.title2)
+                    Text("Two golden retreiver pupies sitting together on grass spinkled with autumn leaves.")
+                           .font(.body)
+                           .multilineTextAlignment(.center)
+                       
                     
-                    Text("Do's ").fontWeight(.semibold).font(.title3)
-                    
-                    ScrollView{
-                        
-                        VStack(alignment:.leading){
-                            
-                            Text(" - Be descriptive and concise (150  characters MAX).").padding(5).font(.body)
-                            Divider()
-                            Text(" - Focus on conveying the main concept of the image and what it's trying to accomplish.  ").padding(5).font(.body)
-                            
-                            Divider()
-                            
-                            Text(" - Do consider the both the image content and context. ").padding(5).font(.body)
+                }.frame(height: 210)
+                
+               //Divider()
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        // Do Section
+                        Text("Do! ")
+                            .fontWeight(.semibold)
+                            .font(.title3)
+                            .foregroundColor(.green)
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("- Focus on the most important element of the image and be descriptive.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Organize your alt text cohesively: what they are doing, focus point of the image, and image context.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Include sufficient detail and context for your audience")
+                                .padding(.leading, 10)
+                                .font(.body)
                         }
-                        
-                        
-                    }.border(Color.green, width:3).padding()
-                    
-                    Text("Don't's ").fontWeight(.semibold).font(.title3)
-                    
-                    ScrollView{
-                        
-                        VStack(alignment:.leading){
-                            
-                            Text(" - Don't include \"graphic of\", \" photo of\", or \"image of\" .").padding(5).font(.body)
-                            Divider()
-                            Text(" - Don't make assumptions: verify race, identity, gender of individuals in photo.").padding(5).font(.body)
+                        .padding(.bottom, 5)
+
+                        // Don't Section
+                        Text("Don't! ")
+                            .fontWeight(.semibold)
+                            .font(.title3)
+                            .foregroundColor(.red)
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("- Start by saying \"A photo of Two Puppies\" -> Two Puppies.")
+                                .padding(.leading, 10)
+                                .font(.body)
+                            Text("- Be redundant or include unnecessary words \"An image of dogs. The dogs are side by side. The dogs are in grass\" -> Two Puppies sitting together on grass.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Don't make assumptions: verify race, identity, gender of individuals in photo.")
+                                .padding(.leading, 10)
+                                .font(.body)
                         }
-                        
-                        
-                    }.border(Color.red, width:3).padding()
-                    
-                    
+                       // .padding()
+                    }.padding(.vertical, 15)
                 }
                 
                 
-                
-            }.padding()
+            }
             
          
             
-        }
+        }.padding()
         
     }
     
@@ -110,51 +117,40 @@ struct AboutPage: View{
             VStack( spacing: 8){
                 
                 VStack(alignment: .leading){
-                    
-                    
-                    
-                    Divider()
-                    Text("Spring 2022 - Winter 2023 Research Group").fontWeight(.bold).font(.title)
-                    
-                    
-                    ScrollView(.horizontal)
-                    {
-                        HStack(spacing:10){
-                            Text("Yasmine Elglaly").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Robert Bowen").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Braxton Eidem").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Charlie Koenig").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Keagan Cantrell").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                        }
-                    }
-                    
-                    
-                    Divider()
-                    
                     Text("Background").fontWeight(.bold).font(.title)
                     ScrollView{
-                        
-                        
+
                         VStack(alignment: .center)
                         {
-                            
-                            
-                            
-                            
-                        
-                        
-                        Text("A professor at the Western Washington University had an idea for a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. The application would be an extension of a phone’s native camera app and would prompt the user to add an alt-text or caption to every picture taken by the camera. If the user chooses to use the application, they can then record or type a short description of the image. The application will then save that description as text in the images’ alt-text metadata. When the user chooses to publish the image, that metadata will be included in the publishing, which then can be used by screen readers to make the internet more accessible to those who use screen readers to navigate the internet.The importance of this application is that it will spread awareness and create accessibility by adding descriptions to images. The importance in this is that people with disabilities suffer greatly when their lives depend on the internet. For example, people with disabilities may have jobs that rely on the internet, and if they cannot navigate the internet successfully then they could lose those jobs. Another goal of this application is to show people who are not technology experts that they can still help make an accessible environment for people with disabilities."
+
+                        Text("A professor at the Western Washington University had an idea for a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. "
                         ).fontWeight(.bold).font(.caption).foregroundColor(.gray).multilineTextAlignment(.center).lineSpacing(10).padding()
                     }
                 }
                 Divider()
-                
+                    Text("Contributors")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black) // Set the color based on your design
+
+                    Text("Thuan Nguyen")
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.gray) // Set the color based on your design
+                    
+                    Text("Selah Bellscheidt")
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.gray) // Set the color based on your design
                 }
                 
                 
                 
             }.padding()
             Spacer()
+            Text("© 2024 Media Acessibility. All rights reserved.")
+                               .font(.footnote)
+                               .foregroundColor(.black)
         }
         //write a couple paragraphs for explaining our research
     }
@@ -364,12 +360,14 @@ struct Contact: View{
                                 {
                                     Text("Message")
                                     TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
-                                        .cornerRadius(10.0).foregroundColor(text_color)
-                                        .border(Color.gray, width:0.5).onTapGesture {
-                                            
+                                        .foregroundColor(Color.black)
+                                        .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 3)
+                                                .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                        )
+                                        .onTapGesture {
                                             clearEditor()
-                                            
-                                            
                                         }
                                     
                                 }.padding(.top, 20).padding(.bottom,20)
@@ -399,7 +397,7 @@ struct Contact: View{
                             if(can_mail)
                             {
                                 Divider()
-                                Text("It Looks like email is not setup")
+                                Text("It looks like email is not setup")
                             }
                             Spacer()
                             
@@ -509,7 +507,7 @@ struct ContentView: View {
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 230, height: 230)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .padding(.bottom, 20)
+                                    .padding(.bottom, 15.0)
                                 
                             } else { //if we have a curItem figure out how to display it
                                 if curItem?.mediaType == .photo {
@@ -517,8 +515,8 @@ struct ContentView: View {
                                         Image(uiImage: curItem?.photo ?? UIImage())
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 210, height: 210)
-                                            .padding(.bottom, 20)
+                                            .frame(width: 230, height: 230)
+                                            .padding(.bottom, 0.0)
                                             .clipShape(RoundedRectangle(cornerRadius: 15))
                                             .onAppear {
                                                 // Perform image analysis when the image appears
@@ -526,31 +524,29 @@ struct ContentView: View {
                                             }
                                     if !altTextSuggestion.isEmpty {
                                         VStack {
-                                            Spacer() // Pushes the content to the center vertically
-                                            
+                
                                             Text("Alt-Text Suggestion:")
-                                                .font(.caption)
+                                                .font(.body)
                                                 .multilineTextAlignment(.center)
+                                                .padding(.bottom, 2)
+                                                .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
                                             
                                             HStack {
-                                                Spacer() // Pushes the content to the center horizontally
-                                                
                                                 Text(altTextSuggestion)
-                                                    .font(.caption)
+                                                    .font(.body)
+                                                    .multilineTextAlignment(.center)
+                                                    .padding(.bottom, 2)
                                                 
                                                 Button(action: {
                                                     UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
                                                 }) {
                                                     Image(systemName: "doc.on.doc") // System name for copy icon
                                                 }
-                                                .padding(.vertical, 10)
                                                 
-                                                Spacer() // Pushes the content to the center horizontally
                                             }
                                             
-                                            Spacer() // Pushes the content to the center vertically
                                         }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .frame(maxWidth: .infinity)
                                      }
                                     }
                                     
