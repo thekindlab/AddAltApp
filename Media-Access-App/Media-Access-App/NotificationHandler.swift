@@ -24,12 +24,14 @@ class NotificationHandler
     //get permission for notifications from user. NOTE this will only show up the first time a user uses an app.
     func askPermission()
     {
+        print("ASK PERMISSION")
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){
             success, error in
             
             if success{
                 
                 print("User granted access for sending notifications")
+                self.FirstUseNotificationProcedure()
                 
             }
             else if let error = error
@@ -42,6 +44,68 @@ class NotificationHandler
         
         
     }
+    func basicNotification()
+    {
+        let content = UNMutableNotificationContent()
+        content.title = "Test Notification"
+        content.body = "This is an example notification."
+        content.sound = UNNotificationSound.default
+        // Triggering notification after a certain time
+        //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        
+        //Scheduling notification for a certain time every day
+        var dateComponents = DateComponents()
+        //dateComponents.calendar = Calendar.current
+        dateComponents.hour = 17
+        dateComponents.minute = 36
+        
+        //Weekly Notifications
+        //dateComponents.year = 2024
+        //dateComponents.day = 11
+        //dateComponents.weekday = 5
+        //dateComponents.weekdayOrdinal = 2
+        
+        //dateComponents.timeZone = .current
+        //let calendar = Calendar(identifier: .gregorian)
+        //let calendar = Calendar.current
+        //let date = calendar.date(from: dateComponents)!
+        //let triggerWeekly = Calendar.current.dateComponents([.weekday,.hour,.minute,.second,], from: date)
+        //let trigger = UNCalendarNotificationTrigger(dateMatching: triggerWeekly, repeats: true)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+                   guard error == nil else { return }
+            print("Scheduling notification with id: \(request.identifier)")
+               }
+        printAllScheduledNotifications()
+    }
+    
+    func scheduleDailyNotification(text:String, hour:Int){
+        let content = UNMutableNotificationContent()
+        content.title = "Accessible Media App"
+        content.body = text
+        content.sound = UNNotificationSound.default
+        
+        //Scheduling notification for a certain time every day
+        var dateComponents = DateComponents()
+        dateComponents.hour = hour
+        dateComponents.minute = 30
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        //Schedule request
+        UNUserNotificationCenter.current().add(request) { error in
+                   guard error == nil else { return }
+            print("Scheduling notification with id: \(request.identifier)")
+               }
+        printAllScheduledNotifications()
+        
+    }
+    
     
     //Basic Notification Scheduling tools
 //    func sendNotification(date: Date, type: String, timeInterval:Double, title:String, body: String)
@@ -119,6 +183,8 @@ class NotificationHandler
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
+        
+        printAllScheduledNotifications()
     }
     
     func sendNotificationWeekly(triggerDate: DateComponents, title:String, body: String, shouldRepeat: Bool = true)
@@ -136,6 +202,7 @@ class NotificationHandler
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
+        printAllScheduledNotifications()
     }
     
     /*
@@ -182,8 +249,11 @@ class NotificationHandler
     {
         let title = "Welcome To Accessibility App!"
         let body = "Help make the internet more accessible by adding alt-text to your images."
-        let time = (60.0) *  (30)
+        //let time = (60.0) *  (30)
+        let time = (60.0) * 10
         sendNotification(date: Date(), type: "time" , timeInterval: time, title: title, body: body)
+        print("Scheduled welcome notification.")
+        printAllScheduledNotifications()
         //schedule a Welcome Notification for 30 minutes after first use.
     
     }
@@ -191,10 +261,15 @@ class NotificationHandler
     func FirstUseNotificationProcedure()
     {
         self.removeAppNotifications()
-        self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
-        self.scheduleDailyAppNotifications(title: "Caption Me Daily!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", min: 35, hour: 13)
-        self.scheduleWelcomeNotification()
-        printAllScheduledNotifications()
+        //self.basicNotification()
+        //print("scheduled basic notification")
+       // self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
+        //self.scheduleDailyAppNotifications(title: "Caption Me Daily!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", min: 35, hour: 13)
+        //self.scheduleWelcomeNotification()
+        //printAllScheduledNotifications()
+        //print("Testng daily notification")
+        scheduleDailyNotification(text: "“Don’t forget to caption your images in the Media Accessibility App!", hour: 11)
+        //print("END of FirstUseNotificationProcedure")
     }
     
     
@@ -246,7 +321,13 @@ class NotificationHandler
     
     func printAllScheduledNotifications()
     {
-        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (notficiations) in
+        print("PRINTING SCHEDULED NOTIFICATIONS:")
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { notficiations in
+            
+            if notficiations.isEmpty{
+                print("EMPTY Notification Scheduler")
+            }
 
                     for localNotification in notficiations {
                         print("Scheduled Local Notification")
@@ -254,6 +335,17 @@ class NotificationHandler
 
                     }
                 })
+         
+        /*UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+             for notificationRequest:UNNotificationRequest in notificationRequests {
+                print(notificationRequest.identifier)
+            }
+            if notificationRequests.isEmpty{
+                print("EMPTY Notification Scheduler")
+            }
+        }
+         */
+        //print("Ended Print Func")
     }
     
     
@@ -264,6 +356,7 @@ class NotificationHandler
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
     }
+
     
     
     

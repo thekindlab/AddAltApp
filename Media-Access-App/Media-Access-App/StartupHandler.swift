@@ -22,6 +22,7 @@ class StartupHandler
     
     func checkFirstAppUse()
     {
+        print("check first use")
         
         let startupDataWrapper = CoreDataManager.shared.loadStartUp()
         
@@ -46,7 +47,8 @@ class StartupHandler
                 
                 handleNoStartupData() //create a new Startup Core Data entity
                 
-                notif_handler?.FirstUseNotificationProcedure()
+                //Moved function call to askPermission() function in NotificationHandler so doesn't trigger before get permission
+                //notif_handler?.FirstUseNotificationProcedure()
                 
             }
             
