@@ -11,6 +11,7 @@ import SwiftUI
 
 @main
 struct Media_AccessApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
