@@ -91,7 +91,7 @@ class NotificationHandler
         //Scheduling notification for a certain time every day
         var dateComponents = DateComponents()
         dateComponents.hour = hour
-        dateComponents.minute = 50
+        dateComponents.minute = 30
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
@@ -268,7 +268,7 @@ class NotificationHandler
         //self.scheduleWelcomeNotification()
         //printAllScheduledNotifications()
         //print("Testng daily notification")
-        scheduleDailyNotification(text: "“Don’t forget to caption your images in the Media Accessibility App!", hour: 11)
+        scheduleDailyNotification(text: "“Don’t forget to caption your images in the Media Accessibility App!", hour: 12)
         //print("END of FirstUseNotificationProcedure")
     }
     
