@@ -91,7 +91,7 @@ class NotificationHandler
         //Scheduling notification for a certain time every day
         var dateComponents = DateComponents()
         dateComponents.hour = hour
-        dateComponents.minute = 30
+        dateComponents.minute = 50
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
