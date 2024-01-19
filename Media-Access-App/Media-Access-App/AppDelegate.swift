@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Media-Access-App
 //
-//  Created by Selah Bellscheidt on 1/16/24.
+//  Created by Selah Bellscheidt on 1/18/24.
 // Code source: https://stackoverflow.com/questions/65782435/receive-local-notifications-within-own-app-view-or-how-to-register-a-unuserno
 
 import Foundation
