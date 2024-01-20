@@ -8,6 +8,7 @@ import SwiftUI
 import AVKit
 import UIKit
 import MessageUI
+
 enum MyError: Error {
     case runtimeError(String)
 }
@@ -15,13 +16,17 @@ struct Settings: View{
     
     var body: some View{
         
-        Text("Settings").bold().padding(.top, 50.0)
+        Text("Menu")
+            .font(.title) // Adjust the font size as needed
+            .bold()
+            .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
         
         List{
-                NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
-                NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
-                NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-            NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
+                
+            NavigationLink(destination: CaptioningHistory()){ Text("Your Captioned History")} //would be cools to have and easy to implement
+            NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
+            NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
+            NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Help & Support")}
             }
     }
     
@@ -31,72 +36,80 @@ struct CaptionGuide : View{
         
         VStack(spacing: 8){
             
-            Text("Caption Guide").fontWeight(.bold).font(.title)
+            Text("Alt Text Caption Guide")
+                .font(.title) // Adjust the font size as needed
+                .bold()
             
+            //Divider()
             
-            Divider()
-            
-            VStack(spacing: 20){
+            VStack(spacing: 10){
                 
                 ScrollView{
+                    Image("Puppies_Image")
+                           .resizable()
+                           .scaledToFit()
+                           .frame(width: 200, height: 170) // Adjust dimensions as needed
                     
-                Text("Why Caption?").fontWeight(.bold).font(.title2)
-                
-                    Text("People with visual disabilities can have difficulties interpreting visual information such as images, graphs, or tables. Adding a caption to your photo will allow individuals on the internet who use assistive technology to better understand what they are viewing.").font(.body)
-                
-                Text("Spread Your Photo!").fontWeight(.bold).font(.title2)
-                
-                    Text("In addition to making the internet more friendly towards visually impaired individuals, adding captions to photos can make it easier to find on the internet if posted.").font(.body)
-                }.frame(height: 180)
-                
-                Divider()
-                
-                VStack(spacing: 12){
+                    Text("Two golden retreiver pupies sitting together on grass spinkled with autumn leaves.")
+                           .font(.body)
+                           .multilineTextAlignment(.center)
+                       
                     
-                    Text("Best practices").fontWeight(.bold).font(.title2)
-                    
-                    Text("Do's ").fontWeight(.semibold).font(.title3)
-                    
-                    ScrollView{
-                        
-                        VStack(alignment:.leading){
-                            
-                            Text(" - Be descriptive and concise (150  characters MAX).").padding(5).font(.body)
-                            Divider()
-                            Text(" - Focus on conveying the main concept of the image and what it's trying to accomplish.  ").padding(5).font(.body)
-                            
-                            Divider()
-                            
-                            Text(" - Do consider the both the image content and context. ").padding(5).font(.body)
+                }.frame(height: 225)
+                
+               //Divider()
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        // Do Section
+                        Text("Do! ")
+                            .fontWeight(.semibold)
+                            .font(.title3)
+                            .foregroundColor(.green)
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("- Focus on the most important element of the image and be descriptive.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Organize your alt text cohesively: what they are doing, focus point of the image, and image context.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Include sufficient detail and context for your audience")
+                                .padding(.leading, 10)
+                                .font(.body)
                         }
-                        
-                        
-                    }.border(Color.green, width:3).padding()
-                    
-                    Text("Don't's ").fontWeight(.semibold).font(.title3)
-                    
-                    ScrollView{
-                        
-                        VStack(alignment:.leading){
-                            
-                            Text(" - Don't include \"graphic of\", \" photo of\", or \"image of\" .").padding(5).font(.body)
-                            Divider()
-                            Text(" - Don't make assumptions: verify race, identity, gender of individuals in photo.").padding(5).font(.body)
+                        .padding(.bottom, 5)
+
+                        // Don't Section
+                        Text("Don't! ")
+                            .fontWeight(.semibold)
+                            .font(.title3)
+                            .foregroundColor(.red)
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("- Start by saying \"A photo of Two Puppies\" -> Two Puppies.")
+                                .padding(.leading, 10)
+                                .font(.body)
+                            Text("- Be redundant or include unnecessary words \"An image of dogs. The dogs are side by side. The dogs are in grass\" -> Two Puppies sitting together on grass.")
+                                .padding(.leading, 10)
+                                .font(.body)
+
+                            Text("- Don't make assumptions: verify race, identity, gender of individuals in photo.")
+                                .padding(.leading, 10)
+                                .font(.body)
                         }
-                        
-                        
-                    }.border(Color.red, width:3).padding()
-                    
-                    
+                       // .padding()
+                    }.padding(.vertical, 15)
                 }
-                
                 
                 
             }.padding()
             
          
             
-        }
+        }.padding()
         
     }
     
@@ -106,70 +119,82 @@ struct AboutPage: View{
     var body: some View{
         
         VStack(alignment: .center, spacing: 16){
-            Text("About Us").bold().font(.title)
+            Text("Our Mission")
+                .font(.title) // Adjust the font size as needed
+                .bold()
+                
             
             VStack( spacing: 8){
-                
                 VStack(alignment: .leading){
-                    
-                    
-                    
-                    Divider()
-                    Text("Spring 2022 - Winter 2023 Research Group").fontWeight(.bold).font(.title)
-                    
-                    
-                    ScrollView(.horizontal)
-                    {
-                        HStack(spacing:10){
-                            Text("Yasmine Elglaly").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Robert Bowen").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Braxton Eidem").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Charlie Koenig").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                            Text("Keagan Cantrell").font(.caption).frame(width:120, height:50).font(.largeTitle).background(Color.blue).clipShape(Capsule()).foregroundColor(.white)
-                        }
-                    }
-                    
-                    
-                    Divider()
-                    
-                    Text("Background").fontWeight(.bold).font(.title)
+                    Text("Background").fontWeight(.bold).font(.title).foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+                    VStack(){
                     ScrollView{
-                        
-                        
-                        VStack(alignment: .center)
-                        {
-                            
-                            
-                            
-                            
-                        
-                        
-                        Text("A professor at the Western Washington University had an idea for a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. The application would be an extension of a phone’s native camera app and would prompt the user to add an alt-text or caption to every picture taken by the camera. If the user chooses to use the application, they can then record or type a short description of the image. The application will then save that description as text in the images’ alt-text metadata. When the user chooses to publish the image, that metadata will be included in the publishing, which then can be used by screen readers to make the internet more accessible to those who use screen readers to navigate the internet.The importance of this application is that it will spread awareness and create accessibility by adding descriptions to images. The importance in this is that people with disabilities suffer greatly when their lives depend on the internet. For example, people with disabilities may have jobs that rely on the internet, and if they cannot navigate the internet successfully then they could lose those jobs. Another goal of this application is to show people who are not technology experts that they can still help make an accessible environment for people with disabilities."
-                        ).fontWeight(.bold).font(.caption).foregroundColor(.gray).multilineTextAlignment(.center).lineSpacing(10).padding()
-                    }
+                        //write a couple paragraphs for explaining our research
+                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt-text in their images. We believe in empowering the visually impaired community to connect with others through the valuable medium of alt-text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. Join us on this journey towards a more inclusive future."
+                        ).font(.system(size:15)).foregroundColor(.black).lineSpacing(8)
+                    }.frame(height: 310)
                 }
-                Divider()
-                
+            Divider()
+            GeometryReader { geometry in
+                VStack(spacing: 10) {
+
+                    Text("Contributors")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+
+                    Text("Yasmine Elglaly")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+
+                    Text("Thuan Nguyen")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+
+                    Text("Selah Bellscheidt")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("WWU students")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+
                 }
-                
-                
+                .padding()
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 1)
+                        .frame(width: UIScreen.main.bounds.width - 20) // Full width of the screen
+                )
+                .cornerRadius(10)
+                .shadow(radius: 3)
+                .frame(width: geometry.size.width, height: geometry.size.height) // Set width and height
+                }
+
+                }
                 
             }.padding()
-            Spacer()
+            Text("© 2024 Media Acessibility. All rights reserved.")
+                               .font(.footnote)
+                               .foregroundColor(.black)
         }
-        //write a couple paragraphs for explaining our research
+       
     }
     
 }
 struct CaptioningHistory: View{
     
-   
-    
     var body: some View {
         
         VStack{
             
-        Text("Caption History").bold().padding(.top, 50.0)
+        Text("Caption History").font(.title) // Adjust the font size as needed
+                .bold()
         
             if(CoreDataManager.shared.loadAllImageData()!.count < 1)
             {
@@ -256,9 +281,6 @@ struct MailView: UIViewControllerRepresentable
         
         
         
-        
-        
-        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -322,7 +344,7 @@ struct MailView: UIViewControllerRepresentable
 }
 struct Contact: View{
     @Environment(\.colorScheme) var colorScheme
-    @State  var recipientEmail = "bowenr4@wwu.edu"
+    @State  var recipientEmail = "kindlab@wwu.edu"
     @State  var emailBody: String
     @State  var senderName: String
     @State  var sendData: Bool
@@ -347,7 +369,10 @@ struct Contact: View{
                         
                         
                         VStack(alignment: .center, spacing: 16){
-                            Text("Contact Us").bold()
+                            Text("Contact Us")
+                                .font(.title) // Adjust the font size as needed
+                                .bold()
+                              
                             
                             
                             
@@ -357,7 +382,7 @@ struct Contact: View{
                                 Divider()
                                 
                                 HStack(spacing:16){
-                                    Text("Name")
+                                    Text("Your Name")
                                     
                                     TextField(text: $senderName, prompt: Text("Optional"))
                                     {
@@ -370,12 +395,14 @@ struct Contact: View{
                                 {
                                     Text("Message")
                                     TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
-                                        .cornerRadius(10.0).foregroundColor(text_color)
-                                        .border(Color.gray, width:0.5).onTapGesture {
-                                            
+                                        .foregroundColor(Color.black)
+                                        .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 3)
+                                                .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                        )
+                                        .onTapGesture {
                                             clearEditor()
-                                            
-                                            
                                         }
                                     
                                 }.padding(.top, 20).padding(.bottom,20)
@@ -405,7 +432,7 @@ struct Contact: View{
                             if(can_mail)
                             {
                                 Divider()
-                                Text("It Looks like email is not setup")
+                                Text("It looks like email is not setup")
                             }
                             Spacer()
                             
@@ -486,17 +513,25 @@ struct ContentView: View {
                     VStack {
                         
                         //navigation to Settings page
-                        NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                        //NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                        
+                        //navigation to Settings page
+                        NavigationLink(destination: Settings()) {
+                            Image(systemName: "line.horizontal.3")
+                            .font(.system(size: 30))
+                            .foregroundColor(.black)
+                        }
+                        .padding(.top, 20)
+                        .padding(.trailing, UIScreen.main.bounds.size.width * 1.5 / 2)
                         
                         VStack{
                             
                             
                             
                             //Header
-                            Text("Media Accessibility")
-                                .font(.headline)
-                                .fontWeight(.regular)
-                                .padding(.bottom, 100.0)
+                            Text("MEDIA ACCESIBILITY")
+                                .font(.system(size: 20,  weight: .bold))
+                                .padding(.bottom, 20.0)
                             //Header
                             
                             
@@ -505,6 +540,9 @@ struct ContentView: View {
                                 Image("Media-Access")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
+                                    .frame(width: 230, height: 230)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    .padding(.bottom, 15.0)
                                 
                             } else { //if we have a curItem figure out how to display it
                                 if curItem?.mediaType == .photo {
@@ -512,38 +550,38 @@ struct ContentView: View {
                                         Image(uiImage: curItem?.photo ?? UIImage())
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 200, height: 200)
+                                            .frame(width: 250, height: 250)
+                                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                                            .padding(.bottom, 0)
                                             .onAppear {
                                                 // Perform image analysis when the image appears
                                                 analyzeImage(image)
                                             }
                                     if !altTextSuggestion.isEmpty {
                                         VStack {
-                                            Spacer() // Pushes the content to the center vertically
-                                            
+                
                                             Text("Alt-Text Suggestion:")
-                                                .font(.caption)
+                                                .font(.body)
                                                 .multilineTextAlignment(.center)
+                                                .padding(.bottom, 2)
+                                                .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
                                             
                                             HStack {
-                                                Spacer() // Pushes the content to the center horizontally
-                                                
                                                 Text(altTextSuggestion)
-                                                    .font(.caption)
+                                                    .font(.body)
+                                                    .multilineTextAlignment(.center)
+                                                    .padding(.bottom, 5)
                                                 
                                                 Button(action: {
                                                     UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
                                                 }) {
                                                     Image(systemName: "doc.on.doc") // System name for copy icon
                                                 }
-                                                .padding(.vertical, 10)
                                                 
-                                                Spacer() // Pushes the content to the center horizontally
                                             }
                                             
-                                            Spacer() // Pushes the content to the center vertically
                                         }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .frame(maxWidth: .infinity)
                                      }
                                     }
                                     
@@ -568,36 +606,51 @@ struct ContentView: View {
                             //Text editor input object
                             TextEditor(text: $currentCaption)
                                 .frame(width: 350, height: 80, alignment: .center)
-                                .cornerRadius(3.0)
+                                .foregroundColor(Color.black)
+                                .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                )
                                 .onTapGesture(count: 1) {
                                     clearEditor()
                                 }
-                                .foregroundColor(Color.gray)
-                                .border(Color.black, width: 1)
-                        
+                                .padding(.bottom, 5.0)
+                                .onTapGesture {
+                                    // Dismiss the keyboard when tapped outside the text box
+                                    hideKeyboard()
+                                }
                             //Text editor input object
                             
                             
                             //Clear & Submit button Stack
                             HStack {
                                 
-                                
                                 //  Cancel Button
                                 Button(action: {
                                     print("Cancelled")
-                                    if(currentCaption == "Choose one photo, then add a caption to the photo. ") {
+                                    if(currentCaption == "Choose one photo, then add a caption to the photo.") {
                                         currentCaption = ""
                                     }
                                     else {
-                                        currentCaption = "Choose one photo, then add a caption to the photo. "
+                                        currentCaption = "Choose one photo, then add a caption to the photo."
                                     }
                                     
                                 }, label: {
-                                    Text("Clear").foregroundColor(Color.white)
+                                    HStack {
+                                        Image(systemName: "trash") // Check icon
+                                            .foregroundColor(.white)
+                                            .frame(width: 25, height: 25)
+                                            .background(Color.black)
+                                            .clipShape(Circle())
+                                        Text("CLEAR")
+                                            .bold() // Make the text bold
+                                            .foregroundColor(.white)
+                                    }
                                 })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.red)
-                                .clipShape(Capsule())
+                                .frame(width: 100.0, height: 33.0)
+                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                                 
                                 
                                 
@@ -656,20 +709,31 @@ struct ContentView: View {
                                         } else {
                                             curItem = nil
                                         }
-                                        currentCaption = "Choose one photo, then add a caption to the photo. "
+                                        currentCaption = "Choose one photo, then add a caption to the photo."
                                     }
                                 }, label: {
-                                    Text("Submit").foregroundColor(Color.white)
+                                    HStack {
+                                        Image(systemName: "checkmark") // Check icon
+                                            .foregroundColor(.white)
+                                            .frame(width: 25, height: 25)
+                                            .background(Color.black)
+                                            .clipShape(Circle())
+                                        Text("SAVE")
+                                            .bold() // Make the text bold
+                                            .foregroundColor(.white)
+                                    }
                                 })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.green)
-                                .clipShape(Capsule())
+                                .frame(width: 100.0, height: 33.0)
+                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Invalid Caption"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                                     //submit button
                                 }
                                 
+                                
                             }
+                            .padding(.trailing, 20.0)
                             .padding(.bottom, 15.0)
                             //Clear & Submit button Stack
                             
@@ -678,8 +742,6 @@ struct ContentView: View {
                             
                             //Navigation for handeling photos that are being captioned
                             NavigationView {
-                                
-                                
                                 
                                 //list of media items looking to be captioned
                                 List(mediaItems.items, id: \.id) { item in
@@ -729,13 +791,11 @@ struct ContentView: View {
                                 
                                 // "queue buttons" location
                                 .toolbar {
-                                    
                                     //Trash button
                                     ToolbarItem(placement: .navigation) {
                                         Button(action:
                                                 //what happens when you click the button
                                                {let nextItem = mediaItems.getNext(item: curItemID)
-                                            
                                             mediaItems.getDeleteItem(item: curItemID)
                                             if(nextItem.id != "") {
                                                 curItem = nextItem
@@ -744,11 +804,10 @@ struct ContentView: View {
                                             }
                                             currentCaption = "Choose one photo, then add a caption to the photo. "
                                         }){Image (systemName: "trash")
-                                                .foregroundColor(.red)
+                                                .foregroundColor(.black)
                                             
-                                            Text("Remove").foregroundColor(.red)
+                                            Text("REMOVE").foregroundColor(.black)
                                         }
-                                        
                                     }
                                     //Trash button
                                     
@@ -758,7 +817,8 @@ struct ContentView: View {
                                         Button(action:
                                                 {self.showCamera.toggle()})
                                         {Image (systemName: "camera")
-                                            Text("New")
+                                            .foregroundColor(.black)
+                                            Text("NEW").foregroundColor(.black)
                                         }
                                     }
                                     //Camera button
@@ -770,7 +830,8 @@ struct ContentView: View {
                                         Button(action:
                                                 {showSheet = true})
                                         {Image (systemName: "photo")
-                                            Text("Add")
+                                                .foregroundColor(.black)
+                                            Text("OPEN").foregroundColor(.black)
                                         }
                                         .disabled(curItem != nil) // Disable button if curItem is not nil
                                     }
@@ -794,9 +855,6 @@ struct ContentView: View {
                             //Camera sheet
                             .sheet(isPresented: self.$showCamera) {
                                 ImagePickerView( curItem: $curItem,  captionTimeControl: timeToCaption, sourceType: .camera)
-                                
-                                    
-                                    
                             
                             }
                             //Camera sheet
@@ -821,6 +879,11 @@ struct ContentView: View {
                     }
                 }
     }
+    
+    private func hideKeyboard() {
+           // Dismiss the keyboard
+           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+       }
     
     private func endEditing() {
             UIApplication.shared.endEditing()
