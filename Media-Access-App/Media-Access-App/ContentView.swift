@@ -21,8 +21,39 @@ struct Settings: View{
                 NavigationLink(destination: AboutPage()) { Text("About Page")  } //for about research, goals of research
                 NavigationLink(destination: CaptioningHistory()){ Text("Captioning History")} //would be cools to have and easy to implement
                 NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-            NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
+                NavigationLink(destination: NotificationTiming()) { Text("Set Notification")  } //Setting notifications
+                NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Contact")}
             }
+    }
+    
+}
+struct NotificationTiming : View {
+    @State private var selection = "6 PM"
+    @State private var notificationManager = NotificationHandler()
+    let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
+    var body: some View {
+        VStack (spacing: 8) {
+            Text("Select a time to receive notifications").fontWeight(.bold).padding(.bottom, 40)
+            
+            HStack {
+                
+                
+                Text("Currently selected:")//.padding(.bottom,20)
+                
+                VStack(spacing: 20){
+                    
+                    Picker("Select a time", selection: $selection) {
+                        ForEach(times, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.menu).padding(.trailing, 30).onReceive([self.selection].publisher.first()) { value in
+                        notificationManager.rescheduleNotification(time: value)
+             }
+                }
+            }
+            
+        }
     }
     
 }
@@ -472,6 +503,10 @@ struct ContentView: View {
     @State private var notificationManager = NotificationHandler()
     @State private var startupManager = StartupHandler(notif_handler : NotificationHandler())
     
+    // For if you want to select notification time on this page
+    //@State private var selection = "6 PM"
+    //let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
+    
     var body: some View {
         
         
@@ -480,11 +515,28 @@ struct ContentView: View {
                 NavigationView {
                     
                     
-                    
                     VStack {
-                        
-                        //navigation to Settings page
+                        //navigation to Settings page - original
                         NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
+                        /* For if you want to select notification time on this page
+                        HStack {
+                            
+                            //navigation to Settings page
+                            NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.leading, 30)
+                            
+                            Spacer()
+
+                            
+                            Picker("Select a time", selection: $selection) {
+                                ForEach(times, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                            .pickerStyle(.menu).padding(.trailing, 20)
+                            
+                        }
+                        .padding(.top, 30.0)
+                         */
                         
                         VStack{
                             
@@ -603,6 +655,17 @@ struct ContentView: View {
                                 
                                 //Notification scheduling test code.
                                 
+                                /* Button(action: {
+                                    print("Images Captioned:")
+                                     notificationManager.createNotificationMsg()
+                                }, label: {
+                                    Text("Print #").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.gray)
+                                .clipShape(Capsule())*/
+
+                                
                                 
                                 
                                 //submit button
@@ -638,6 +701,9 @@ struct ContentView: View {
                                             curItem = nil
                                         }
                                         currentCaption = "Add a photo and then add a caption. "
+                                        // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
+                                        notificationManager.refreshNotificationMsg()
+                                        
                                     }
                                 }, label: {
                                     Text("Submit").foregroundColor(Color.white)

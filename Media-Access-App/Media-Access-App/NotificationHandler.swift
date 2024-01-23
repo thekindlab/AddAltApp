@@ -15,6 +15,8 @@ import UserNotifications
 class NotificationHandler
 
 {
+    var hour = 18
+
     init(){
         
         askPermission()
@@ -49,7 +51,7 @@ class NotificationHandler
     func FirstUseNotificationProcedure()
     {
         self.removeAppNotifications()
-        scheduleDailyNotification(text: "“Don’t forget to caption your images in the Media Accessibility App!", hour: 19)
+        self.scheduleDailyNotification(text: createNotificationMsg())
         //self.basicNotification()
         //print("scheduled basic notification")
        // self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
@@ -60,10 +62,42 @@ class NotificationHandler
         //print("END of FirstUseNotificationProcedure")
     }
     
+    // Called when users decide to change when their notification is scheduled
+    func rescheduleNotification(time:String)
+    {
+        print(time)
+        var new_time = time.dropLast(1)
+        //Check AM or PM
+        if new_time.last == "A" {
+            new_time = new_time.dropLast(2)
+            hour = Int(new_time)!
+            // 24 hr time, so 12 am is 0
+            if hour == 12{
+                hour = 0
+            }
+        }
+        else if new_time.last == "P" {
+            new_time = new_time.dropLast(2)
+            hour = Int(new_time)!
+            //24 hr time so 1pm is 13pm, etc.
+            if hour != 12{
+                hour = hour + 12
+                print(hour)
+            }
+        }
+        //For basic notification:
+        //self.removeAppNotifications()
+        //self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!")
+        
+        //For Motivational Notification"
+        self.refreshNotificationMsg()
+        
+    }
+    
     
     //Schedule a daily notification
     //Parameters: text (string) - the content of the notification that you want to send, hour(string) -- the hour you want the notification to be sent
-    func scheduleDailyNotification(text:String, hour:Int){
+    func scheduleDailyNotification(text:String){
         //The content of the notification (what the notification will contain)
         let content = UNMutableNotificationContent()
         content.title = "Accessible Media App"
@@ -84,8 +118,25 @@ class NotificationHandler
                    guard error == nil else { return }
             print("Scheduling notification with id: \(request.identifier)")
                }
-        printAllScheduledNotifications()  //Prints all notifications that have been scheduled
+        self.printAllScheduledNotifications()  //Prints all notifications that have been scheduled
         
+    }
+    
+    //Creates motivational message which users will receive when 
+    func createNotificationMsg() -> String
+    {
+        let existingStartupInfo = CoreDataManager.shared.loadStartUp()![0]
+        var caption_number = existingStartupInfo.numberOfCaptions
+        var message = "“You’ve added alt text to \(caption_number) images so far. Click to continue making your images accessible to blind and low vision users!"
+        print(message)
+        return message
+    }
+    
+    //Refreshes the daily notification to update msg with new # of photos captioned
+    func refreshNotificationMsg()
+    {
+        self.removeAppNotifications()
+        self.scheduleDailyNotification(text: createNotificationMsg())
     }
     
     //This function was used to test different code -- it's got code for weekly notifications (commented out), as well as daily
