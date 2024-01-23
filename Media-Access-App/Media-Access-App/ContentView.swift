@@ -162,9 +162,9 @@ struct AboutPage: View{
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
-                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt-text in their images. We believe in empowering the visually impaired community to connect with others through the valuable medium of alt-text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. Join us on this journey towards a more inclusive future."
+                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt text in their images. We believe in empowering blind and low vision users to connect with others through the valuable medium of alt text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that will spread awareness and allow resources to help create an accessible environment for blind and low vision users. The application will allow users to caption their pictures and save their image description as metadata so that a screen reader can then convey that information to blind and low vision users. Join us on this journey towards a more inclusive future."
                         ).font(.system(size:15)).foregroundColor(.black).lineSpacing(8)
-                    }.frame(height: 310)
+                    }.frame(height: 280)
                 }
             Divider()
             GeometryReader { geometry in
@@ -190,7 +190,22 @@ struct AboutPage: View{
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
                     
-                    Text("WWU students")
+                    Text("Robert Bowen")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Braxton Eidem")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Charlie Koenig")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Keagan Cantrell")
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
