@@ -217,7 +217,6 @@ class NotificationHandler
     {
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
     }
     
     /*
