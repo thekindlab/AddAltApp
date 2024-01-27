@@ -219,6 +219,26 @@ class NotificationHandler
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
     
+    //Translates 24 hour time to our standard time
+    //Ex: 22 -> 10 PM
+    //Returns as a string, ex: "10 PM"
+    func translateToStandardTime() -> String
+    {
+        if self.hour == 0 {
+            return "12 AM"
+        }
+        else if self.hour < 12 {
+            return String(self.hour)+" AM"
+        }
+        else if self.hour == 12 {
+            return String(self.hour) + " PM"
+        }
+        else if self.hour > 12 {
+            return String(self.hour-12)+" PM"
+        }
+        return "VOID"
+    }
+    
     /*
     func schedulingFrequencyNotificationAlgorithm()s
     {//algorithm that is ran each time captions happen to determine whether more notifications should be sent to the user.
