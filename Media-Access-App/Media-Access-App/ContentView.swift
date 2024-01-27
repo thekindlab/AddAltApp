@@ -34,19 +34,84 @@ struct Settings: View{
     
 }
 struct NotificationTiming : View {
-    @State private var selection = "6 PM"
+    
+    @State private var notificationManager = NotificationHandler()
+    let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
+    @State private var selection: String?
+    
+    var body: some View {
+        VStack (spacing: 8) {
+            Text("Schedule Notification")
+                .font(.title)
+                .bold()
+                .padding(.top, 20)
+                .padding(.bottom, 30)
+                //.padding(.bottom, 250)
+            
+            Text("This app sends daily reminders to author alt text. Select a time below to schedule when to receive this notification:").padding(.bottom, 20).padding(.leading, 20).padding(.trailing, 20)
+            
+            //Text("Select a time below to schedule when to receive this notification:")//.fontWeight(.bold)
+             //   .padding(.leading, 20).padding(.trailing, 20)//.padding(.bottom, 20)
+        }
+        NavigationView {
+            VStack {
+                List(times, id: \.self, selection: $selection) { hour in
+                    
+                    Text(hour)
+                }
+                Divider()
+                Text("Currently scheduled for:").font(.title2).bold()
+                Text("\(selection ?? notificationManager.translateToStandardTime())")
+                    .onChange(of: selection) { newValue in
+                        //print("Name changed to \(String(describing: selection))!")
+                        notificationManager.rescheduleNotification(time: selection!)
+                                }
+                
+                    .navigationTitle("Notification Scheduler")
+            }
+        }
+    }
+}
+    
+    /*@State private var selection = "6 PM"
     @State private var notificationManager = NotificationHandler()
     let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
     var body: some View {
         VStack (spacing: 8) {
-            Text("Select a time to receive notifications").fontWeight(.bold).padding(.bottom, 40)
             
-            HStack {
+            Text("Notification Scheduling")
+                .font(.title)
+                .bold()
+                .padding(.top, 20)
+                .padding(.bottom, 40)
+                //.padding(.bottom, 250)
+            
+            Text("This app sends daily reminders to author alt text.").padding(.bottom, 20)
+            
+            Text("Select a time below to schedule when to receive this notification:").fontWeight(.bold)
+                .padding(.leading, 20).padding(.trailing, 20)//.padding(.bottom, 20)
+            
+            VStack(spacing: 10){
+                
+                Picker("Select a time", selection: $selection) {
+                    ForEach(times, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.menu).padding(.trailing, 30).onReceive([self.selection].publisher.first()) { value in
+                    notificationManager.rescheduleNotification(time: value)
+                }
+            }
+            
+            Text("Currently Scheduled: \(selection)").fontWeight(.bold)
+            
+           //Text("Select a time to receive notifications:").fontWeight(.bold)//.padding(.bottom, 20)
+            /*HStack {
                 
                 
                 Text("Currently selected:")//.padding(.bottom,20)
                 
-                VStack(spacing: 20){
+                VStack(spacing: 10){
                     
                     Picker("Select a time", selection: $selection) {
                         ForEach(times, id: \.self) {
@@ -57,12 +122,11 @@ struct NotificationTiming : View {
                         notificationManager.rescheduleNotification(time: value)
              }
                 }
-            }
+            }*/
+            Spacer()
             
         }
-    }
-    
-}
+    }*/
 struct CaptionGuide : View{
     var body: some View{
         
@@ -74,7 +138,7 @@ struct CaptionGuide : View{
             
             //Divider()
             
-            VStack(spacing: 10){
+            VStack(alignment: .center, spacing: 10){
                 
                 ScrollView{
                     Image("Puppies_Image")
@@ -1250,7 +1314,7 @@ struct ContentView: View {
         // get the components
         let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDateTime)
         
-        let current_date = String(dateTimeComponents.year!) + "/"  + String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
+        let current_date = String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + "/"  + String(dateTimeComponents.year!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
         
         
         
