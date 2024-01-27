@@ -19,7 +19,7 @@ import SwiftUI
 class CaptionedPhotoAlbum: NSObject { //Class Captioned PhotoAlbum inherits from NSObject
     
     //Variables
-    static let albumName = "Captioned"
+    static let albumName = "Your Alt Text Photos"
     static let sharedInstance = CaptionedPhotoAlbum()
 
     var assetCollection: PHAssetCollection!

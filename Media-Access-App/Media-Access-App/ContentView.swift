@@ -12,6 +12,7 @@ import MessageUI
 enum MyError: Error {
     case runtimeError(String)
 }
+
 struct Settings: View{
     
     var body: some View{
@@ -23,10 +24,10 @@ struct Settings: View{
         
         List{
                 
-            NavigationLink(destination: CaptioningHistory()){ Text("Your Captioned History")} //would be cools to have and easy to implement
-            NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-            NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
+            NavigationLink(destination: CaptioningHistory()){ Text("Your Alt Text History")} //would be cools to have and easy to implement
+            NavigationLink(destination: CaptionGuide()){Text("Alt Text Guide")} //we need to have this
             NavigationLink(destination: NotificationTiming()) { Text("Schedule Notification")  } //Scheduling notifications
+            NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
             NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Help & Support")}
           
             }
@@ -40,7 +41,7 @@ struct NotificationTiming : View {
     var body: some View {
         VStack (spacing: 8) {
             
-            Text("Notification Scheduling")
+            Text("Schedule Notification")
                 .font(.title)
                 .bold()
                 .padding(.top, 20)
@@ -76,7 +77,7 @@ struct CaptionGuide : View{
         
         VStack(spacing: 8){
             
-            Text("Alt Text Caption Guide")
+            Text("Alt Text Guide")
                 .font(.title) // Adjust the font size as needed
                 .bold()
             
@@ -116,7 +117,7 @@ struct CaptionGuide : View{
                                 .padding(.leading, 10)
                                 .font(.body)
 
-                            Text("- Include sufficient detail and context for your audience")
+                            Text("- Include sufficient detail and context for your audience.")
                                 .padding(.leading, 10)
                                 .font(.body)
                         }
@@ -149,7 +150,8 @@ struct CaptionGuide : View{
             
          
             
-        }.padding()
+        }
+        .padding()
         
     }
     
@@ -400,35 +402,33 @@ struct Contact: View{
         
     
         VStack{
-                    
-                    
-                    
                     HStack(alignment: .top)
                     {
-                        
-                        
-                        
                         VStack(alignment: .center, spacing: 16){
-                            Text("Contact Us")
+                            Text("Help & Support")
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
                               
-                            
-                            
-                            
-                            
                             VStack( spacing: 8){
                                 
                                 Divider()
                                 
                                 HStack(spacing:16){
                                     Text("Your Name")
-                                    
-                                    TextField(text: $senderName, prompt: Text("Optional"))
-                                    {
-                                        Text("name")
-                                    }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled().padding(.leading,10)
-                                }
+
+                                    TextField("Name", text: $senderName)
+                                            .padding(.top, 20)
+                                            .padding(.bottom, 20)
+                                            .autocorrectionDisabled()
+                                            .padding(.leading, 10)
+                                    }
+                                    .onChange(of: senderName) { newName in
+                                        // You can add additional validation logic here
+                                        if newName.isEmpty {
+                                            // Display an alert or take appropriate action
+                                            print("Please enter your name, so we can reponse you faster. Thanks.")
+                                        }
+                                    }
                                 Divider()
                                 
                                 VStack(alignment: .leading, spacing:16)
@@ -443,6 +443,7 @@ struct Contact: View{
                                         )
                                         .onTapGesture {
                                             clearEditor()
+                                            hideKeyboard()
                                         }
                                     
                                 }.padding(.top, 20).padding(.bottom,20)
@@ -507,10 +508,9 @@ struct Contact: View{
     private func endEditing() {
             UIApplication.shared.endEditing()
         }
-    
- 
-    
-    
+    private func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     
 }
 extension UIApplication {
@@ -736,11 +736,11 @@ struct ContentView: View {
                                 
                                 
                                 
-                                //submit button
+                                //SAVE button
                                 Button(action: {
                                     //On press
                                     if(curItem?.mediaType == .photo) { //save the current photo
-                                        
+                                        currentCaption = ""
                                     }
                                     // Check if the caption length is within the desired range
                                    let captionLength = currentCaption.count
@@ -754,14 +754,19 @@ struct ContentView: View {
                                    let invalidWords = ["image", "picture", "icon"]
                                     for word in invalidWords {
                                            if currentCaption.localizedCaseInsensitiveContains(word) {
-                                               alertMessage = "Caption should not include the words 'image', 'picture', or 'icon'."
+                                               alertMessage = "Caption should not include the words 'image', 'picture', 'photo', or 'icon'."
                                                showAlert = true
                                                return
                                            }
                                        }
+                                    if currentCaption == "Choose one photo, then add a caption to the photo." {
+                                        // Show an alert if the user tries to submit without a caption
+                                        alertMessage = "Please add a caption before submitting."
+                                        showAlert = true
+                                        return
+                                    }
                                     
                                     if(curItem != nil) { //if we have a photo to save
-                                        
                                         
                                         timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
                                         
@@ -787,9 +792,13 @@ struct ContentView: View {
                                         }
 
                                        
-                                        currentCaption = "Choose one photo, then add a caption to the photo."
+                                        currentCaption = ""
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
                                         notificationManager.refreshNotificationMsg()
+                                    } else {
+                                        // Show an alert or handle the case where the user is trying to submit without a photo
+                                        showAlert = true
+                                        alertMessage = "Please choose a photo before submitting."
                                     }
                                 }, label: {
                                     HStack {
@@ -900,6 +909,7 @@ struct ContentView: View {
                                             .foregroundColor(.black)
                                             Text("NEW").foregroundColor(.black)
                                         }
+                                       
                                     }
                                     //Camera button
                                     
@@ -957,12 +967,14 @@ struct ContentView: View {
                             
                         }
                     }
+                    .background(Color.white) // Set the background color to white
+                    .preferredColorScheme(.light) // Set preferred color scheme to light mode
                 }
     }
     
     private func hideKeyboard() {
            // Dismiss the keyboard
-           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
        }
     
     private func endEditing() {
@@ -1255,6 +1267,12 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct ContactView_Previews: PreviewProvider {
+    static var previews: some View {
+        Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)
     }
 }
 

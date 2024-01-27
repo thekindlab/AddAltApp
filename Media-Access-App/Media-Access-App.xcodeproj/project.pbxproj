@@ -25,6 +25,7 @@
 		73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D90A28F4825E0085CE17 /* ContentView.swift */; };
 		73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCB29751F830004FC00 /* NotificationHandler.swift */; };
 		73FD7CCE297B57CC0004FC00 /* StartupHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */; };
+		E45523F72B60334000F40398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45523F62B60333F00F40398 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		73C4D90A28F4825E0085CE17 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		73FD7CCB29751F830004FC00 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupHandler.swift; sourceTree = "<group>"; };
+		E45523F62B60333F00F40398 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		73C4D8D428F481810085CE17 /* Media-Access-App */ = {
 			isa = PBXGroup;
 			children = (
+				E45523F62B60333F00F40398 /* AppDelegate.swift */,
 				735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */,
 				73C4D90428F4825E0085CE17 /* CaptionedPhotosAlbum.swift */,
 				73C4D90A28F4825E0085CE17 /* ContentView.swift */,
@@ -299,6 +302,7 @@
 				73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */,
 				73C4D90E28F4825E0085CE17 /* Coordinator.swift in Sources */,
 				733D0508292C273300837208 /* Time.swift in Sources */,
+				E45523F72B60334000F40398 /* AppDelegate.swift in Sources */,
 				73C4D90D28F4825E0085CE17 /* CaptionedPhotosAlbum.swift in Sources */,
 				73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */,
 				73C4D90C28F4825E0085CE17 /* PhotoPicker.swift in Sources */,
