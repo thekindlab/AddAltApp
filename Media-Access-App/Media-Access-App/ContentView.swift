@@ -405,6 +405,7 @@ struct MailView: UIViewControllerRepresentable
         viewController.setToRecipients([recieveEmail])
         
         var pathCSV = ""
+        var pathZip : URL?
         if(recieveResponse)
         { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
             
@@ -431,6 +432,8 @@ struct MailView: UIViewControllerRepresentable
             
             pathCSV = CoreDataManager.shared.createCSV()
             
+            pathZip = CoreDataManager.shared.createZip()
+            
             
         }
         
@@ -440,9 +443,15 @@ struct MailView: UIViewControllerRepresentable
         {
             if let fileData = NSData(contentsOfFile: pathCSV)
             {
-                print("File data loaded.")
+                print("CSV data loaded.")
                 viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
             }
+        }
+        if let zipData = NSData(contentsOf: pathZip!)
+        {
+            print("Zip data loaded.")
+            viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.Zip")
+            //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
         }
         return viewController
         
@@ -793,6 +802,16 @@ struct ContentView: View {
                                 //notif Scheduler test code
                                 
                                 //Notification scheduling test code.
+                                Button(action: {
+                                    //print("Images Captioned:")
+                                    CoreDataManager.shared.createZip()
+                                }, label: {
+                                    Text("Print #").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.gray)
+                                .clipShape(Capsule())
+                                
                                 
                                 /* Button(action: {
                                     print("Images Captioned:")
