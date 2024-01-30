@@ -33,6 +33,7 @@ struct Settings: View{
     }
     
 }
+//For scheduling notifications
 struct NotificationTiming : View {
     
     @State private var notificationManager = NotificationHandler()
@@ -437,8 +438,8 @@ struct MailView: UIViewControllerRepresentable
             let files = CoreDataManager.shared.createDataFiles()
             pathCSV = files.csvPath
             pathZip = files.zipPath
-            print("HERE")
-            print(pathCSV)
+            //print("HERE")
+            //print(pathCSV)
             
             
             
@@ -455,6 +456,7 @@ struct MailView: UIViewControllerRepresentable
                 viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).csv")
                 
             }
+            delCSV(path: pathCSV)
         }
         if(pathZip != nil) {
             if let zipData = NSData(contentsOf: pathZip!)
@@ -464,19 +466,28 @@ struct MailView: UIViewControllerRepresentable
                 viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).zip")
                 //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
             }
+            delZip(url: pathZip)
         }
-        delCSV(path: pathCSV)
         
         return viewController
         
     }
+    //Deleting the csv after emailing
     func delCSV(path:String) {
         do {
             let url = URL(fileURLWithPath: path)
             try FileManager.default.removeItem(at: url)
-            print("Successfully deleted file!")
         } catch {
             print("Error deleting file: \(error)")
+        }
+    }
+    //Deleting the zip file after emailing
+    func delZip(url:URL?)
+    {
+        do {
+            try FileManager.default.removeItem(at: url!)
+        } catch {
+            print("Error deleting zip: \(error)")
         }
     }
     
@@ -825,16 +836,6 @@ struct ContentView: View {
                                 //notif Scheduler test code
                                 
                                 //Notification scheduling test code.
-                                Button(action: {
-                                    //print("Images Captioned:")
-                                    print(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString)
-                                }, label: {
-                                    Text("Print #").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.gray)
-                                .clipShape(Capsule())
-                                
                                 
                                 /* Button(action: {
                                     print("Images Captioned:")

@@ -314,6 +314,9 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     //TEST CODE
     
+    //Create both the CSV file and the Zip file (in same function to ensure that same identifier is being used for photo and data row
+    //Returns: tuple - (csvPath - string containing the path to the doc, zipPath: URL to the zipped temporary directory)
+    //Function includes some inspiration from : https://stackoverflow.com/questions/57065748/create-zip-file-from-an-array-of-data-coredata-images-and-share-via-the-zip-f
     func createDataFiles() -> (csvPath: String, zipPath: URL?)
     {
         var zipPath: URL?
@@ -327,11 +330,11 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
             
             do {
                 let results = try mainContext.fetch(fetchRequest)
-                var id = 1
+                var id = 1 // photo identifier
                 for saved_photo in results{
                    
                     //CSV
-                    //get metadata
+                    //get photo metadata
                     let dateComponents = saved_photo.caption_date!.components(separatedBy: " ")
                     let photoCaption = saved_photo.caption! //as Any
                     let photoLength = saved_photo.caption_length as Any
@@ -339,7 +342,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                     let photoDate = dateComponents.first!//saved_photo.caption_date!//String(describing: saved_photo.caption_date)
                     let photoTime = dateComponents.last!
                     let photoEpoch = saved_photo.caption_date_epoch
-                    //Append row to CSV string
+                    //Append data row to CSV string
                     let dataString = "\(id),\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoTime),\(photoEpoch)\n"
                     print("DATA: \(dataString)") //test printout
                     csvString = csvString.appending(dataString)
@@ -434,30 +437,67 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
         return ""
     }
+    // createTempDir, createZip, saveImages modified from: https://stackoverflow.com/questions/57065748/create-zip-file-from-an-array-of-data-coredata-images-and-share-via-the-zip-f
     
+    //Creating a temporary directory
+    //Returns: URL to location of temporary directory
+    func createTempDirectory() -> URL? {
+        let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        //let tempDir = documentDir.appendingPathComponent("userImages")
+        let tempDir = documentDir.appendingPathComponent(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString)
+        
+        do {
+            try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            print("Error creating directory: \(error)")
+            return nil
+        }
+        return tempDir
+        
+    }
+    //Creating a zip file of the images that have had alt text added
+    //Returns URL to location of zipped folder
     func createZip() -> URL?
     {
+        //Create a temporary directory and save the images there
         guard let directory = saveImages() else {
             return nil
         }
-        
+        //Zip the directory
         do {
             let zipFilePath = try Zip.quickZipFiles([directory], fileName: "TempDir")
+            //delete directory
+            do {
+                try FileManager.default.removeItem(at: directory)
+            } catch {
+                print("Error deleting directory: \(error)")
+            }
             return zipFilePath
         } catch {
+            //delete directory
+            do {
+                try FileManager.default.removeItem(at: directory)
+            } catch {
+                print("Error deleting directory: \(error)")
+            }
             return nil
         }
         
         
     }
+    //Save images that have had alt text added in a temporary directory
+    //Returns URL to temporary directory which has images that user added alt text to saved in it
     func saveImages () -> URL?
     {
+        // Create temporary directory
         guard let directory = createTempDirectory() else { return nil }
+        // Access photo data
         let mainContext = CoreDataManager.shared.mainContext
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         do {
             let results = try mainContext.fetch(fetchRequest)
-            var i = 1
+            var i = 1 // identifier
+            //Save the image in the directory
             for saved_photo in results {
                 let image = UIImage(data: saved_photo.image_data!)
                 if let data = image?.pngData() {
@@ -477,23 +517,6 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         }
         
     }
-    
-    func createTempDirectory() -> URL? {
-        let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        //let tempDir = documentDir.appendingPathComponent("userImages")
-        let tempDir = documentDir.appendingPathComponent(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString)
-        
-        do {
-            try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("Error creating directory: \(error)")
-            return nil
-        }
-        return tempDir
-        
-    }
-    
-    
     
     
     
