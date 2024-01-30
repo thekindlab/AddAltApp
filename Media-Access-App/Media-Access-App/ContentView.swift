@@ -451,14 +451,17 @@ struct MailView: UIViewControllerRepresentable
             if let fileData = NSData(contentsOfFile: pathCSV)
             {
                 print("CSV data loaded.")
-                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+                //viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).csv")
+                
             }
         }
         if(pathZip != nil) {
             if let zipData = NSData(contentsOf: pathZip!)
             {
                 print("Zip data loaded.")
-                viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.Zip")
+                //viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.zip")
+                viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).zip")
                 //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
             }
         }
@@ -814,7 +817,7 @@ struct ContentView: View {
                                 //Notification scheduling test code.
                                 Button(action: {
                                     //print("Images Captioned:")
-                                    CoreDataManager.shared.createZip()
+                                    print(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString)
                                 }, label: {
                                     Text("Print #").foregroundColor(Color.white)
                                 })

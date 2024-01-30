@@ -138,7 +138,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
-    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date)
+    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date, user: UUID)
     {
         
         deleteStartupData() //delete the startup data and replace more current data.
@@ -157,6 +157,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                 dataOnStartup.firstUse = firstUse
                 dataOnStartup.numberOfCaptions = Int64(captionNumber);
                 dataOnStartup.dateOfFirstUse = dateOfFirstUse;
+                dataOnStartup.userID = user
                 try context.save()
                 
             }
@@ -317,7 +318,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     {
         var zipPath: URL?
         var csvPath = ""
-        var csvString = "PHOTO_ID,CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_TIMESTAMP,CAPTION_EPOCH\n"
+        var csvString = "PHOTO_ID,CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_TIMESTAMPxf,CAPTION_EPOCH\n"
         guard let directory = createTempDirectory() else { return ("",nil) }
         
             //Fetch Photo data
@@ -479,7 +480,8 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     func createTempDirectory() -> URL? {
         let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let tempDir = documentDir.appendingPathComponent("TempDir")
+        //let tempDir = documentDir.appendingPathComponent("userImages")
+        let tempDir = documentDir.appendingPathComponent(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString)
         
         do {
             try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
