@@ -313,29 +313,105 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
     
     //TEST CODE
     
+    func createDataFiles() -> (csvPath: String, zipPath: URL?)
+    {
+        var zipPath: URL?
+        var csvPath = ""
+        var csvString = "PHOTO_ID,CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_TIMESTAMP,CAPTION_EPOCH\n"
+        guard let directory = createTempDirectory() else { return ("",nil) }
+        
+            //Fetch Photo data
+            let mainContext = CoreDataManager.shared.mainContext
+            let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+            
+            do {
+                let results = try mainContext.fetch(fetchRequest)
+                var id = 1
+                for saved_photo in results{
+                   
+                    //CSV
+                    //get metadata
+                    let dateComponents = saved_photo.caption_date!.components(separatedBy: " ")
+                    let photoCaption = saved_photo.caption! //as Any
+                    let photoLength = saved_photo.caption_length as Any
+                    let photoTimeToCaption = saved_photo.time_to_caption as Any
+                    let photoDate = dateComponents.first!//saved_photo.caption_date!//String(describing: saved_photo.caption_date)
+                    let photoTime = dateComponents.last!
+                    let photoEpoch = saved_photo.caption_date_epoch
+                    //Append row to CSV string
+                    let dataString = "\(id),\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoTime),\(photoEpoch)\n"
+                    print("DATA: \(dataString)") //test printout
+                    csvString = csvString.appending(dataString)
+                    
+                    //ZIP
+                    //Save image to directory
+                    let image = UIImage(data: saved_photo.image_data!)
+                    if let data = image?.jpegData(compressionQuality: 0.1) {
+                    //if let data = image?.pngData() {
+                        let filename = directory.appendingPathComponent("image\(id).jpg")
+                        //let filename = directory.appendingPathComponent("image\(id).png")
+                        try? data.write(to: filename)
+                    }
+                    id = id + 1
+                    
+                }
+            }
+            catch {
+                debugPrint(error)
+                return ("",nil)
+            }
+            
+            //Create CSV file
+            let fileManager = FileManager.default
+            do {
+                let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+                print("PATH: \(path)")
+                let fileURL = path.appendingPathComponent("CSVData.csv")
+                try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+                csvPath = fileURL.path
+                print("")
+            } catch {
+                print("error creating file")
+                return ("",nil)
+            }
+            
+            //Create Zip File
+            do {
+                zipPath = try Zip.quickZipFiles([directory], fileName: "TempDir")
+            } catch {
+                return ("",nil)
+            }
+        
+        return (csvPath, zipPath)
+    }
+    
     
     //create CSV file
     
     func createCSV() -> String
     {
-        var csvString = "CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_EPOCH\n"
+        var csvString = "PHOTO_ID,CAPTION,LENGTH,TIME_TO_CAPTION,CAPTION_DATE,CAPTION_TIMESTAMP,CAPTION_EPOCH\n"
         let mainContext = CoreDataManager.shared.mainContext
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         
         do {
             let results = try mainContext.fetch(fetchRequest)
+            var id = 1
             for saved_photo in results{
                 
                 //save meta data in CSV string. Definitetly needs type adjusting
-                let photoCaption = saved_photo.caption as Any
+                let dateComponents = saved_photo.caption_date!.components(separatedBy: " ")
+                let photoCaption = saved_photo.caption! //as Any
                 let photoLength = saved_photo.caption_length as Any
                 let photoTimeToCaption = saved_photo.time_to_caption as Any
-                let photoDate = String(describing: saved_photo.caption_date)
+                let photoDate = dateComponents.first!//saved_photo.caption_date!//String(describing: saved_photo.caption_date)
+                let photoTime = dateComponents.last!
                 let photoEpoch = saved_photo.caption_date_epoch
                 
-                let dataString = "\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoEpoch)\n"
+                let dataString = "\(id),\(photoCaption),\(photoLength),\(photoTimeToCaption),\(photoDate),\(photoTime),\(photoEpoch)\n"
                 print("DATA: \(dataString)") //test printout
                 csvString = csvString.appending(dataString)
+                id = id + 1
             }
             
         }

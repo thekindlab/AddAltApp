@@ -430,9 +430,16 @@ struct MailView: UIViewControllerRepresentable
         {
             emailBody = emailBody + " \n I want to send information about my app usage!"
             
-            pathCSV = CoreDataManager.shared.createCSV()
+            //pathCSV = CoreDataManager.shared.createCSV()
             
-            pathZip = CoreDataManager.shared.createZip()
+            //pathZip = CoreDataManager.shared.createZip()
+            
+            let files = CoreDataManager.shared.createDataFiles()
+            pathCSV = files.csvPath
+            pathZip = files.zipPath
+            print("HERE")
+            print(pathCSV)
+            
             
             
         }
@@ -447,12 +454,15 @@ struct MailView: UIViewControllerRepresentable
                 viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
             }
         }
-        if let zipData = NSData(contentsOf: pathZip!)
-        {
-            print("Zip data loaded.")
-            viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.Zip")
-            //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
+        if(pathZip != nil) {
+            if let zipData = NSData(contentsOf: pathZip!)
+            {
+                print("Zip data loaded.")
+                viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.Zip")
+                //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
+            }
         }
+        
         return viewController
         
     }
