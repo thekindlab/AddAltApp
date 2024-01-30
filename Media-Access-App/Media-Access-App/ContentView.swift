@@ -235,7 +235,7 @@ struct CaptioningHistory: View{
         
         VStack{
             
-        Text("Caption History").font(.title) // Adjust the font size as needed
+        Text("Your Alt Text History").font(.title) // Adjust the font size as needed
                 .bold()
         
             if(CoreDataManager.shared.loadAllImageData()!.count < 1)
