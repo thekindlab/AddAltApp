@@ -465,9 +465,19 @@ struct MailView: UIViewControllerRepresentable
                 //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
             }
         }
+        delCSV(path: pathCSV)
         
         return viewController
         
+    }
+    func delCSV(path:String) {
+        do {
+            let url = URL(fileURLWithPath: path)
+            try FileManager.default.removeItem(at: url)
+            print("Successfully deleted file!")
+        } catch {
+            print("Error deleting file: \(error)")
+        }
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
