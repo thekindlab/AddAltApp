@@ -503,7 +503,7 @@ struct Contact: View{
     @State  var senderName: String
     @State  var sendData: Bool
     @State  var recieveResponse: Bool
-    
+    @State private var keyboardHeight: CGFloat = 0
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -523,27 +523,24 @@ struct Contact: View{
                               
                             VStack( spacing: 8){
                                 Divider()
-                                
                                 HStack(spacing:16){
                                     Text("Your Name")
 
                                     TextEditor(text: $senderName)
-                                            .padding(.top, 20)
-                                            .padding(.bottom, 20)
                                             .autocorrectionDisabled()
-                                            .padding(.leading, 10)
+                                            .padding(.top, 10)
                                     }
-                                .onChange(of: senderName) { newName in
-                                    if newName.isEmpty {
-                                        print("Please enter your name, so we can respond to you faster. Thanks.")
+                                    .onChange(of: senderName) { newName in
+                                        let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                        
+                                        if trimmedName.isEmpty {
+                                            print("Please enter your name, so we can respond to you faster. Thanks.")
+                                        }
                                     }
-                                }
 
                                 Divider()
                                 
-                                
-                                
-                                VStack(alignment: .leading, spacing:16)
+                                VStack(alignment: .leading, spacing:10)
                                 {
                                     Text("Message")
                                     TextEditor(text: $emailBody)
@@ -571,14 +568,18 @@ struct Contact: View{
                             VStack(alignment: .center)
                             {
                                 Button(action: {
-                                    self.isShowingMailView.toggle()
+                                    if !senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                        self.isShowingMailView.toggle()
+                                    } else {
+                                        print("Please enter your name, so we can respond to you faster. Thanks.")
+                                    }
                                 }, label: {
                                     Text(" Send Message").foregroundColor(Color.white)
                                 })
                                 .frame(width: 200.00, height: 33.0)
                                 .background(button_color)
                                 .clipShape(Capsule())
-                                .disabled(!MFMailComposeViewController.canSendMail())
+                                .disabled(senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !MFMailComposeViewController.canSendMail())
                                 .sheet(isPresented: $isShowingMailView)
                                 {
                                     
@@ -592,13 +593,30 @@ struct Contact: View{
                             }
                             Spacer()
                             
-                            
-                            
-                        }.padding(.bottom, 25.0).padding(.horizontal)
+                        }.padding(.bottom, 20.0).padding(.horizontal)
                     }
-                }.ignoresSafeArea(.keyboard, edges: [.bottom]).onTapGesture {
+                    
+                }
+                .padding(.bottom, keyboardHeight)
+                .onAppear {
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+                        if let keyboardSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                            self.keyboardHeight = keyboardSize.height
+                        }
+                    }
+
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                        self.keyboardHeight = 0
+                    }
+                }
+                .onDisappear {
+                    NotificationCenter.default.removeObserver(self)
+                }
+                
+                .onTapGesture {
                     self.endEditing()
-                }      //write a contactable email for any questions or concerns
+                }
+                .ignoresSafeArea(.keyboard, edges: [.bottom])
             }
     
     private func clearEditor() {
