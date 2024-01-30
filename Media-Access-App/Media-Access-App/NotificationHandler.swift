@@ -97,6 +97,9 @@ class NotificationHandler
     
     //Schedule a daily notification
     //Parameters: text (string) - the content of the notification that you want to send, hour(string) -- the hour you want the notification to be sent
+    //Sources I consulted for help/modified from: 
+        //https://stackoverflow.com/questions/65782435/receive-local-notifications-within-own-app-view-or-how-to-register-a-unuserno
+        //https://www.hackingwithswift.com/example-code/system/how-to-set-local-alerts-using-unnotificationcenter
     func scheduleDailyNotification(text:String){
         //The content of the notification (what the notification will contain)
         let content = UNMutableNotificationContent()
@@ -140,6 +143,9 @@ class NotificationHandler
     }
     
     //This function was used to test different code -- it's got code for weekly notifications (commented out), as well as daily
+    //Resources consulted for weekly notifications: 
+    //https://stackoverflow.com/questions/38669845/how-to-set-a-weekly-local-notification-in-swift
+    //https://itecnote.com/tecnote/ios-repeating-local-notifications-for-specific-days-of-week-swift-3-ios-10/
     func basicNotification()
     {
         let content = UNMutableNotificationContent()
@@ -217,6 +223,26 @@ class NotificationHandler
     {
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+    
+    //Translates 24 hour time to our standard time
+    //Ex: 22 -> 10 PM
+    //Returns as a string, ex: "10 PM"
+    func translateToStandardTime() -> String
+    {
+        if self.hour == 0 {
+            return "12 AM"
+        }
+        else if self.hour < 12 {
+            return String(self.hour)+" AM"
+        }
+        else if self.hour == 12 {
+            return String(self.hour) + " PM"
+        }
+        else if self.hour > 12 {
+            return String(self.hour-12)+" PM"
+        }
+        return "VOID"
     }
     
     /*

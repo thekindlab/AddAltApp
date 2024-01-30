@@ -25,7 +25,8 @@
 		73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C4D90A28F4825E0085CE17 /* ContentView.swift */; };
 		73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCB29751F830004FC00 /* NotificationHandler.swift */; };
 		73FD7CCE297B57CC0004FC00 /* StartupHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */; };
-		E45523F72B60334000F40398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45523F62B60333F00F40398 /* AppDelegate.swift */; };
+		CE7E952C2B68CBE700BBA853 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = CE7E952B2B68CBE700BBA853 /* Zip */; };
+		CE7E952E2B68CCB400BBA853 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E952D2B68CCB400BBA853 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +70,7 @@
 		73C4D90A28F4825E0085CE17 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		73FD7CCB29751F830004FC00 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		73FD7CCD297B57CC0004FC00 /* StartupHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupHandler.swift; sourceTree = "<group>"; };
-		E45523F62B60333F00F40398 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CE7E952D2B68CCB400BBA853 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE7E952C2B68CBE700BBA853 /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +122,7 @@
 		73C4D8D428F481810085CE17 /* Media-Access-App */ = {
 			isa = PBXGroup;
 			children = (
-				E45523F62B60333F00F40398 /* AppDelegate.swift */,
+				CE7E952D2B68CCB400BBA853 /* AppDelegate.swift */,
 				735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */,
 				73C4D90428F4825E0085CE17 /* CaptionedPhotosAlbum.swift */,
 				73C4D90A28F4825E0085CE17 /* ContentView.swift */,
@@ -183,6 +185,9 @@
 			dependencies = (
 			);
 			name = "Media-Access-App";
+			packageProductDependencies = (
+				CE7E952B2B68CBE700BBA853 /* Zip */,
+			);
 			productName = "Media-Access-App";
 			productReference = 73C4D8D228F481810085CE17 /* Media-Access-App.app */;
 			productType = "com.apple.product-type.application";
@@ -256,6 +261,9 @@
 				Base,
 			);
 			mainGroup = 73C4D8C928F481810085CE17;
+			packageReferences = (
+				CE7E952A2B68CBE700BBA853 /* XCRemoteSwiftPackageReference "Zip" */,
+			);
 			productRefGroup = 73C4D8D328F481810085CE17 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -302,7 +310,7 @@
 				73FD7CCC29751F830004FC00 /* NotificationHandler.swift in Sources */,
 				73C4D90E28F4825E0085CE17 /* Coordinator.swift in Sources */,
 				733D0508292C273300837208 /* Time.swift in Sources */,
-				E45523F72B60334000F40398 /* AppDelegate.swift in Sources */,
+				CE7E952E2B68CCB400BBA853 /* AppDelegate.swift in Sources */,
 				73C4D90D28F4825E0085CE17 /* CaptionedPhotosAlbum.swift in Sources */,
 				73C4D91328F4825E0085CE17 /* ContentView.swift in Sources */,
 				73C4D90C28F4825E0085CE17 /* PhotoPicker.swift in Sources */,
@@ -655,6 +663,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CE7E952A2B68CBE700BBA853 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CE7E952B2B68CBE700BBA853 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE7E952A2B68CBE700BBA853 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		735A40F2292B4EB0001EFDB8 /* Local_User_Data.xcdatamodeld */ = {
