@@ -12,6 +12,7 @@ import MessageUI
 enum MyError: Error {
     case runtimeError(String)
 }
+
 struct Settings: View{
     
     var body: some View{
@@ -23,10 +24,10 @@ struct Settings: View{
         
         List{
                 
-            NavigationLink(destination: CaptioningHistory()){ Text("Your Captioned History")} //would be cools to have and easy to implement
-            NavigationLink(destination: CaptionGuide()){Text("Caption Guide")} //we need to have this
-            NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
+            NavigationLink(destination: CaptioningHistory()){ Text("Your Alt Text History")} //would be cools to have and easy to implement
+            NavigationLink(destination: CaptionGuide()){Text("Alt Text Guide")} //we need to have this
             NavigationLink(destination: NotificationTiming()) { Text("Schedule Notification")  } //Scheduling notifications
+            NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
             NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Help & Support")}
           
             }
@@ -124,7 +125,6 @@ struct NotificationTiming : View {
              }
                 }
             }*/
-            Spacer()
             
         }
     }*/
@@ -133,7 +133,7 @@ struct CaptionGuide : View{
         
         VStack(spacing: 8){
             
-            Text("Alt Text Caption Guide")
+            Text("Alt Text Guide")
                 .font(.title) // Adjust the font size as needed
                 .bold()
             
@@ -173,7 +173,7 @@ struct CaptionGuide : View{
                                 .padding(.leading, 10)
                                 .font(.body)
 
-                            Text("- Include sufficient detail and context for your audience")
+                            Text("- Include sufficient detail and context for your audience.")
                                 .padding(.leading, 10)
                                 .font(.body)
                         }
@@ -206,7 +206,8 @@ struct CaptionGuide : View{
             
          
             
-        }.padding()
+        }
+        .padding()
         
     }
     
@@ -305,7 +306,7 @@ struct CaptioningHistory: View{
         
         VStack{
             
-        Text("Caption History").font(.title) // Adjust the font size as needed
+        Text("Your Alt Text History").font(.title) // Adjust the font size as needed
                 .bold()
         
             if(CoreDataManager.shared.loadAllImageData()!.count < 1)
@@ -411,7 +412,7 @@ struct MailView: UIViewControllerRepresentable
         { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
             
             
-            let new_emailBody = emailBody + " \n , I want to recieve a Response!"
+            let new_emailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to recieve a response!"
             
         
             
@@ -421,7 +422,6 @@ struct MailView: UIViewControllerRepresentable
         else
         {
             
-            
             viewController.setMessageBody(emailBody, isHTML: true)
         }
         
@@ -429,7 +429,7 @@ struct MailView: UIViewControllerRepresentable
         
         if(sendData)
         {
-            emailBody = emailBody + " \n I want to send information about my app usage!"
+            emailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to send information about my app usage!"
             
             //pathCSV = CoreDataManager.shared.createCSV()
             
@@ -514,41 +514,40 @@ struct Contact: View{
         
     
         VStack{
-                    
-                    
-                    
                     HStack(alignment: .top)
                     {
-                        
-                        
-                        
                         VStack(alignment: .center, spacing: 16){
-                            Text("Contact Us")
+                            Text("Help & Support")
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
                               
-                            
-                            
-                            
-                            
                             VStack( spacing: 8){
-                                
                                 Divider()
                                 
                                 HStack(spacing:16){
                                     Text("Your Name")
-                                    
-                                    TextField(text: $senderName, prompt: Text("Optional"))
-                                    {
-                                        Text("name")
-                                    }.padding(.top, 20).padding(.bottom,20).autocorrectionDisabled().padding(.leading,10)
+
+                                    TextEditor(text: $senderName)
+                                            .padding(.top, 20)
+                                            .padding(.bottom, 20)
+                                            .autocorrectionDisabled()
+                                            .padding(.leading, 10)
+                                    }
+                                .onChange(of: senderName) { newName in
+                                    if newName.isEmpty {
+                                        print("Please enter your name, so we can respond to you faster. Thanks.")
+                                    }
                                 }
+
                                 Divider()
+                                
+                                
                                 
                                 VStack(alignment: .leading, spacing:16)
                                 {
                                     Text("Message")
-                                    TextEditor(text: $emailBody).frame(width: 350, height: 200, alignment: .center)
+                                    TextEditor(text: $emailBody)
+                                        .frame(width: 350, height: 200, alignment: .center)
                                         .foregroundColor(Color.black)
                                         .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
                                         .overlay(
@@ -557,9 +556,10 @@ struct Contact: View{
                                         )
                                         .onTapGesture {
                                             clearEditor()
+                                            hideKeyboard()
                                         }
                                     
-                                }.padding(.top, 20).padding(.bottom,20)
+                                }.padding()
                                 Divider()
                                 
                                 Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
@@ -577,7 +577,9 @@ struct Contact: View{
                                 })
                                 .frame(width: 200.00, height: 33.0)
                                 .background(button_color)
-                                .clipShape(Capsule()).disabled(!MFMailComposeViewController.canSendMail()).sheet(isPresented: $isShowingMailView)
+                                .clipShape(Capsule())
+                                .disabled(!MFMailComposeViewController.canSendMail())
+                                .sheet(isPresented: $isShowingMailView)
                                 {
                                     
                                     MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, sendData: self.$sendData, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
@@ -597,7 +599,7 @@ struct Contact: View{
                 }.ignoresSafeArea(.keyboard, edges: [.bottom]).onTapGesture {
                     self.endEditing()
                 }      //write a contactable email for any questions or concerns
-                    }
+            }
     
     private func clearEditor() {
         
@@ -621,10 +623,9 @@ struct Contact: View{
     private func endEditing() {
             UIApplication.shared.endEditing()
         }
-    
- 
-    
-    
+    private func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     
 }
 extension UIApplication {
@@ -640,7 +641,7 @@ extension String {
 
 struct ContentView: View {
     //Global Variables
-    @State private var currentCaption: String = "Choose one photo, then add a caption to the photo. "
+    @State private var currentCaption: String = "Choose one photo, then add a caption to the photo."
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
@@ -791,12 +792,10 @@ struct ContentView: View {
                                     RoundedRectangle(cornerRadius: 3)
                                         .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
                                 )
-                                .onTapGesture(count: 1) {
-                                    clearEditor()
-                                }
                                 .padding(.bottom, 5.0)
-                                .onTapGesture {
+                                .onTapGesture (count: 1){
                                     // Dismiss the keyboard when tapped outside the text box
+                                    clearEditor()
                                     hideKeyboard()
                                 }
                             //Text editor input object
@@ -850,31 +849,39 @@ struct ContentView: View {
                                 
                                 
                                 
-                                //submit button
+                                //SAVE button
                                 Button(action: {
                                     //On press
                                     if(curItem?.mediaType == .photo) { //save the current photo
                                         
                                     }
-                                    // Check if the caption length is within the desired range
-                                   let captionLength = currentCaption.count
-                                    if captionLength < 15 || captionLength > 150 {
-                                            alertMessage = "Caption must be between 15 and 150 characters."
+                                    
+                                    if(curItem != nil) { //if we have a photo to save
+                                       
+                                       if currentCaption == "Choose one photo, then add a caption to the photo." {
+                                            // Show an alert if the user tries to submit without a caption
+                                            alertMessage = "Please add a caption before submitting."
                                             showAlert = true
                                             return
                                         }
-                                    
-                                   // Check if the caption contains invalid words
-                                   let invalidWords = ["image", "picture", "icon"]
-                                    for word in invalidWords {
-                                           if currentCaption.localizedCaseInsensitiveContains(word) {
-                                               alertMessage = "Caption should not include the words 'image', 'picture', or 'icon'."
-                                               showAlert = true
-                                               return
+                                        
+                                        // Check if the caption length is within the desired range
+                                       let captionLength = currentCaption.count
+                                        if captionLength < 15 || captionLength > 150 {
+                                                alertMessage = "Caption must be between 15 and 150 characters."
+                                                showAlert = true
+                                                return
+                                            }
+                                        
+                                       // Check if the caption contains invalid words
+                                       let invalidWords = ["image", "picture", "icon", "photo"]
+                                        for word in invalidWords {
+                                               if currentCaption.localizedCaseInsensitiveContains(word) {
+                                                   alertMessage = "Caption should not include the words 'image', 'picture', 'photo', or 'icon'."
+                                                   showAlert = true
+                                                   return
+                                               }
                                            }
-                                       }
-                                    
-                                    if(curItem != nil) { //if we have a photo to save
                                         
                                         
                                         timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
@@ -904,6 +911,10 @@ struct ContentView: View {
                                         currentCaption = "Choose one photo, then add a caption to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
                                         notificationManager.refreshNotificationMsg()
+                                    } else {
+                                        // Show an alert or handle the case where the user is trying to submit without a photo
+                                        showAlert = true
+                                        alertMessage = "Please choose a photo before submitting."
                                     }
                                 }, label: {
                                     HStack {
@@ -1014,6 +1025,7 @@ struct ContentView: View {
                                             .foregroundColor(.black)
                                             Text("NEW").foregroundColor(.black)
                                         }
+                                       
                                     }
                                     //Camera button
                                     
@@ -1071,13 +1083,16 @@ struct ContentView: View {
                             
                         }
                     }
+                    .background(Color.white) // Set the background color to white
+                    .preferredColorScheme(.light) // Set preferred color scheme to light mode
                 }
     }
     
+    
+    
     private func hideKeyboard() {
-           // Dismiss the keyboard
-           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-       }
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     
     private func endEditing() {
             UIApplication.shared.endEditing()
@@ -1094,7 +1109,7 @@ struct ContentView: View {
     
     
     private func clearEditor() {
-        if(currentCaption == "Choose one photo, then add a caption to the photo. ") {
+        if(currentCaption == "Choose one photo, then add a caption to the photo.") {
             currentCaption = ""
         }
     }
@@ -1369,6 +1384,12 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct ContactView_Previews: PreviewProvider {
+    static var previews: some View {
+        Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)
     }
 }
 

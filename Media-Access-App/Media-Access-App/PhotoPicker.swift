@@ -1,11 +1,9 @@
-//
-//  PhotoPicker.swift
 //  PHPickerDemo
 //
 //  Created by Gabriel Theodoropoulos.
 //
 /*
- The PhotoPicker struct extends some Swift tools for using the photo library to pick photos. 
+ The PhotoPicker struct extends some Swift tools for using the photo library to pick photos.
  
  
  */
@@ -196,7 +194,16 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
         
         
-        private func getVideo(from itemProvider: NSItemProvider, typeIdentifier: String) {
+        private func getVideo(from itemProvider: NSItemProvider, typeIdentifier: String, presentingViewController: UIViewController?) {
+            guard let utType = UTType(typeIdentifier), !utType.conforms(to: .movie) else {
+                // Display an alert indicating that videos are not allowed
+                let alert = UIAlertController(title: "Error", message: "Please select an image, videos are not allowed.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                presentingViewController?.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            // Rest of the function remains unchanged
             itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error in
                 if let error = error {
                     print(error.localizedDescription)
@@ -222,5 +229,13 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 }
             }
         }
+        
+        
     }
 }
+        
+        
+        
+        
+        
+

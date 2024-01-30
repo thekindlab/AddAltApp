@@ -3,8 +3,8 @@
 //  Media-Access
 //
 //  Created by Ian Vechey on 2/26/22.
-//
-//where the program enters
+// Fixed by Thuan and Selah on 1/10/2024
+// where the program enters
 
 
 import SwiftUI
@@ -16,6 +16,8 @@ struct Media_AccessApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.light)
+                .background(Color.white)
         }
     }
 }
