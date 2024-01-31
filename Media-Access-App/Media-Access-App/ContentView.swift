@@ -410,14 +410,16 @@ struct MailView: UIViewControllerRepresentable
         var pathZip : URL?
         var composedEmailBody = ""
            
-         if(recieveResponse) {
-             composedEmailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
-         } else {
-             composedEmailBody = "User Name: \(senderName)\n\n\(emailBody)"
-         }
-
-         if(sendData) {
-             composedEmailBody += "\n\nI want to send information about my app usage!"
+           if(recieveResponse) {
+               composedEmailBody = "Message from: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
+               viewController.setMessageBody(composedEmailBody, isHTML: true)
+           } else {
+               composedEmailBody = "Message from: \(senderName)\n\n\(emailBody)"
+               viewController.setMessageBody(composedEmailBody, isHTML: true)
+           }
+           
+           if(sendData) {
+               composedEmailBody += "\n\nI want to send information about my app usage!"
              //pathCSV = CoreDataManager.shared.createCSV()
           //pathZip = CoreDataManager.shared.createZip()
 
@@ -427,7 +429,6 @@ struct MailView: UIViewControllerRepresentable
             //print("HERE")
             //print(pathCSV)
          }
-
         
        if(pathCSV != "")
         {
@@ -486,6 +487,7 @@ struct Contact: View{
     @State  var senderName: String
     @State  var sendData: Bool
     @State  var recieveResponse: Bool
+    @State private var showAlert = false
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -505,20 +507,22 @@ struct Contact: View{
                               
                             VStack( spacing: 8){
                                 Divider()
-                                HStack(spacing:6){
+                                VStack(spacing:6){
                                     Text("Your Name")
-
                                     TextEditor(text: $senderName)
-                                            .autocorrectionDisabled()
-                                            .padding(.top, 10)
-                                    }
-                                    .onChange(of: senderName) { newName in
-                                        let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                        
-                                        if trimmedName.isEmpty {
-                                            print("Please enter your name, so we can respond to you faster. Thanks.")
+                                        .autocorrectionDisabled()
+                                        .alert(isPresented: $showAlert) {
+                                        Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
                                         }
-                                    }
+                                        .onChange(of: senderName) { newName in
+                                            let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                            
+                                            if trimmedName.isEmpty {
+                                                    showAlert = true
+                                            }
+                                        }
+                                }
+                                    
 
                                 Divider()
                                 
@@ -553,7 +557,8 @@ struct Contact: View{
                                     if !senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                         self.isShowingMailView.toggle()
                                     } else {
-                                        print("Please enter your name, so we can respond to you faster. Thanks.")
+                                        showAlert = true
+                                        return
                                     }
                                 }, label: {
                                     Text(" Send Message").foregroundColor(Color.white)
@@ -858,12 +863,12 @@ struct ContentView: View {
                                         }
                                         
                                         // Check if the caption length is within the desired range
-//                                       let captionLength = currentCaption.count
-//                                        if captionLength < 15 {
-//                                                alertMessage = "Alt text must contain more than 15 characters."
-//                                                showAlert = true
-//                                                return
-//                                            }
+                                       let captionLength = currentCaption.count
+                                        if captionLength < 10 {
+                                                alertMessage = "Alt text must contain more than 10 characters."
+                                                showAlert = true
+                                                return
+                                            }
                                         
                                        // Check if the caption contains invalid words
                                        let invalidWords = ["image", "picture", "icon", "photo"]
