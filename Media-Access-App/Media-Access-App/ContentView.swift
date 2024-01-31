@@ -221,7 +221,7 @@ struct AboutPage: View{
                 }
                 
             }.padding()
-            Text("© 2024 Media Acessibility. All rights reserved.")
+            Text("© 2024 Media Accessibility. All rights reserved.")
                                .font(.footnote)
                                .foregroundColor(.black)
         }
@@ -336,35 +336,20 @@ struct MailView: UIViewControllerRepresentable
         viewController.setToRecipients([recieveEmail])
         
         var pathCSV = ""
-        if(recieveResponse)
-        { //odd need to format like this or won't work. probably better to do it will a lock wait, but doesn't seem to work
-            
-            
-            let new_emailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to recieve a response!"
-            
-        
-            
-            viewController.setMessageBody(new_emailBody, isHTML: true)
-            
-        }
-        else
-        {
-            
-            viewController.setMessageBody(emailBody, isHTML: true)
-        }
-        
-        
-        
-        if(sendData)
-        {
-            emailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to send information about my app usage!"
-            
-            pathCSV = CoreDataManager.shared.createCSV()
-            
-            
-        }
-        
-        viewController.setMessageBody(emailBody, isHTML: true)
+           var composedEmailBody = ""
+           
+           if(recieveResponse) {
+               composedEmailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
+           } else {
+               composedEmailBody = "User Name: \(senderName)\n\n\(emailBody)"
+           }
+           
+           if(sendData) {
+               composedEmailBody += "\n\nI want to send information about my app usage!"
+               pathCSV = CoreDataManager.shared.createCSV()
+           }
+           
+           viewController.setMessageBody(composedEmailBody, isHTML: true)
         
         if(pathCSV != "")
         {
@@ -390,7 +375,6 @@ struct Contact: View{
     @State  var senderName: String
     @State  var sendData: Bool
     @State  var recieveResponse: Bool
-    @State private var keyboardHeight: CGFloat = 0
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -410,7 +394,7 @@ struct Contact: View{
                               
                             VStack( spacing: 8){
                                 Divider()
-                                HStack(spacing:16){
+                                HStack(spacing:6){
                                     Text("Your Name")
 
                                     TextEditor(text: $senderName)
@@ -427,7 +411,7 @@ struct Contact: View{
 
                                 Divider()
                                 
-                                VStack(alignment: .leading, spacing:10)
+                                VStack(alignment: .leading, spacing:16)
                                 {
                                     Text("Message")
                                     TextEditor(text: $emailBody)
@@ -483,21 +467,6 @@ struct Contact: View{
                         }.padding(.bottom, 20.0).padding(.horizontal)
                     }
                     
-                }
-                .padding(.bottom, keyboardHeight)
-                .onAppear {
-                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
-                        if let keyboardSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                            self.keyboardHeight = keyboardSize.height
-                        }
-                    }
-
-                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-                        self.keyboardHeight = 0
-                    }
-                }
-                .onDisappear {
-                    NotificationCenter.default.removeObserver(self)
                 }
                 
                 .onTapGesture {
@@ -614,7 +583,7 @@ struct ContentView: View {
                             
                             
                             //Header
-                            Text("MEDIA ACCESIBILITY")
+                            Text("MEDIA ACCESSIBILITY")
                                 .font(.system(size: 20,  weight: .bold))
                                 .padding(.bottom, 20.0)
                             //Header
@@ -703,6 +672,13 @@ struct ContentView: View {
                                     clearEditor()
                                     hideKeyboard()
                                 }
+                                //To prevent the user from entering line breaks (pressing Enter) in the TextEditor box,
+                                .onChange(of: currentCaption) { newCaption in
+                                       if newCaption.contains("\n") {
+                                           // Remove newlines
+                                           currentCaption = newCaption.replacingOccurrences(of: "\n", with: " ")
+                                       }
+                                   }
                             //Text editor input object
                             
                             
@@ -765,24 +741,24 @@ struct ContentView: View {
                                        
                                        if currentCaption == "Choose one photo, then add a caption to the photo." {
                                             // Show an alert if the user tries to submit without a caption
-                                            alertMessage = "Please add a caption before submitting."
+                                            alertMessage = "Please add alt text before submitting."
                                             showAlert = true
                                             return
                                         }
                                         
                                         // Check if the caption length is within the desired range
-                                       let captionLength = currentCaption.count
-                                        if captionLength < 15 || captionLength > 150 {
-                                                alertMessage = "Caption must be between 15 and 150 characters."
-                                                showAlert = true
-                                                return
-                                            }
+//                                       let captionLength = currentCaption.count
+//                                        if captionLength < 15 {
+//                                                alertMessage = "Alt text must contain more than 15 characters."
+//                                                showAlert = true
+//                                                return
+//                                            }
                                         
                                        // Check if the caption contains invalid words
                                        let invalidWords = ["image", "picture", "icon", "photo"]
                                         for word in invalidWords {
                                                if currentCaption.localizedCaseInsensitiveContains(word) {
-                                                   alertMessage = "Caption should not include the words 'image', 'picture', 'photo', or 'icon'."
+                                                   alertMessage = "Alt text should not include the words 'image', 'picture', 'photo', or 'icon'."
                                                    showAlert = true
                                                    return
                                                }
@@ -819,7 +795,7 @@ struct ContentView: View {
                                     } else {
                                         // Show an alert or handle the case where the user is trying to submit without a photo
                                         showAlert = true
-                                        alertMessage = "Please choose a photo before submitting."
+                                        alertMessage = "Please choose a photo before submmiting."
                                     }
                                 }, label: {
                                     HStack {
@@ -912,7 +888,7 @@ struct ContentView: View {
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Choose one photo, then add a caption to the photo. "
+                                            currentCaption = "Choose one photo, then add a caption to the photo."
                                         }){Image (systemName: "trash")
                                                 .foregroundColor(.black)
                                             
