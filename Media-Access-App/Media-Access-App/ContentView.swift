@@ -34,22 +34,81 @@ struct Settings: View{
     }
     
 }
+//For scheduling notifications
 struct NotificationTiming : View {
-    @State private var selection = "6 PM"
+    
+    @State private var notificationManager = NotificationHandler()
+    let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
+    @State private var selection: String?
+    
+    var body: some View {
+        VStack (spacing: 8) {
+            Text("Schedule Notification")
+                .font(.title)
+                .bold()
+                .padding(.top, 20)
+                .padding(.bottom, 30)
+                //.padding(.bottom, 250)
+            
+            Text("This app sends daily reminders to author alt text. Select a time below to schedule when to receive this notification:").padding(.bottom, 20).padding(.leading, 20).padding(.trailing, 20)
+            
+            //Text("Select a time below to schedule when to receive this notification:")//.fontWeight(.bold)
+             //   .padding(.leading, 20).padding(.trailing, 20)//.padding(.bottom, 20)
+        }
+        NavigationView {
+            VStack {
+                List(times, id: \.self, selection: $selection) { hour in
+                    
+                    Text(hour)
+                }
+                Divider()
+                Text("Currently scheduled for:").font(.title2).bold()
+                Text("\(selection ?? notificationManager.translateToStandardTime())")
+                    .onChange(of: selection) { newValue in
+                        //print("Name changed to \(String(describing: selection))!")
+                        notificationManager.rescheduleNotification(time: selection!)
+                                }
+                
+                    .navigationTitle("Notification Scheduler")
+            }
+        }
+    }
+}
+    
+    /*@State private var selection = "6 PM"
     @State private var notificationManager = NotificationHandler()
     let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
     var body: some View {
         VStack (spacing: 8) {
             
-            Text("Schedule Notification")
+            Text("Notification Scheduling")
                 .font(.title)
                 .bold()
                 .padding(.top, 20)
                 .padding(.bottom, 40)
                 //.padding(.bottom, 250)
             
-            Text("Select a time to receive notifications:").fontWeight(.bold)//.padding(.bottom, 20)
-            HStack {
+            Text("This app sends daily reminders to author alt text.").padding(.bottom, 20)
+            
+            Text("Select a time below to schedule when to receive this notification:").fontWeight(.bold)
+                .padding(.leading, 20).padding(.trailing, 20)//.padding(.bottom, 20)
+            
+            VStack(spacing: 10){
+                
+                Picker("Select a time", selection: $selection) {
+                    ForEach(times, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.menu).padding(.trailing, 30).onReceive([self.selection].publisher.first()) { value in
+                    notificationManager.rescheduleNotification(time: value)
+                }
+            }
+            
+            Text("Currently Scheduled: \(selection)").fontWeight(.bold)
+            
+           //Text("Select a time to receive notifications:").fontWeight(.bold)//.padding(.bottom, 20)
+            /*HStack {
                 
                 
                 Text("Currently selected:")//.padding(.bottom,20)
@@ -65,13 +124,10 @@ struct NotificationTiming : View {
                         notificationManager.rescheduleNotification(time: value)
              }
                 }
-            }
-            Spacer()
+            }*/
             
         }
-    }
-    
-}
+    }*/
 struct CaptionGuide : View{
     var body: some View{
         
@@ -83,7 +139,7 @@ struct CaptionGuide : View{
             
             //Divider()
             
-            VStack(spacing: 10){
+            VStack(alignment: .center, spacing: 10){
                 
                 ScrollView{
                     Image("Puppies_Image")
@@ -172,9 +228,9 @@ struct AboutPage: View{
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
-                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt-text in their images. We believe in empowering the visually impaired community to connect with others through the valuable medium of alt-text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that would spread awareness and allow resources for non visually impaired people to help create an accessible environment. The application will allow users to caption their pictures and save their description as metadata so a screen reader can then convey that information to the visually impaired. Join us on this journey towards a more inclusive future."
+                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt text in their images. We believe in empowering blind and low vision users to connect with others through the valuable medium of alt text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that will spread awareness and allow resources to help create an accessible environment for blind and low vision users. The application will allow users to caption their pictures and save their image description as metadata so that a screen reader can then convey that information to blind and low vision users. Join us on this journey towards a more inclusive future."
                         ).font(.system(size:15)).foregroundColor(.black).lineSpacing(8)
-                    }.frame(height: 310)
+                    }.frame(height: 280)
                 }
             Divider()
             GeometryReader { geometry in
@@ -200,7 +256,22 @@ struct AboutPage: View{
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
                     
-                    Text("WWU students")
+                    Text("Robert Bowen")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Braxton Eidem")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Charlie Koenig")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text("Keagan Cantrell")
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
@@ -235,7 +306,7 @@ struct CaptioningHistory: View{
         
         VStack{
             
-        Text("Caption History").font(.title) // Adjust the font size as needed
+        Text("Your Alt Text History").font(.title) // Adjust the font size as needed
                 .bold()
         
             if(CoreDataManager.shared.loadAllImageData()!.count < 1)
@@ -336,31 +407,71 @@ struct MailView: UIViewControllerRepresentable
         viewController.setToRecipients([recieveEmail])
         
         var pathCSV = ""
-           var composedEmailBody = ""
+        var pathZip : URL?
+        var composedEmailBody = ""
            
-           if(recieveResponse) {
-               composedEmailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
-           } else {
-               composedEmailBody = "User Name: \(senderName)\n\n\(emailBody)"
-           }
-           
-           if(sendData) {
-               composedEmailBody += "\n\nI want to send information about my app usage!"
-               pathCSV = CoreDataManager.shared.createCSV()
-           }
-           
-           viewController.setMessageBody(composedEmailBody, isHTML: true)
+         if(recieveResponse) {
+             composedEmailBody = "User Name: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
+         } else {
+             composedEmailBody = "User Name: \(senderName)\n\n\(emailBody)"
+         }
+
+         if(sendData) {
+             composedEmailBody += "\n\nI want to send information about my app usage!"
+             //pathCSV = CoreDataManager.shared.createCSV()
+          //pathZip = CoreDataManager.shared.createZip()
+
+            let files = CoreDataManager.shared.createDataFiles()
+            pathCSV = files.csvPath
+            pathZip = files.zipPath
+            //print("HERE")
+            //print(pathCSV)
+         }
+
         
-        if(pathCSV != "")
+       if(pathCSV != "")
         {
             if let fileData = NSData(contentsOfFile: pathCSV)
             {
-                print("File data loaded.")
-                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+                print("CSV data loaded.")
+                //viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "userData.csv")
+                viewController.addAttachmentData(fileData as Data, mimeType: "text/csv", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).csv")
+                
             }
+            delCSV(path: pathCSV)
         }
+      
+        if(pathZip != nil) {
+            if let zipData = NSData(contentsOf: pathZip!)
+            {
+                print("Zip data loaded.")
+                //viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "userImages.zip")
+                viewController.addAttachmentData(zipData as Data, mimeType: "application/zip", fileName: "\(CoreDataManager.shared.loadStartUp()![0].userID!.uuidString).zip")
+                //viewController.addAttachmentData(pathZip!.dataRepresentation, mimeType: "application/zip", fileName: ("userImages.zip"))
+            }
+            delZip(url: pathZip)
+        }
+        
         return viewController
         
+    }
+    //Deleting the csv after emailing
+    func delCSV(path:String) {
+        do {
+            let url = URL(fileURLWithPath: path)
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("Error deleting file: \(error)")
+        }
+    }
+    //Deleting the zip file after emailing
+    func delZip(url:URL?)
+    {
+        do {
+            try FileManager.default.removeItem(at: url!)
+        } catch {
+            print("Error deleting zip: \(error)")
+        }
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
@@ -1253,7 +1364,7 @@ struct ContentView: View {
         // get the components
         let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDateTime)
         
-        let current_date = String(dateTimeComponents.year!) + "/"  + String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
+        let current_date = String(dateTimeComponents.month!) + "/" + String(dateTimeComponents.day!) + "/"  + String(dateTimeComponents.year!) + " " + String(dateTimeComponents.hour!) + ":" + String(dateTimeComponents.minute!) + ":" + String(dateTimeComponents.second!)
         
         
         
