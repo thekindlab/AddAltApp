@@ -1,7 +1,7 @@
 //  PHPickerDemo
 //
 //  Created by Gabriel Theodoropoulos.
-//
+// Fixed by Thuan Nguyen
 /*
  The PhotoPicker struct extends some Swift tools for using the photo library to pick photos.
  
@@ -25,7 +25,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> PHPickerViewController { //constructs a Photo Picker Controller
         
         var config = PHPickerConfiguration()
-        config.filter = .any(of: [.images, .videos, .livePhotos])
+        config.filter = .any(of: [.images, .livePhotos])
         config.selectionLimit = 1
         config.preferredAssetRepresentationMode = .current
         
@@ -194,41 +194,41 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
         
         
-        private func getVideo(from itemProvider: NSItemProvider, typeIdentifier: String, presentingViewController: UIViewController?) {
-            guard let utType = UTType(typeIdentifier), !utType.conforms(to: .movie) else {
-                // Display an alert indicating that videos are not allowed
-                let alert = UIAlertController(title: "Error", message: "Please select an image, videos are not allowed.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                presentingViewController?.present(alert, animated: true, completion: nil)
-                return
-            }
-            
-            // Rest of the function remains unchanged
-            itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-                
-                guard let url = url else { return }
-                
-                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-                guard let targetURL = documentsDirectory?.appendingPathComponent(url.lastPathComponent) else { return }
-                
-                do {
-                    if FileManager.default.fileExists(atPath: targetURL.path) {
-                        try FileManager.default.removeItem(at: targetURL)
-                    }
-                    
-                    try FileManager.default.copyItem(at: url, to: targetURL)
-                    
-                    DispatchQueue.main.async {
-                        self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: targetURL))
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
+//        private func getVideo(from itemProvider: NSItemProvider, typeIdentifier: String, presentingViewController: UIViewController?) {
+//            guard let utType = UTType(typeIdentifier), !utType.conforms(to: .movie) else {
+//                // Display an alert indicating that videos are not allowed
+//                let alert = UIAlertController(title: "Error", message: "Please select an image, videos are not allowed.", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                presentingViewController?.present(alert, animated: true, completion: nil)
+//                return
+//            }
+//
+//            // Rest of the function remains unchanged
+//            itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error in
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                }
+//
+//                guard let url = url else { return }
+//
+//                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+//                guard let targetURL = documentsDirectory?.appendingPathComponent(url.lastPathComponent) else { return }
+//
+//                do {
+//                    if FileManager.default.fileExists(atPath: targetURL.path) {
+//                        try FileManager.default.removeItem(at: targetURL)
+//                    }
+//
+//                    try FileManager.default.copyItem(at: url, to: targetURL)
+//
+//                    DispatchQueue.main.async {
+//                        self.photoPicker.mediaItems.append(item: PhotoPickerModel(with: targetURL))
+//                    }
+//                } catch {
+//                    print(error.localizedDescription)
+//                }
+//            }
+//        }
         
         
     }
