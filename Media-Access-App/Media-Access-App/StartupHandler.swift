@@ -61,6 +61,7 @@ class StartupHandler
     {
         var number_of_captions = 0;
         let image_data = CoreDataManager.shared.loadAllImageData()
+        let user_id = UUID()
         
         if(image_data != nil)
         {
@@ -70,7 +71,7 @@ class StartupHandler
         
         
 
-        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date() )
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date(), user: user_id )
 
     }
     
@@ -85,6 +86,7 @@ class StartupHandler
         let dateOfFirstUse =  existingStartupInfo.dateOfFirstUse
         var daysOfUse:Int;
         var number_of_captions = 0
+        let user_id = existingStartupInfo.userID
         
         
         if(image_data == nil)
@@ -114,7 +116,7 @@ class StartupHandler
         
         
         
-        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: daysOfUse, dateOfFirstUse: dateOfFirstUse!)
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: daysOfUse, dateOfFirstUse: dateOfFirstUse!, user: user_id!)
         
         
         
