@@ -12,6 +12,7 @@
         <attribute name="dateOfFirstUse" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="daysOfUse" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="firstUse" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="numberOfCaptions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>

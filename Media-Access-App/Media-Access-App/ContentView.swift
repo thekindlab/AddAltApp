@@ -842,6 +842,14 @@ struct ContentView: View {
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.gray)
                                 .clipShape(Capsule())*/
+                                Button(action: {
+                                    print(CoreDataManager.shared.loadStartUp()![0].hour)
+                                }, label: {
+                                    Text("Print hour").foregroundColor(Color.white)
+                                })
+                                .frame(width: 100.0, height: 30.0)
+                                .background(Color.gray)
+                                .clipShape(Capsule())
 
                                 
                                 
@@ -892,7 +900,8 @@ struct ContentView: View {
                                         timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
                                         
                                         //update Startup Info
-                                        startupManager.updateStartupInformation()
+                                        startupManager.updateStartupInformation(hour:nil)
+                                        //print("hour saved: \(CoreDataManager.shared.loadStartUp()![0].hour)")
                                         
                                         
                                         

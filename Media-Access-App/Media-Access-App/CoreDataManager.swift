@@ -138,7 +138,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
-    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date, user: UUID)
+    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date, user: UUID, hour: Int64)
     {
         
         deleteStartupData() //delete the startup data and replace more current data.
@@ -158,6 +158,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                 dataOnStartup.numberOfCaptions = Int64(captionNumber);
                 dataOnStartup.dateOfFirstUse = dateOfFirstUse;
                 dataOnStartup.userID = user
+                dataOnStartup.hour = hour
                 try context.save()
                 
             }
@@ -169,6 +170,10 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
             
         }
         
+        
+    }
+    func changeHour (hour:Int64)
+    {
         
     }
     
