@@ -505,11 +505,12 @@ struct Contact: View{
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
                               
-                            VStack( spacing: 8){
+                            VStack(){
                                 Divider()
-                                VStack(spacing:6){
+                                HStack(spacing: 5){
                                     Text("Your Name")
                                     TextEditor(text: $senderName)
+                                        .frame(width: 100, alignment: .leading)
                                         .autocorrectionDisabled()
                                         .alert(isPresented: $showAlert) {
                                         Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
@@ -1266,7 +1267,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Choose one photo, then add a caption to the photo. "
+           currentCaption = "Choose one photo, then add a caption to the photo."
             return
         }
         
@@ -1275,7 +1276,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Choose one photo, then add a caption to the photo. "
+           currentCaption = "Choose one photo, then add a caption to the photo."
             return;
         }
         
