@@ -153,7 +153,14 @@ struct CaptionGuide : View{
                        
                     
                 }.frame(height: 275)
-                
+                VStack{
+                    Text("Alt text:")
+                        .fontWeight(.semibold)
+                        .font(.title3)
+                        .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+                    Text("Alternative text (alt text) is a short textual description of an image. Blind and low vision users read alt text using a screen reader. Alt text helps users understand what is happening in the photo.")
+                        .font(.body)
+                }
                //Divider()
                 
                 ScrollView {
@@ -231,7 +238,7 @@ struct AboutPage: View{
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
-                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt text in their images. We believe in empowering blind and low vision users to connect with others through the valuable medium of alt text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that will spread awareness and allow resources to help create an accessible environment for blind and low vision users. The application will allow users to caption their pictures and save their image description as metadata so that a screen reader can then convey that information to blind and low vision users. Join us on this journey towards a more inclusive future."
+                        Text("Our mission is to make the world a more accessible environment by inspiring and encouraging users to include alt text in their images. We believe in empowering blind and low vision users to connect with others through the valuable medium of alt text. Inspired by a professor at the Western Washington University, we are dedicated to creating a mobile application that will spread awareness and allow resources to help create an accessible environment for blind and low vision users. The application will allow users to add alt text their pictures and save their image description as metadata so that a screen reader can then convey that information to blind and low vision users. Join us on this journey towards a more inclusive future."
                         ).font(.system(size:15)).foregroundColor(.black).lineSpacing(8)
                     }.frame(height: 280)
                 }
@@ -314,7 +321,7 @@ struct CaptioningHistory: View{
         
             if(CoreDataManager.shared.loadAllImageData()!.count < 1)
             {
-                Text("It looks like you haven't captioned anything.").padding(.top, 50.0)
+                Text("It looks like you haven't add any alt text image.").padding(.top, 50.0)
             }
             
             ScrollView{
@@ -329,8 +336,8 @@ struct CaptioningHistory: View{
                             Text("Date: \(caption_history.caption_date!)" )
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            Text(" It took \(String(round(caption_history.time_to_caption, to:4)))s to caption this photo. ").font(.system(size:12))
-                            Text("The caption was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
+                            Text("It took \(String(round(caption_history.time_to_caption, to:4)))s to add alt text. ").font(.system(size:12))
+                            Text("The alt text was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
                             
                         }
                         
@@ -414,15 +421,15 @@ struct MailView: UIViewControllerRepresentable
         var composedEmailBody = ""
            
            if(recieveResponse) {
-               composedEmailBody = "<p>Message from: \(senderName)</p><br/><p>\(emailBody)</p><br/><p>I want to receive a response!</p>"
+               composedEmailBody = "<p>Message from: \(senderName)</p><p>\(emailBody)</p><p>I want to receive a response!</p>"
                viewController.setMessageBody(composedEmailBody, isHTML: true)
            } else {
-               composedEmailBody = "<p>Message from: \(senderName)</p><br/><p>\(emailBody)</p>"
+               composedEmailBody = "<p>Message from: \(senderName)</p><p>\(emailBody)</p>"
                viewController.setMessageBody(composedEmailBody, isHTML: true)
            }
            
            if(sendData) {
-               composedEmailBody += "<br/><p>I want to send information about my app usage!</p>"
+               composedEmailBody += "<p>I want to send information about my app usage!</p>"
              //pathCSV = CoreDataManager.shared.createCSV()
           //pathZip = CoreDataManager.shared.createZip()
 
@@ -637,7 +644,7 @@ extension String {
 
 struct ContentView: View {
     //Global Variables
-    @State private var currentCaption: String = "Choose one photo, then add a caption to the photo."
+    @State private var currentCaption: String = "Choose one photo, then add alt text to the photo."
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
@@ -798,7 +805,7 @@ struct ContentView: View {
                                 .onChange(of: currentCaption) { newCaption in
                                        if newCaption.contains("\n") {
                                            // Remove newlines
-                                           currentCaption = newCaption.replacingOccurrences(of: "\n", with: " ")
+                                           currentCaption = newCaption.replacingOccurrences(of: "\n", with: "")
                                        }
                                    }
                             //Text editor input object
@@ -810,11 +817,11 @@ struct ContentView: View {
                                 //  Cancel Button
                                 Button(action: {
                                     print("Cancelled")
-                                    if(currentCaption == "Choose one photo, then add a caption to the photo.") {
+                                    if(currentCaption == "Choose one photo, then add alt text to the photo.") {
                                         currentCaption = ""
                                     }
                                     else {
-                                        currentCaption = "Choose one photo, then add a caption to the photo."
+                                        currentCaption = "Choose one photo, then add alt text to the photo."
                                     }
                                     
                                 }, label: {
@@ -860,8 +867,7 @@ struct ContentView: View {
                                     }
                                     
                                     if(curItem != nil) { //if we have a photo to save
-                                       
-                                       if currentCaption == "Choose one photo, then add a caption to the photo." {
+                                       if currentCaption == "Choose one photo, then add alt text to the photo." {
                                             // Show an alert if the user tries to submit without a caption
                                             alertMessage = "Please add alt text before submitting."
                                             showAlert = true
@@ -870,11 +876,15 @@ struct ContentView: View {
                                         
                                         // Check if the caption length is within the desired range
                                        let captionLength = currentCaption.count
-                                        if captionLength < 10 {
-                                                alertMessage = "Alt text must contain more than 10 characters."
+                                        if captionLength < 1 {
+                                                alertMessage = "Please add alt text before submitting."
                                                 showAlert = true
                                                 return
-                                            }
+                                        }
+                                        if captionLength >= 1 &&  captionLength < 15{
+                                                alertMessage = "Please make your alt text more than 15 characters."
+                                                showAlert = true
+                                        }
                                         
                                        // Check if the caption contains invalid words
                                        let invalidWords = ["image", "picture", "icon", "photo"]
@@ -912,7 +922,7 @@ struct ContentView: View {
                                         }
 
                                        
-                                        currentCaption = "Choose one photo, then add a caption to the photo."
+                                        currentCaption = "Choose one photo, then add alt text to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
                                         notificationManager.refreshNotificationMsg()
                                     } else {
@@ -936,7 +946,7 @@ struct ContentView: View {
                                 .background(Color(red: 130/255, green: 160/255, blue: 170/255))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("Invalid Caption"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                    Alert(title: Text("Invalid Alt Text"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                                     //submit button
                                 }
                                 
@@ -1011,7 +1021,7 @@ struct ContentView: View {
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Choose one photo, then add a caption to the photo."
+                                            currentCaption = "Choose one photo, then add alt text to the photo."
                                         }){Image (systemName: "trash")
                                                 .foregroundColor(.black)
                                             
@@ -1113,7 +1123,7 @@ struct ContentView: View {
     
     
     private func clearEditor() {
-        if(currentCaption == "Choose one photo, then add a caption to the photo.") {
+        if(currentCaption == "Choose one photo, then add alt text to the photo.") {
             currentCaption = ""
         }
     }
@@ -1272,7 +1282,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Choose one photo, then add a caption to the photo."
+           currentCaption = "Choose one photo, then add alt text to the photo."
             return
         }
         
@@ -1281,7 +1291,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Choose one photo, then add a caption to the photo."
+           currentCaption = "Choose one photo, then add alt text to the photo."
             return;
         }
         
@@ -1301,9 +1311,10 @@ struct ContentView: View {
         let caption_date = getCurrentDate()
         let caption_date_epoch = Date().timeIntervalSinceReferenceDate
         let caption = currentCaption
-        let caption_length = currentCaption.count
+        let trimmedCaption = currentCaption.trimmingCharacters(in: .whitespaces)
+        let caption_length = trimmedCaption.count
         let photo_timeToCaption = timeToCaption.getFinishCaptionTime() - timeToCaption.getStartCaptionTime()
-        CoreDataManager.shared.addNewImage(image_data:  photo_data, new_caption:caption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
+        CoreDataManager.shared.addNewImage(image_data:  photo_data, new_caption:trimmedCaption, photo_caption_length: Int16(caption_length), time_to_caption: photo_timeToCaption, photo_caption_date: caption_date, photo_caption_date_epoch: caption_date_epoch)
         //save the Photo meta data to Core Data with all the desired properties
        
     }
