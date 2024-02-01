@@ -20,7 +20,7 @@ struct Settings: View{
         Text("Menu")
             .font(.title) // Adjust the font size as needed
             .bold()
-            .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+            .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
         
         List{
                 
@@ -153,18 +153,20 @@ struct CaptionGuide : View{
                        
                     
                 }.frame(height: 275)
-                VStack{
-                    Text("Alt text:")
-                        .fontWeight(.semibold)
-                        .font(.title3)
-                        .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
-                    Text("Alternative text (alt text) is a short textual description of an image. Blind and low vision users read alt text using a screen reader. Alt text helps users understand what is happening in the photo.")
-                        .font(.body)
-                }
+
                //Divider()
                 
                 ScrollView {
                     VStack(alignment: .leading) {
+                        Text("Alt text:")
+                            .fontWeight(.semibold)
+                            .font(.title3)
+                            .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
+                        Text("Alternative text (alt text) is a short textual description of an image. Blind and low vision users read alt text using a screen reader. Alt text helps users understand what is happening in the photo.")
+                            .font(.body)
+                            .padding(.bottom, 5)
+                            
+                        
                         // Do Section
                         Text("Do! ")
                             .fontWeight(.semibold)
@@ -234,7 +236,7 @@ struct AboutPage: View{
             
             VStack( spacing: 8){
                 VStack(alignment: .leading){
-                    Text("Background").fontWeight(.bold).font(.title).foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+                    Text("Background").fontWeight(.bold).font(.title).foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
@@ -249,7 +251,7 @@ struct AboutPage: View{
                     Text("Contributors")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+                        .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
 
                     Text("Yasmine Elglaly")
                         .font(.headline)
@@ -291,7 +293,7 @@ struct AboutPage: View{
                 .background(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 1)
+                        .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 1)
                         .frame(width: UIScreen.main.bounds.width - 20) // Full width of the screen
                 )
                 .cornerRadius(10)
@@ -336,7 +338,7 @@ struct CaptioningHistory: View{
                             Text("Date: \(caption_history.caption_date!)" )
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            Text("It took \(String(round(caption_history.time_to_caption, to:4)))s to add alt text. ").font(.system(size:12))
+                            Text("It took \(String(round(caption_history.time_to_caption, to:4)))second to add alt text. ").font(.system(size:12))
                             Text("The alt text was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
                             
                         }
@@ -548,7 +550,7 @@ struct Contact: View{
                                         .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 3)
-                                                .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                                .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
                                         )
                                         .onTapGesture {
                                             clearEditor()
@@ -714,7 +716,7 @@ struct ContentView: View {
                             //Header
                             Text("ACCESSIBLE MEDIA")
                                 .font(.system(size: 20,  weight: .bold))
-                                .padding(.bottom, 20.0)
+                                .padding(.bottom, 5.0)
                             //Header
                             
                             
@@ -723,9 +725,10 @@ struct ContentView: View {
                                 Image("Media-Access")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 310, height: 310)
+                                    .frame(width: 330, height: 260)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .padding(.bottom, 15.0)
+                                    .padding(.bottom, 5.0)
+                                    .accessibility(label: Text("Welcome to the Accessible Media App. Example of photo 'IMG_126.png' without alt text, then with 'A cute gray cat' added as alt text. Thank you for making technology accessible to all."))
                                 
                             } else { //if we have a curItem figure out how to display it
                                 if curItem?.mediaType == .photo {
@@ -747,7 +750,7 @@ struct ContentView: View {
                                                 .font(.body)
                                                 .multilineTextAlignment(.center)
                                                 .padding(.bottom, 2)
-                                                .foregroundColor(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                                .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                                             
                                             HStack {
                                                 Text(altTextSuggestion)
@@ -764,7 +767,7 @@ struct ContentView: View {
                                             }
                                             
                                         }
-                                        .frame(maxWidth: .infinity)
+//                                        .frame(maxWidth: .infinity)
                                      }
                                     }
                                     
@@ -788,12 +791,12 @@ struct ContentView: View {
                             
                             //Text editor input object
                             TextEditor(text: $currentCaption)
-                                .frame(width: 350, height: 80, alignment: .center)
+                                .frame(width: 350, height: 100, alignment: .center)
                                 .foregroundColor(Color.black)
                                 .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 3)
-                                        .stroke(Color(red: 130/255, green: 160/255, blue: 170/255), lineWidth: 2) // Apply rounded border
+                                        .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
                                 )
                                 .padding(.bottom, 5.0)
                                 .onTapGesture (count: 1){
@@ -837,7 +840,7 @@ struct ContentView: View {
                                     }
                                 })
                                 .frame(width: 100.0, height: 33.0)
-                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .background(Color(red: 23/255, green: 88/255, blue: 115/255))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 
                                 
@@ -943,7 +946,7 @@ struct ContentView: View {
                                     }
                                 })
                                 .frame(width: 100.0, height: 33.0)
-                                .background(Color(red: 130/255, green: 160/255, blue: 170/255))
+                                .background(Color(red: 23/255, green: 88/255, blue: 115/255))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Invalid Alt Text"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
