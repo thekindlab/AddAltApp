@@ -302,7 +302,7 @@ struct AboutPage: View{
                 }
                 
             }.padding()
-            Text("© 2024 Media Accessibility. All rights reserved.")
+            Text("© 2024 Accessible Media. All rights reserved.")
                                .font(.footnote)
                                .foregroundColor(.black)
         }
@@ -712,7 +712,7 @@ struct ContentView: View {
                             
                             
                             //Header
-                            Text("MEDIA ACCESSIBILITY")
+                            Text("Accessible Media")
                                 .font(.system(size: 20,  weight: .bold))
                                 .padding(.bottom, 20.0)
                             //Header
