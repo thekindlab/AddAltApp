@@ -141,18 +141,18 @@ struct CaptionGuide : View{
             
             VStack(alignment: .center, spacing: 10){
                 
-                ScrollView{
+                VStack{
                     Image("Puppies_Image")
                            .resizable()
                            .scaledToFit()
                            .frame(width: 200, height: 170) // Adjust dimensions as needed
                     
-                    Text("Two golden retreiver pupies sitting together on grass spinkled with autumn leaves.")
+                    Text("Two golden retriever puppies sitting together on grass sprinkled with orange leaves. Posted to celebrate International Dog Day.")
                            .font(.body)
                            .multilineTextAlignment(.center)
                        
                     
-                }.frame(height: 225)
+                }.frame(height: 275)
                 
                //Divider()
                 
@@ -165,15 +165,18 @@ struct CaptionGuide : View{
                             .foregroundColor(.green)
 
                         VStack(alignment: .leading, spacing: 5) {
-                            Text("- Focus on the most important element of the image and be descriptive.")
+                            Text("**• Be Accurate:** Make sure all details described are correct")
                                 .padding(.leading, 10)
                                 .font(.body)
-
-                            Text("- Organize your alt text cohesively: what they are doing, focus point of the image, and image context.")
-                                .padding(.leading, 10)
+                            Text("**• Be Complete:** Describe all important image elements and context")
+                                .padding(.leading, 15)
                                 .font(.body)
 
-                            Text("- Include sufficient detail and context for your audience.")
+                            Text("**• Describe Image Purpose:** Include context for why you're posting the image")
+                                .padding(.leading, 15)
+                                .font(.body)
+
+                            Text("**• Be Organized:** Describe the subject, then what they're doing, and then the image purpose")
                                 .padding(.leading, 10)
                                 .font(.body)
                         }
@@ -186,15 +189,15 @@ struct CaptionGuide : View{
                             .foregroundColor(.red)
 
                         VStack(alignment: .leading, spacing: 5) {
-                            Text("- Start by saying \"A photo of Two Puppies\" -> Two Puppies.")
-                                .padding(.leading, 10)
+                            Text("**• Start with “A photo:”** For example, instead of \"An image of two puppies,\" say \"Two puppies\"")
+                                .padding(.leading, 15)
                                 .font(.body)
-                            Text("- Be redundant or include unnecessary words \"An image of dogs. The dogs are side by side. The dogs are in grass\" -> Two Puppies sitting together on grass.")
-                                .padding(.leading, 10)
+                            Text("**• Be redundant:** For example, instead of \"Two puppies. The puppies are side by side. The puppies are in grass,\"say \"Two Puppies sitting together on grass\" " )
+                                .padding(.leading, 15)
                                 .font(.body)
 
-                            Text("- Don't make assumptions: verify race, identity, gender of individuals in photo.")
-                                .padding(.leading, 10)
+                            Text("**• Make assumptions:** Verify the race, gender, and other important identity characteristics of individuals in the photo before describing them")
+                                .padding(.leading, 15)
                                 .font(.body)
                         }
                        // .padding()
@@ -845,14 +848,6 @@ struct ContentView: View {
                                 .frame(width: 100.0, height: 30.0)
                                 .background(Color.gray)
                                 .clipShape(Capsule())*/
-                                Button(action: {
-                                    print(CoreDataManager.shared.loadStartUp()![0].hour)
-                                }, label: {
-                                    Text("Print hour").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.gray)
-                                .clipShape(Capsule())
 
                                 
                                 
