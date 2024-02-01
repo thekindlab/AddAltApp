@@ -411,15 +411,15 @@ struct MailView: UIViewControllerRepresentable
         var composedEmailBody = ""
            
            if(recieveResponse) {
-               composedEmailBody = "Message from: \(senderName)\n\n\(emailBody) \n\nI want to receive a response!"
+               composedEmailBody = "<p>Message from: \(senderName)</p><br/><p>\(emailBody)</p><br/><p>I want to receive a response!</p>"
                viewController.setMessageBody(composedEmailBody, isHTML: true)
            } else {
-               composedEmailBody = "Message from: \(senderName)\n\n\(emailBody)"
+               composedEmailBody = "<p>Message from: \(senderName)</p><br/><p>\(emailBody)</p>"
                viewController.setMessageBody(composedEmailBody, isHTML: true)
            }
            
            if(sendData) {
-               composedEmailBody += "\n\nI want to send information about my app usage!"
+               composedEmailBody += "<br/><p>I want to send information about my app usage!</p>"
              //pathCSV = CoreDataManager.shared.createCSV()
           //pathZip = CoreDataManager.shared.createZip()
 
@@ -505,25 +505,27 @@ struct Contact: View{
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
                               
-                            VStack(){
+                            VStack(spacing: 8){
                                 Divider()
-                                HStack(spacing: 5){
+                                HStack(spacing: 16) {
                                     Text("Your Name")
-                                    TextEditor(text: $senderName)
-                                        .frame(width: 100, alignment: .leading)
+                                    
+                                    TextField("", text: $senderName)
+                                        .padding(.top, 20)
+                                        .padding(.bottom, 20)
+                                        .padding(.leading, 10)
                                         .autocorrectionDisabled()
                                         .alert(isPresented: $showAlert) {
-                                        Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                            Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
                                         }
                                         .onChange(of: senderName) { newName in
                                             let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
                                             
                                             if trimmedName.isEmpty {
-                                                    showAlert = true
+                                                showAlert = true
                                             }
                                         }
                                 }
-                                    
 
                                 Divider()
                                 
@@ -543,7 +545,7 @@ struct Contact: View{
                                             hideKeyboard()
                                         }
                                     
-                                }.padding()
+                                }.padding(.top, 20).padding(.bottom,20)
                                 Divider()
                                 
                                 Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
