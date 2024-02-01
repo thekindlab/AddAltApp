@@ -338,7 +338,7 @@ struct CaptioningHistory: View{
                             Text("Date: \(caption_history.caption_date!)" )
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            Text("It took \(String(round(caption_history.time_to_caption, to:4)))second to add alt text. ").font(.system(size:12))
+                            Text("It took \(String(round(caption_history.time_to_caption, to:4))) seconds to add alt text. ").font(.system(size:12))
                             Text("The alt text was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
                             
                         }
