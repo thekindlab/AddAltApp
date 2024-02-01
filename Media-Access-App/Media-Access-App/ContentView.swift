@@ -507,9 +507,10 @@ struct Contact: View{
                               
                             VStack( spacing: 8){
                                 Divider()
-                                VStack(spacing:6){
+                                HStack(spacing:6){
                                     Text("Your Name")
                                     TextEditor(text: $senderName)
+                                        .frame(width: 100, alignment: .leading)
                                         .autocorrectionDisabled()
                                         .alert(isPresented: $showAlert) {
                                         Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
