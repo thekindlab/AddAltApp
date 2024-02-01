@@ -421,7 +421,7 @@ struct MailView: UIViewControllerRepresentable
         var composedEmailBody = ""
            
            if(recieveResponse) {
-               composedEmailBody = "<p>Message from: \(senderName)</p><p>\(emailBody)</p><p>I want to receive a response!</p>"
+               composedEmailBody = "<p>Message from: \(senderName)</p><p>\(emailBody)</p><p>Note: I want to receive a response!</p>"
                viewController.setMessageBody(composedEmailBody, isHTML: true)
            } else {
                composedEmailBody = "<p>Message from: \(senderName)</p><p>\(emailBody)</p>"
@@ -429,7 +429,7 @@ struct MailView: UIViewControllerRepresentable
            }
            
            if(sendData) {
-               composedEmailBody += "<p>I want to send information about my app usage!</p>"
+               composedEmailBody += "<p>Note:I want to send information about my app usage!</p>"
              //pathCSV = CoreDataManager.shared.createCSV()
           //pathZip = CoreDataManager.shared.createZip()
 
@@ -723,7 +723,7 @@ struct ContentView: View {
                                 Image("Media-Access")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 230, height: 230)
+                                    .frame(width: 310, height: 310)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .padding(.bottom, 15.0)
                                 
@@ -882,7 +882,7 @@ struct ContentView: View {
                                                 return
                                         }
                                         if captionLength >= 1 &&  captionLength < 15{
-                                                alertMessage = "Please make your alt text more than 15 characters."
+                                                alertMessage = "Please verify that your alt text describes all important elements of the image."
                                                 showAlert = true
                                         }
                                         
