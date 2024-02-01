@@ -712,7 +712,7 @@ struct ContentView: View {
                             
                             
                             //Header
-                            Text("Accessible Media")
+                            Text("ACCESSIBLE MEDIA")
                                 .font(.system(size: 20,  weight: .bold))
                                 .padding(.bottom, 20.0)
                             //Header
