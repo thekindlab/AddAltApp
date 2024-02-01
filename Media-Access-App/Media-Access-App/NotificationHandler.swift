@@ -15,7 +15,7 @@ import UserNotifications
 class NotificationHandler
 
 {
-    var hour = 18
+    //var hour = 18
 
     init(){
         
@@ -65,24 +65,27 @@ class NotificationHandler
     // Called when users decide to change when their notification is scheduled
     func rescheduleNotification(time:String)
     {
+        let startupManager = StartupHandler(notif_handler:self)
         print(time)
+        var hr = 0
         var new_time = time.dropLast(1)
         //Check AM or PM
         if new_time.last == "A" {
             new_time = new_time.dropLast(2)
-            hour = Int(new_time)!
-            // 24 hr time, so 12 am is 0
-            if hour == 12{
-                hour = 0
+            hr = Int(new_time)!
+            //CoreDataManager.shared.loadStartUp()![0].hour = Int64(new_time)!      // 24 hr time, so 12 am is 0
+            //print(CoreDataManager.shared.loadStartUp()![0])
+            if hr == 12{
+                hr = 0
             }
         }
         else if new_time.last == "P" {
             new_time = new_time.dropLast(2)
-            hour = Int(new_time)!
+            hr = Int(new_time)!
+            //CoreDataManager.shared.loadStartUp()![0].hour = Int64(new_time)!
             //24 hr time so 1pm is 13pm, etc.
-            if hour != 12{
-                hour = hour + 12
-                print(hour)
+            if hr != 12{
+                hr = hr + 12
             }
         }
         //For basic notification:
@@ -90,6 +93,8 @@ class NotificationHandler
         //self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!")
         
         //For Motivational Notification"
+        //print("hr: \(hr)")
+        startupManager.updateStartupInformation(hour:Int64(hr))
         self.refreshNotificationMsg()
         
     }
@@ -109,7 +114,7 @@ class NotificationHandler
         
         //Scheduling notification for a certain time every day
         var dateComponents = DateComponents()
-        dateComponents.hour = hour
+        dateComponents.hour = Int(CoreDataManager.shared.loadStartUp()![0].hour)
         dateComponents.minute = 00
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -230,17 +235,18 @@ class NotificationHandler
     //Returns as a string, ex: "10 PM"
     func translateToStandardTime() -> String
     {
-        if self.hour == 0 {
+        let hour = CoreDataManager.shared.loadStartUp()![0].hour
+        if hour == 0 {
             return "12 AM"
         }
-        else if self.hour < 12 {
-            return String(self.hour)+" AM"
+        else if hour < 12 {
+            return String(hour)+" AM"
         }
-        else if self.hour == 12 {
-            return String(self.hour) + " PM"
+        else if hour == 12 {
+            return String(hour) + " PM"
         }
-        else if self.hour > 12 {
-            return String(self.hour-12)+" PM"
+        else if hour > 12 {
+            return String(hour-12)+" PM"
         }
         return "VOID"
     }

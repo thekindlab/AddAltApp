@@ -505,9 +505,9 @@ struct Contact: View{
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
                               
-                            VStack( spacing: 8){
+                            VStack(){
                                 Divider()
-                                HStack(spacing:6){
+                                HStack(spacing: 5){
                                     Text("Your Name")
                                     TextEditor(text: $senderName)
                                         .frame(width: 100, alignment: .leading)
@@ -893,7 +893,8 @@ struct ContentView: View {
                                         timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
                                         
                                         //update Startup Info
-                                        startupManager.updateStartupInformation()
+                                        startupManager.updateStartupInformation(hour:nil)
+                                        //print("hour saved: \(CoreDataManager.shared.loadStartUp()![0].hour)")
                                         
                                         
                                         
@@ -1266,7 +1267,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Choose one photo, then add a caption to the photo. "
+           currentCaption = "Choose one photo, then add a caption to the photo."
             return
         }
         
@@ -1275,7 +1276,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Choose one photo, then add a caption to the photo. "
+           currentCaption = "Choose one photo, then add a caption to the photo."
             return;
         }
         
