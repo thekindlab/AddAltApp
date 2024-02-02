@@ -646,7 +646,7 @@ extension String {
 
 struct ContentView: View {
     //Global Variables
-    @State private var currentCaption: String = "Choose one photo, then add alt text to the photo."
+    @State private var currentCaption: String = "Choose one photo below, then add alt text to the photo."
     @State private var showSheet = false
     @State private var showCamera = false
     @State private var curImage: UIImage?
@@ -820,11 +820,11 @@ struct ContentView: View {
                                 //  Cancel Button
                                 Button(action: {
                                     print("Cancelled")
-                                    if(currentCaption == "Choose one photo, then add alt text to the photo.") {
+                                    if(currentCaption == "Choose one photo below, then add alt text to the photo.") {
                                         currentCaption = ""
                                     }
                                     else {
-                                        currentCaption = "Choose one photo, then add alt text to the photo."
+                                        currentCaption = "Choose one photo below, then add alt text to the photo."
                                     }
                                     
                                 }, label: {
@@ -870,7 +870,7 @@ struct ContentView: View {
                                     }
                                     
                                     if(curItem != nil) { //if we have a photo to save
-                                       if currentCaption == "Choose one photo, then add alt text to the photo." {
+                                       if currentCaption == "Choose one photo below, then add alt text to the photo." {
                                             // Show an alert if the user tries to submit without a caption
                                             alertMessage = "Please add alt text before submitting."
                                             showAlert = true
@@ -885,7 +885,7 @@ struct ContentView: View {
                                                 return
                                         }
                                         if captionLength >= 1 &&  captionLength < 15{
-                                                alertMessage = "Please verify that your alt text describes all important elements of the image."
+                                                alertMessage = "Please verify that your alt text describes all important elements of the image. Alt text is still saved."
                                                 showAlert = true
                                         }
                                         
@@ -925,7 +925,7 @@ struct ContentView: View {
                                         }
 
                                        
-                                        currentCaption = "Choose one photo, then add alt text to the photo."
+                                        currentCaption = "Choose one photo below, then add alt text to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
                                         notificationManager.refreshNotificationMsg()
                                     } else {
@@ -949,7 +949,7 @@ struct ContentView: View {
                                 .background(Color(red: 23/255, green: 88/255, blue: 115/255))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("Invalid Alt Text"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                    Alert(title: Text("Warning"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                                     //submit button
                                 }
                                 
@@ -1024,7 +1024,7 @@ struct ContentView: View {
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Choose one photo, then add alt text to the photo."
+                                            currentCaption = "Choose one photo below, then add alt text to the photo."
                                         }){Image (systemName: "trash")
                                                 .foregroundColor(.black)
                                             
@@ -1126,7 +1126,7 @@ struct ContentView: View {
     
     
     private func clearEditor() {
-        if(currentCaption == "Choose one photo, then add alt text to the photo.") {
+        if(currentCaption == "Choose one photo below, then add alt text to the photo.") {
             currentCaption = ""
         }
     }
@@ -1285,7 +1285,7 @@ struct ContentView: View {
         if(IPTCDictionary == nil)
         { //IPTCDictionary not set
             
-           currentCaption = "Choose one photo, then add alt text to the photo."
+           currentCaption = "Choose one photo below, then add alt text to the photo."
             return
         }
         
@@ -1294,7 +1294,7 @@ struct ContentView: View {
         if(potential_caption == nil)
         {
             
-           currentCaption = "Choose one photo, then add alt text to the photo."
+           currentCaption = "Choose one photo below, then add alt text to the photo."
             return;
         }
         
