@@ -26,7 +26,7 @@ struct Settings: View{
                 
             NavigationLink(destination: CaptioningHistory()){ Text("Your Alt Text History")} //would be cools to have and easy to implement
             NavigationLink(destination: CaptionGuide()){Text("Alt Text Guide")} //we need to have this
-            NavigationLink(destination: NotificationTiming()) { Text("Schedule Notification")  } //Scheduling notifications
+            //NavigationLink(destination: NotificationTiming()) { Text("Schedule Notification")  } //Scheduling notifications
             NavigationLink(destination: AboutPage()) { Text("Our Mission")  } //for about research, goals of research
             NavigationLink(destination: Contact(emailBody: "Something Is Wrong!", senderName: "", sendData: false, recieveResponse: false)){Text("Help & Support")}
           
@@ -34,6 +34,7 @@ struct Settings: View{
     }
     
 }
+/*
 //For scheduling notifications
 struct NotificationTiming : View {
     
@@ -73,7 +74,7 @@ struct NotificationTiming : View {
             }
         }
     }
-}
+}*/
     
     /*@State private var selection = "6 PM"
     @State private var notificationManager = NotificationHandler()
@@ -656,8 +657,8 @@ struct ContentView: View {
     @ObservedObject var mediaItems = PickedMediaItems() //array of Photos (PhotoPickerModels)
     @State private var photoLibrary = CaptionedPhotoAlbum() //users photo album
     @State private var timeToCaption = Time()
-    @State private var notificationManager = NotificationHandler()
-    @State private var startupManager = StartupHandler(notif_handler : NotificationHandler())
+    //@State private var notificationManager = NotificationHandler()
+    @State private var startupManager = StartupHandler()   //(notif_handler : NotificationHandler())
     @State private var showAlert = false
     @State private var alertMessage = ""
     
@@ -885,6 +886,7 @@ struct ContentView: View {
                                                 return
                                         }
                                         if captionLength >= 1 &&  captionLength < 15{
+
                                                 alertMessage = "Please verify that your alt text describes all important elements of the image. Alt text is still saved."
                                                 showAlert = true
                                         }
@@ -927,7 +929,7 @@ struct ContentView: View {
                                        
                                         currentCaption = "Choose one photo below, then add alt text to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
-                                        notificationManager.refreshNotificationMsg()
+                                        //notificationManager.refreshNotificationMsg()
                                     } else {
                                         // Show an alert or handle the case where the user is trying to submit without a photo
                                         showAlert = true

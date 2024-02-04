@@ -10,11 +10,11 @@ import Foundation
 
 class StartupHandler
 {
-    private var notif_handler:NotificationHandler?
+    //private var notif_handler:NotificationHandler?
     
-    init(notif_handler: NotificationHandler)
+    init()   //notif_handler: NotificationHandler)
     {
-        self.notif_handler = notif_handler
+        //self.notif_handler = notif_handler
         checkFirstAppUse()
       
     }
@@ -62,8 +62,8 @@ class StartupHandler
         var number_of_captions = 0;
         let image_data = CoreDataManager.shared.loadAllImageData()
         let user_id = UUID()
-        let hr = 18
-        print("set to 18")
+        //let hr = 18
+        //print("set to 18")
         
         if(image_data != nil)
         {
@@ -73,14 +73,15 @@ class StartupHandler
         
         
 
-        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date(), user: user_id, hour: Int64(hr) )
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date(), user: user_id)
+        //CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: 0, dateOfFirstUse: Date(), user: user_id, hour: Int64(hr) )
 
     }
     
     func updateStartupInformation(hour: Int64?)
     {
         checkFirstAppUse() //check if no Startup Data is avaiable
-        var hr: Int64
+        //var hr: Int64
         let existingStartupInfo = CoreDataManager.shared.loadStartUp()![0]
         let image_data = CoreDataManager.shared.loadAllImageData()
         
@@ -89,12 +90,12 @@ class StartupHandler
         var daysOfUse:Int;
         var number_of_captions = 0
         let user_id = existingStartupInfo.userID
-        if hour == nil {
+        /*if hour == nil {
             hr = existingStartupInfo.hour
 
         } else {
             hr = hour!
-        }
+        }*/
                 
         //print("hr: \(hr)")
         if(image_data == nil)
@@ -124,7 +125,7 @@ class StartupHandler
         
         
         
-        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: daysOfUse, dateOfFirstUse: dateOfFirstUse!, user: user_id!, hour: hr)
+        CoreDataManager.shared.addNewStartupInfo(captionNumber: number_of_captions, daysUsed: daysOfUse, dateOfFirstUse: dateOfFirstUse!, user: user_id!) //, hour: hr)
         
         
         

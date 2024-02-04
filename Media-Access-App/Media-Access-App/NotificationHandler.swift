@@ -65,7 +65,7 @@ class NotificationHandler
     // Called when users decide to change when their notification is scheduled
     func rescheduleNotification(time:String)
     {
-        let startupManager = StartupHandler(notif_handler:self)
+        let startupManager = StartupHandler()//notif_handler:self)
         print(time)
         var hr = 0
         var new_time = time.dropLast(1)
