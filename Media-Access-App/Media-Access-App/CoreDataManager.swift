@@ -138,7 +138,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
         
     }
     
-    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date, user: UUID) //, hour: Int64)
+    func addNewStartupInfo(firstUse:Bool = false, captionNumber: Int, daysUsed:Int, dateOfFirstUse: Date, user: UUID, hour: Int64)
     {
         
         deleteStartupData() //delete the startup data and replace more current data.
@@ -158,7 +158,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                 dataOnStartup.numberOfCaptions = Int64(captionNumber);
                 dataOnStartup.dateOfFirstUse = dateOfFirstUse;
                 dataOnStartup.userID = user
-                //dataOnStartup.hour = hour
+                dataOnStartup.hour = hour
                 try context.save()
                 
             }
@@ -510,7 +510,7 @@ class CoreDataManager{ //implemented a Singleton CoreDataManager object
                         try? data.write(to: filename)
                     }
                 //try saved_photo.image_data!.write(to: directory.appendingPathComponent("image\(i).jpg"))
-                //print("i: \(i)")
+                print("i: \(i)")
                 i = i + 1
             }
             return directory
