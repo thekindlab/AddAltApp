@@ -289,7 +289,8 @@ struct AboutPage: View{
                         .foregroundColor(.black)
 
                 }
-                .padding()
+                .padding(.vertical, 40)
+                .padding(.horizontal, 110)
                 .background(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
@@ -885,7 +886,7 @@ struct ContentView: View {
                                                 return
                                         }
                                         if captionLength >= 1 &&  captionLength < 15{
-                                                alertMessage = "Please verify that your alt text describes all important elements of the image. Alt text is still saved."
+                                                alertMessage = "Please verify that your alt text describes all important elements of the image. Your previous alt text is still saved."
                                                 showAlert = true
                                         }
                                         
