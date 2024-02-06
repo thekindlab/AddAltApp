@@ -147,7 +147,7 @@ struct CaptionGuide : View{
                            .scaledToFit()
                            .frame(width: 200, height: 170) // Adjust dimensions as needed
                     
-                    Text("Two golden retriever puppies sitting together on grass sprinkled with orange leaves. Posted to celebrate International Dog Day.")
+                    Text("Example alt text: Two golden retriever puppies sitting together on grass sprinkled with orange leaves. Posted to celebrate International Dog Day.")
                            .font(.body)
                            .multilineTextAlignment(.center)
                        
