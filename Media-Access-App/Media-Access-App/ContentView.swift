@@ -147,7 +147,7 @@ struct CaptionGuide : View{
                            .scaledToFit()
                            .frame(width: 200, height: 170) // Adjust dimensions as needed
                     
-                    Text("Two golden retriever puppies sitting together on grass sprinkled with orange leaves. Posted to celebrate International Dog Day.")
+                    Text("Example alt text: Two golden retriever puppies sitting together on grass sprinkled with orange leaves. Posted to celebrate International Dog Day.")
                            .font(.body)
                            .multilineTextAlignment(.center)
                        
@@ -236,7 +236,7 @@ struct AboutPage: View{
             
             VStack( spacing: 8){
                 VStack(alignment: .leading){
-                    Text("Background").fontWeight(.bold).font(.title).foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
+                    Text("Background").fontWeight(.bold).font(.title2).foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
@@ -249,7 +249,7 @@ struct AboutPage: View{
                 VStack(spacing: 10) {
 
                     Text("Contributors")
-                        .font(.title)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
 
