@@ -249,7 +249,7 @@ struct AboutPage: View{
                 VStack(spacing: 10) {
 
                     Text("Contributors")
-                        .font(.title)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
 
