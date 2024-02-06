@@ -339,8 +339,10 @@ struct CaptioningHistory: View{
                             Text("Date: \(caption_history.caption_date!)" )
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            Text("It took \(String(round(caption_history.time_to_caption, to:4))) seconds to add alt text. ").font(.system(size:12))
+                            //Text("It took \(String(round(caption_history.time_to_caption, to:4))) seconds to add alt text. ").font(.system(size:12))
+                            Text("It took \(String(Int(round(caption_history.time_to_caption)))) seconds to add alt text. ").font(.system(size:12))
                             Text("The alt text was \(String(caption_history.caption_length)) characters long.").font(.system(size:12))
+                            //Text("Test round: \(String(caption_history.time_to_caption))").font(.system(size:12))
                             
                         }
                         
@@ -357,12 +359,14 @@ struct CaptioningHistory: View{
         }
     }
     
-        func round(_ num: Double, to places: Int) -> Double {
+    /* Previous group created - we determined that we won't need to round to four decimal places, so switched to the
+    func round(_ num: Double, to places: Int) -> Double {
             let p = log10(abs(num))
             let f = pow(10, p.rounded() - Double(places) + 1)
             let rnum = (num / f).rounded() * f
             return rnum
         }
+     */
 }
 struct MailView: UIViewControllerRepresentable
 {//NEED TO TEST ON A PHYSICAL DEVICE. CANNOT TEST ON A SIMULATOR
