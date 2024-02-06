@@ -533,7 +533,7 @@ struct Contact: View{
                                         .padding(.leading, 10)
                                         .autocorrectionDisabled()
                                         .alert(isPresented: $showAlert) {
-                                            Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                            Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
                                         }
                                         .onChange(of: senderName) { newName in
                                             let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -574,16 +574,17 @@ struct Contact: View{
                             VStack(alignment: .center)
                             {
                                 Button(action: {
-                                    if !senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                        self.isShowingMailView.toggle()
-                                    } else {
-                                        showAlert = true
-                                        return
-                                    }
+                                    if senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || emailBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                            showAlert = true
+                                        } else {
+                                            if MFMailComposeViewController.canSendMail() {
+                                                self.isShowingMailView.toggle()
+                                            }
+                                        }
                                 }, label: {
                                     Text(" Send Message").foregroundColor(Color.white)
                                 })
-                                .frame(width: 200.00, height: 33.0)
+                                .frame(width: 180.00, height: 37.0)
                                 .background(button_color)
                                 .clipShape(Capsule())
                                 .disabled(senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !MFMailComposeViewController.canSendMail())
