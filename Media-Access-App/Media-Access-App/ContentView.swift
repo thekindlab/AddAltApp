@@ -236,7 +236,7 @@ struct AboutPage: View{
             
             VStack( spacing: 8){
                 VStack(alignment: .leading){
-                    Text("Background").fontWeight(.bold).font(.title).foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
+                    Text("Background").fontWeight(.bold).font(.title2).foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                     VStack(){
                     ScrollView{
                         //write a couple paragraphs for explaining our research
