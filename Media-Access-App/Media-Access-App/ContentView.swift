@@ -749,7 +749,7 @@ struct ContentView: View {
                                             .padding(.bottom, 0)
                                             .onAppear {
                                                 // Perform image analysis when the image appears
-                                                analyzeImage(image)
+                                                //analyzeImage(image)
                                             }
                                     if !altTextSuggestion.isEmpty {
                                         VStack {
@@ -1139,83 +1139,83 @@ struct ContentView: View {
         }
     }
     
-    private func analyzeImage(_ image: UIImage) {
-        let resizedImage = resizeImage(image, targetSize: CGSize(width: 3000, height: 2002))
-        
-        // Convert image to binary data
-        guard let imageData = resizedImage.jpegData(compressionQuality: 0.9) else {
-            print("Could not get JPEG representation of UIImage")
-            return
-        }
-        let apiKey = "c2b7be37ed4f4f9dab6b3bed64e91bce" // Securely stored API key
-        let endpoint = "https://api-vision-alt-text.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Description&language=en"
-        guard let url = URL(string: endpoint) else {
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-        request.setValue(apiKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-        request.httpBody = imageData
-        URLSession.shared.dataTask(with: request) {data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Error analyzing the image: \(error)")
-                    self.altTextSuggestion = "Error analyzing the image."
-                    return
-                }
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    self.altTextSuggestion = "No HTTP response received."
-                    return
-                }
-                guard let data = data, httpResponse.statusCode == 200 else {
-                    print("HTTP Status Code: \(httpResponse.statusCode)")
-                    self.altTextSuggestion = "Error analyzing the image. Status Code: \(httpResponse.statusCode)"
-                    return
-                }
-                if let dataString = String(data: data, encoding: .utf8) {
-                    print("Response Data: \(dataString)")
-                }
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let description = json["description"] as? [String: Any],
-                       let captions = description["captions"] as? [[String: Any]],
-                       let firstCaption = captions.first,
-                       let text = firstCaption["text"] as? String {
-                        self.altTextSuggestion = text.capitalizedFirstLetter() // Capitalize the first letter
-                    } else {
-                        self.altTextSuggestion = "The alt-text sugestion is not available."
-                    }
-                } catch {
-                    print("Error parsing response: \(error)")
-                    self.altTextSuggestion = "Error analyzing the image."
-                }
-            }
-        }.resume()
-    }
-
-    
-    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        let widthRatio = targetSize.width / size.width
-        let heightRatio = targetSize.height / size.height
-        // Determine what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if widthRatio > heightRatio {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
-        }
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(origin: CGPoint.zero, size: newSize)
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        print("Error parsing response. Resize image")
-        return newImage ?? image
-    }
+//    private func analyzeImage(_ image: UIImage) {
+//        let resizedImage = resizeImage(image, targetSize: CGSize(width: 3000, height: 2002))
+//
+//        // Convert image to binary data
+//        guard let imageData = resizedImage.jpegData(compressionQuality: 0.9) else {
+//            print("Could not get JPEG representation of UIImage")
+//            return
+//        }
+//        let apiKey = "c2b7be37ed4f4f9dab6b3bed64e91bce" // Securely stored API key
+//        let endpoint = "https://api-vision-alt-text.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Description&language=en"
+//        guard let url = URL(string: endpoint) else {
+//            return
+//        }
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+//        request.setValue(apiKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+//        request.httpBody = imageData
+//        URLSession.shared.dataTask(with: request) {data, response, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    print("Error analyzing the image: \(error)")
+//                    self.altTextSuggestion = "Error analyzing the image."
+//                    return
+//                }
+//                guard let httpResponse = response as? HTTPURLResponse else {
+//                    self.altTextSuggestion = "No HTTP response received."
+//                    return
+//                }
+//                guard let data = data, httpResponse.statusCode == 200 else {
+//                    print("HTTP Status Code: \(httpResponse.statusCode)")
+//                    self.altTextSuggestion = "Error analyzing the image. Status Code: \(httpResponse.statusCode)"
+//                    return
+//                }
+//                if let dataString = String(data: data, encoding: .utf8) {
+//                    print("Response Data: \(dataString)")
+//                }
+//                do {
+//                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+//                       let description = json["description"] as? [String: Any],
+//                       let captions = description["captions"] as? [[String: Any]],
+//                       let firstCaption = captions.first,
+//                       let text = firstCaption["text"] as? String {
+//                        self.altTextSuggestion = text.capitalizedFirstLetter() // Capitalize the first letter
+//                    } else {
+//                        self.altTextSuggestion = "The alt-text sugestion is not available."
+//                    }
+//                } catch {
+//                    print("Error parsing response: \(error)")
+//                    self.altTextSuggestion = "Error analyzing the image."
+//                }
+//            }
+//        }.resume()
+//    }
+//
+//
+//    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+//        let size = image.size
+//        let widthRatio = targetSize.width / size.width
+//        let heightRatio = targetSize.height / size.height
+//        // Determine what our orientation is, and use that to form the rectangle
+//        var newSize: CGSize
+//        if widthRatio > heightRatio {
+//            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+//        } else {
+//            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+//        }
+//        // This is the rect that we've calculated out and this is what is actually used below
+//        let rect = CGRect(origin: CGPoint.zero, size: newSize)
+//        // Actually do the resizing to the rect using the ImageContext stuff
+//        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+//        image.draw(in: rect)
+//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        print("Error parsing response. Resize image")
+//        return newImage ?? image
+//    }
     private func saveCaptionedPhotoToLibrary()  {
         
         //grab current image UIImage
