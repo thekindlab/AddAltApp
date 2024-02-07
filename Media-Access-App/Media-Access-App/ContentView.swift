@@ -505,6 +505,7 @@ struct Contact: View{
     @State  var sendData: Bool
     @State  var recieveResponse: Bool
     @State private var showAlert = false
+    @State private var trimmedSenderName = ""
     
     @State var result: Result<MFMailComposeResult, Error>? = nil
     @State var isShowingMailView = false
@@ -530,17 +531,13 @@ struct Contact: View{
                                         .padding(.bottom, 20)
                                         .padding(.leading, 10)
                                         .autocorrectionDisabled()
-                                        .alert(isPresented: $showAlert) {
-                                        Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
-                                        }
                                         .onChange(of: senderName) { newName in
-                                            let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                            
-                                            if trimmedName.isEmpty {
-                                                showAlert = true
-                                            }
+                                            trimmedSenderName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
                                         }
-                                }
+                                        .alert(isPresented: $showAlert) {
+                                            Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                        }
+}
 
                                 Divider()
                                 
@@ -574,8 +571,7 @@ struct Contact: View{
                             {
                                 Button(action: {
                                     let trimmedBody = emailBody.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    
-                                    if  trimmedBody.isEmpty {
+                                    if trimmedSenderName.isEmpty || trimmedBody.isEmpty {
                                         showAlert = true
                                     } else {
                                         if MFMailComposeViewController.canSendMail() {
@@ -583,17 +579,11 @@ struct Contact: View{
                                         }
                                     }
                                 }, label: {
-                                    Text("Send Message").foregroundColor(Color.white)
+                                    Text("Send Message")
+                                        .foregroundColor(Color.white)
                                 })
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
-                                }
-                                .onChange(of: senderName) { newName in
-                                    let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    
-                                    if trimmedName.isEmpty {
-                                        showAlert = true
-                                    }
                                 }
                                 .frame(width: 180.00, height: 37.0)
                                 .background(button_color)
