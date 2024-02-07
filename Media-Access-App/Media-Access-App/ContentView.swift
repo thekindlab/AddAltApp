@@ -934,7 +934,7 @@ struct ContentView: View {
                                        
                                         currentCaption = "Choose one photo below, then add alt text to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
-                                        notificationManager.refreshNotificationMsg()
+                                        //notificationManager.refreshNotificationMsg()
                                     } else {
                                         // Show an alert or handle the case where the user is trying to submit without a photo
                                         showAlert = true

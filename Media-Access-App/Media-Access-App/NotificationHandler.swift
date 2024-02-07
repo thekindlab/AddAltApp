@@ -51,7 +51,7 @@ class NotificationHandler
     func FirstUseNotificationProcedure()
     {
         self.removeAppNotifications()
-        self.scheduleDailyNotification(text: createNotificationMsg())
+        self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!") //createNotificationMsg())
         //self.basicNotification()
         //print("scheduled basic notification")
        // self.scheduleWeeklyAppNotifications(title: "Caption Me!", body: "Have any new photos? Make them accessible-friendly with a click of a button.", day: 2, min: 30, hour: 15)
@@ -88,14 +88,14 @@ class NotificationHandler
                 hr = hr + 12
             }
         }
+        startupManager.updateStartupInformation(hour:Int64(hr))
         //For basic notification:
-        //self.removeAppNotifications()
-        //self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!")
+        self.removeAppNotifications()
+        self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!")
         
         //For Motivational Notification"
         //print("hr: \(hr)")
-        startupManager.updateStartupInformation(hour:Int64(hr))
-        self.refreshNotificationMsg()
+        //self.refreshNotificationMsg()
         
     }
     
@@ -111,6 +111,8 @@ class NotificationHandler
         content.title = "Accessible Media App"
         content.body = text
         content.sound = UNNotificationSound.default
+        
+        //print("Scheduling this: \(text)")
         
         //Scheduling notification for a certain time every day
         var dateComponents = DateComponents()
@@ -144,7 +146,7 @@ class NotificationHandler
     func refreshNotificationMsg()
     {
         self.removeAppNotifications()
-        self.scheduleDailyNotification(text: createNotificationMsg())
+        self.scheduleDailyNotification(text: "Don't forget to add alt text to your images in the Accessible Media App!") //createNotificationMsg())
     }
     
     //This function was used to test different code -- it's got code for weekly notifications (commented out), as well as daily
