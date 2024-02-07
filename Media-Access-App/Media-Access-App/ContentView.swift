@@ -532,6 +532,16 @@ struct Contact: View{
                                         .padding(.bottom, 20)
                                         .padding(.leading, 10)
                                         .autocorrectionDisabled()
+                                        .alert(isPresented: $showAlert) {
+                                            Alert(title: Text("Alert"), message: Text("Please enter your name, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                        }
+                                        .onChange(of: senderName) { newName in
+                                            let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                            
+                                            if trimmedName.isEmpty {
+                                                showAlert = true
+                                            }
+                                        }
                                 }
 
                                 Divider()
@@ -564,6 +574,7 @@ struct Contact: View{
                             VStack(alignment: .center)
                             {
                                 Button(action: {
+                                    
                                     let trimmedName = senderName.trimmingCharacters(in: .whitespacesAndNewlines)
                                     let trimmedBody = emailBody.trimmingCharacters(in: .whitespacesAndNewlines)
                                     
