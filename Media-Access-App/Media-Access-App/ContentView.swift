@@ -512,8 +512,7 @@ struct Contact: View{
     @State var button_color = !MFMailComposeViewController.canSendMail() ? Color.gray : Color.blue
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
-        
-    
+
         VStack{
                     HStack(alignment: .top)
                     {
@@ -531,10 +530,16 @@ struct Contact: View{
                                         .padding(.bottom, 20)
                                         .padding(.leading, 10)
                                         .autocorrectionDisabled()
-                                        .onChange(of: senderName) { newValue in
-                                        let trimmedName = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                        senderName = trimmedName // Update senderName with trimmed value
-                                    }
+                                        .alert(isPresented: $showAlert) {
+                                        Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                        }
+                                        .onChange(of: senderName) { newName in
+                                            let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                            
+                                            if trimmedName.isEmpty {
+                                                showAlert = true
+                                            }
+                                        }
                                 }
 
                                 Divider()
@@ -556,6 +561,7 @@ struct Contact: View{
                                         }
                                     
                                 }.padding(.top, 20).padding(.bottom,20)
+                                
                                 Divider()
                                 
                                 Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
@@ -567,10 +573,9 @@ struct Contact: View{
                             VStack(alignment: .center)
                             {
                                 Button(action: {
-                                    let trimmedName = senderName.trimmingCharacters(in: .whitespacesAndNewlines)
                                     let trimmedBody = emailBody.trimmingCharacters(in: .whitespacesAndNewlines)
                                     
-                                    if trimmedName.isEmpty || trimmedBody.isEmpty {
+                                    if  trimmedBody.isEmpty {
                                         showAlert = true
                                     } else {
                                         if MFMailComposeViewController.canSendMail() {
@@ -578,10 +583,17 @@ struct Contact: View{
                                         }
                                     }
                                 }, label: {
-                                    Text(" Send Message").foregroundColor(Color.white)
+                                    Text("Send Message").foregroundColor(Color.white)
                                 })
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                }
+                                .onChange(of: senderName) { newName in
+                                    let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    
+                                    if trimmedName.isEmpty {
+                                        showAlert = true
+                                    }
                                 }
                                 .frame(width: 180.00, height: 37.0)
                                 .background(button_color)
