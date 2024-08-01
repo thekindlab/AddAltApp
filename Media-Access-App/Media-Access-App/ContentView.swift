@@ -513,15 +513,16 @@ struct Contact: View{
     @State var button_color = !MFMailComposeViewController.canSendMail() ? Color.gray : Color.blue
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
-
-        VStack{
+        GeometryReader { geometry in
+            ScrollView {
+                VStack{
                     HStack(alignment: .top)
                     {
                         VStack(alignment: .center, spacing: 16){
                             Text("Help & Support")
                                 .font(.title) // Adjust the font size as needed
                                 .bold()
-                              
+                            
                             VStack(spacing: 8){
                                 Divider()
                                 HStack(spacing: 16) {
@@ -537,8 +538,8 @@ struct Contact: View{
                                         .alert(isPresented: $showAlert) {
                                             Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
                                         }
-}
-
+                                }
+                                
                                 Divider()
                                 
                                 VStack(alignment: .leading, spacing:16)
@@ -604,14 +605,15 @@ struct Contact: View{
                             
                         }.padding(.bottom, 20.0).padding(.horizontal)
                     }
-                    
                 }
                 
+            }
+        }
                 .onTapGesture {
                     self.endEditing()
                 }
                 .ignoresSafeArea(.keyboard, edges: [.bottom])
-            }
+    }
     
     private func clearEditor() {
         
@@ -673,15 +675,17 @@ struct ContentView: View {
     //let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
     
     var body: some View {
-        
-        
-        //App View Stack    (what the user sees on startup )
+        GeometryReader { geometry in
+            ScrollView {
+                
+                
+                //App View Stack    (what the user sees on startup )
                 
                 NavigationView {
                     
                     
                     VStack {
-
+                        
                         
                         //navigation to Settings page
                         //NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
@@ -689,32 +693,32 @@ struct ContentView: View {
                         //navigation to Settings page
                         NavigationLink(destination: Settings()) {
                             Image(systemName: "line.horizontal.3")
-                            .font(.system(size: 30))
-                            .foregroundColor(.black)
+                                .font(.system(size: 30))
+                                .foregroundColor(.black)
                         }
                         .padding(.top, 20)
                         .padding(.trailing, UIScreen.main.bounds.size.width * 1.5 / 2)
-                      
-                      /* For if you want to select notification time on this page
-                        HStack {
-                            
-                            //navigation to Settings page
-                            NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.leading, 30)
-                            
-                            Spacer()
-
-                            
-                            Picker("Select a time", selection: $selection) {
-                                ForEach(times, id: \.self) {
-                                    Text($0)
-                                }
-                            }
-                            .pickerStyle(.menu).padding(.trailing, 20)
-                            
-                        }
-                        .padding(.top, 30.0)
+                        
+                        /* For if you want to select notification time on this page
+                         HStack {
+                         
+                         //navigation to Settings page
+                         NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.leading, 30)
+                         
+                         Spacer()
+                         
+                         
+                         Picker("Select a time", selection: $selection) {
+                         ForEach(times, id: \.self) {
+                         Text($0)
+                         }
+                         }
+                         .pickerStyle(.menu).padding(.trailing, 20)
+                         
+                         }
+                         .padding(.top, 30.0)
                          */
-
+                        
                         
                         VStack{
                             
@@ -750,32 +754,32 @@ struct ContentView: View {
                                                 // Perform image analysis when the image appears
                                                 //analyzeImage(image)
                                             }
-                                    if !altTextSuggestion.isEmpty {
-                                        VStack {
-                
-                                            Text("Alt-Text Suggestion:")
-                                                .font(.body)
-                                                .multilineTextAlignment(.center)
-                                                .padding(.bottom, 2)
-                                                .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
-                                            
-                                            HStack {
-                                                Text(altTextSuggestion)
+                                        if !altTextSuggestion.isEmpty {
+                                            VStack {
+                                                
+                                                Text("Alt-Text Suggestion:")
                                                     .font(.body)
                                                     .multilineTextAlignment(.center)
-                                                    .padding(.bottom, 5)
+                                                    .padding(.bottom, 2)
+                                                    .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                                                 
-                                                Button(action: {
-                                                    UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
-                                                }) {
-                                                    Image(systemName: "doc.on.doc") // System name for copy icon
+                                                HStack {
+                                                    Text(altTextSuggestion)
+                                                        .font(.body)
+                                                        .multilineTextAlignment(.center)
+                                                        .padding(.bottom, 5)
+                                                    
+                                                    Button(action: {
+                                                        UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
+                                                    }) {
+                                                        Image(systemName: "doc.on.doc") // System name for copy icon
+                                                    }
+                                                    
                                                 }
                                                 
                                             }
-                                            
+                                            //                                        .frame(maxWidth: .infinity)
                                         }
-//                                        .frame(maxWidth: .infinity)
-                                     }
                                     }
                                     
                                 } else if curItem?.mediaType == .video {
@@ -811,13 +815,13 @@ struct ContentView: View {
                                     clearEditor()
                                     hideKeyboard()
                                 }
-                                //To prevent the user from entering line breaks (pressing Enter) in the TextEditor box,
+                            //To prevent the user from entering line breaks (pressing Enter) in the TextEditor box,
                                 .onChange(of: currentCaption) { newCaption in
-                                       if newCaption.contains("\n") {
-                                           // Remove newlines
-                                           currentCaption = newCaption.replacingOccurrences(of: "\n", with: "")
-                                       }
-                                   }
+                                    if newCaption.contains("\n") {
+                                        // Remove newlines
+                                        currentCaption = newCaption.replacingOccurrences(of: "\n", with: "")
+                                    }
+                                }
                             //Text editor input object
                             
                             
@@ -857,15 +861,15 @@ struct ContentView: View {
                                 //Notification scheduling test code.
                                 
                                 /* Button(action: {
-                                    print("Images Captioned:")
-                                     notificationManager.createNotificationMsg()
-                                }, label: {
-                                    Text("Print #").foregroundColor(Color.white)
-                                })
-                                .frame(width: 100.0, height: 30.0)
-                                .background(Color.gray)
-                                .clipShape(Capsule())*/
-
+                                 print("Images Captioned:")
+                                 notificationManager.createNotificationMsg()
+                                 }, label: {
+                                 Text("Print #").foregroundColor(Color.white)
+                                 })
+                                 .frame(width: 100.0, height: 30.0)
+                                 .background(Color.gray)
+                                 .clipShape(Capsule())*/
+                                
                                 
                                 
                                 
@@ -877,7 +881,7 @@ struct ContentView: View {
                                     }
                                     
                                     if(curItem != nil) { //if we have a photo to save
-                                       if currentCaption == "Choose one photo below, then add alt text to the photo." {
+                                        if currentCaption == "Choose one photo below, then add alt text to the photo." {
                                             // Show an alert if the user tries to submit without a caption
                                             alertMessage = "Please add alt text before submitting."
                                             showAlert = true
@@ -885,26 +889,26 @@ struct ContentView: View {
                                         }
                                         
                                         // Check if the caption length is within the desired range
-                                       let captionLength = currentCaption.count
+                                        let captionLength = currentCaption.count
                                         if captionLength < 1 {
-                                                alertMessage = "Please add alt text before submitting."
-                                                showAlert = true
-                                                return
+                                            alertMessage = "Please add alt text before submitting."
+                                            showAlert = true
+                                            return
                                         }
                                         if captionLength >= 1 &&  captionLength < 15{
-                                                alertMessage = "Please verify that your alt text describes all important elements of the image. Your previous alt text is still saved."
-                                                showAlert = true
+                                            alertMessage = "Please verify that your alt text describes all important elements of the image. Your previous alt text is still saved."
+                                            showAlert = true
                                         }
                                         
-                                       // Check if the caption contains invalid words
-                                       let invalidWords = ["image", "picture", "icon", "photo"]
+                                        // Check if the caption contains invalid words
+                                        let invalidWords = ["image", "picture", "icon", "photo"]
                                         for word in invalidWords {
-                                               if currentCaption.localizedCaseInsensitiveContains(word) {
-                                                   alertMessage = "Alt text should not include the words 'image', 'picture', 'photo', or 'icon'."
-                                                   showAlert = true
-                                                   return
-                                               }
-                                           }
+                                            if currentCaption.localizedCaseInsensitiveContains(word) {
+                                                alertMessage = "Alt text should not include the words 'image', 'picture', 'photo', or 'icon'."
+                                                showAlert = true
+                                                return
+                                            }
+                                        }
                                         
                                         
                                         timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
@@ -930,8 +934,8 @@ struct ContentView: View {
                                         } else {
                                             curItem = nil
                                         }
-
-                                       
+                                        
+                                        
                                         currentCaption = "Choose one photo below, then add alt text to the photo."
                                         // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
                                         notificationManager.refreshNotificationMsg()
@@ -1046,10 +1050,10 @@ struct ContentView: View {
                                         Button(action:
                                                 {self.showCamera.toggle()})
                                         {Image (systemName: "camera")
-                                            .foregroundColor(.black)
+                                                .foregroundColor(.black)
                                             Text("NEW").foregroundColor(.black)
                                         }
-                                       
+                                        
                                     }
                                     //Camera button
                                     
@@ -1085,7 +1089,7 @@ struct ContentView: View {
                             //Camera sheet
                             .sheet(isPresented: self.$showCamera) {
                                 ImagePickerView( curItem: $curItem,  captionTimeControl: timeToCaption, sourceType: .camera)
-                            
+                                
                             }
                             //Camera sheet
                             
@@ -1110,6 +1114,8 @@ struct ContentView: View {
                     .background(Color.white) // Set the background color to white
                     .preferredColorScheme(.light) // Set preferred color scheme to light mode
                 }
+            }
+        }
     }
     
     
@@ -1140,7 +1146,7 @@ struct ContentView: View {
     
 //    private func analyzeImage(_ image: UIImage) {
 //        let resizedImage = resizeImage(image, targetSize: CGSize(width: 3000, height: 2002))
-//        
+//
 //        // Convert image to binary data
 //        guard let imageData = resizedImage.jpegData(compressionQuality: 0.9) else {
 //            print("Could not get JPEG representation of UIImage")
@@ -1193,7 +1199,7 @@ struct ContentView: View {
 //        }.resume()
 //    }
 //
-//    
+//
 //    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
 //        let size = image.size
 //        let widthRatio = targetSize.width / size.width
