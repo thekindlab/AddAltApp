@@ -246,6 +246,7 @@ struct AboutPage: View{
                 }
             Divider()
             GeometryReader { geometry in
+                
                 VStack(spacing: 10) {
 
                     Text("Contributors")
@@ -513,106 +514,106 @@ struct Contact: View{
     @State var button_color = !MFMailComposeViewController.canSendMail() ? Color.gray : Color.blue
     @State var can_mail = !MFMailComposeViewController.canSendMail()
     var body: some View{
-        GeometryReader { geometry in
-            ScrollView {
-                VStack{
-                    HStack(alignment: .top)
-                    {
-                        VStack(alignment: .center, spacing: 16){
-                            Text("Help & Support")
-                                .font(.title) // Adjust the font size as needed
-                                .bold()
-                            
-                            VStack(spacing: 8){
-                                Divider()
-                                HStack(spacing: 16) {
-                                    Text("Your Name")
-                                    TextField("", text: $senderName)
-                                        .padding(.top, 20)
-                                        .padding(.bottom, 20)
-                                        .padding(.leading, 10)
-                                        .autocorrectionDisabled()
-                                        .onChange(of: senderName) { newName in
-                                            trimmedSenderName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                        }
-                                        .alert(isPresented: $showAlert) {
-                                            Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
-                                        }
-                                }
-                                
-                                Divider()
-                                
-                                VStack(alignment: .leading, spacing:16)
-                                {
-                                    Text("Message")
-                                    TextEditor(text: $emailBody)
-                                        .frame(width: 350, height: 200, alignment: .center)
-                                        .foregroundColor(Color.black)
-                                        .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 3)
-                                                .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
-                                        )
-                                        .onTapGesture {
-                                            clearEditor()
-                                            hideKeyboard()
-                                        }
-                                    
-                                }.padding(.top, 20).padding(.bottom,20)
-                                
-                                Divider()
-                                
-                                Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
-                                Toggle("Send App Data", isOn: $sendData).padding(.bottom,20)
-                                Divider()
-                                
-                            }
-                            
-                            VStack(alignment: .center)
-                            {
-                                Button(action: {
-                                    let trimmedBody = emailBody.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    if trimmedSenderName.isEmpty || trimmedBody.isEmpty {
-                                        showAlert = true
-                                    } else {
-                                        if MFMailComposeViewController.canSendMail() {
-                                            self.isShowingMailView.toggle()
-                                        }
+        
+        ScrollView {
+            VStack{
+                HStack(alignment: .top)
+                {
+                    VStack(alignment: .center, spacing: 16){
+                        Text("Help & Support")
+                            .font(.title) // Adjust the font size as needed
+                            .bold()
+                        
+                        VStack(spacing: 8){
+                            Divider()
+                            HStack(spacing: 16) {
+                                Text("Your Name")
+                                TextField("", text: $senderName)
+                                    .padding(.top, 20)
+                                    .padding(.bottom, 20)
+                                    .padding(.leading, 10)
+                                    .autocorrectionDisabled()
+                                    .onChange(of: senderName) { newName in
+                                        trimmedSenderName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
                                     }
-                                }, label: {
-                                    Text("Send Message")
-                                        .foregroundColor(Color.white)
-                                })
-                                .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
-                                }
-                                .frame(width: 180.00, height: 37.0)
-                                .background(button_color)
-                                .clipShape(Capsule())
-                                .disabled(senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !MFMailComposeViewController.canSendMail())
-                                .sheet(isPresented: $isShowingMailView)
-                                {
-                                    
-                                    MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, sendData: self.$sendData, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
-                                }
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                                    }
                             }
-                            if(can_mail)
-                            {
-                                Divider()
-                                Text("It looks like email is not setup")
-                            }
-                            Spacer()
                             
-                        }.padding(.bottom, 20.0).padding(.horizontal)
-                    }
+                            Divider()
+                            
+                            VStack(alignment: .leading, spacing:16)
+                            {
+                                Text("Message")
+                                TextEditor(text: $emailBody)
+                                    .frame(width: 350, height: 200, alignment: .center)
+                                    .foregroundColor(Color.black)
+                                    .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 3)
+                                            .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
+                                    )
+                                    .onTapGesture {
+                                        clearEditor()
+                                        hideKeyboard()
+                                    }
+                                
+                            }.padding(.top, 20).padding(.bottom,20)
+                            
+                            Divider()
+                            
+                            Toggle("Recieve a Response", isOn: $recieveResponse).padding(.top, 20).padding(.bottom,20)
+                            Toggle("Send App Data", isOn: $sendData).padding(.bottom,20)
+                            Divider()
+                            
+                        }
+                        
+                        VStack(alignment: .center)
+                        {
+                            Button(action: {
+                                let trimmedBody = emailBody.trimmingCharacters(in: .whitespacesAndNewlines)
+                                if trimmedSenderName.isEmpty || trimmedBody.isEmpty {
+                                    showAlert = true
+                                } else {
+                                    if MFMailComposeViewController.canSendMail() {
+                                        self.isShowingMailView.toggle()
+                                    }
+                                }
+                            }, label: {
+                                Text("Send Message")
+                                    .foregroundColor(Color.white)
+                            })
+                            .alert(isPresented: $showAlert) {
+                                Alert(title: Text("Alert"), message: Text("Please enter your name and message, so we can respond to you faster. Thanks."), dismissButton: .default(Text("OK")))
+                            }
+                            .frame(width: 180.00, height: 37.0)
+                            .background(button_color)
+                            .clipShape(Capsule())
+                            .disabled(senderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !MFMailComposeViewController.canSendMail())
+                            .sheet(isPresented: $isShowingMailView)
+                            {
+                                
+                                MailView(result: self.$result, emailBody: self.$emailBody, senderName: self.$senderName, sendData: self.$sendData, recieveResponse: self.$recieveResponse, recieveEmail: self.$recipientEmail)
+                            }
+                        }
+                        if(can_mail)
+                        {
+                            Divider()
+                            Text("It looks like email is not setup")
+                        }
+                        Spacer()
+                        
+                    }.padding(.bottom, 20.0).padding(.horizontal)
                 }
-                
             }
+        
+            
         }
-                .onTapGesture {
-                    self.endEditing()
-                }
-                .ignoresSafeArea(.keyboard, edges: [.bottom])
+        .onTapGesture {
+            self.endEditing()
+        }
+        .ignoresSafeArea(.keyboard, edges: [.bottom])
     }
     
     private func clearEditor() {
@@ -675,447 +676,441 @@ struct ContentView: View {
     //let times = ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"]
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                
-                
+
                 //App View Stack    (what the user sees on startup )
                 
                 NavigationView {
                     
-                    
-                    VStack {
-                        
-                        
-                        //navigation to Settings page
-                        //NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
-                        
-                        //navigation to Settings page
-                        NavigationLink(destination: Settings()) {
-                            Image(systemName: "line.horizontal.3")
-                                .font(.system(size: 30))
-                                .foregroundColor(.black)
-                        }
-                        .padding(.top, 20)
-                        .padding(.trailing, UIScreen.main.bounds.size.width * 1.5 / 2)
-                        
-                        /* For if you want to select notification time on this page
-                         HStack {
-                         
-                         //navigation to Settings page
-                         NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.leading, 30)
-                         
-                         Spacer()
-                         
-                         
-                         Picker("Select a time", selection: $selection) {
-                         ForEach(times, id: \.self) {
-                         Text($0)
-                         }
-                         }
-                         .pickerStyle(.menu).padding(.trailing, 20)
-                         
-                         }
-                         .padding(.top, 30.0)
-                         */
-                        
-                        
-                        VStack{
+                    ScrollView {
+                        VStack {
                             
                             
+                            //navigation to Settings page
+                            //NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.top, 30).padding(.trailing, UIScreen.main.bounds.size.width*1.5/2 )
                             
-                            //Header
-                            Text("ACCESSIBLE MEDIA")
-                                .font(.system(size: 20,  weight: .bold))
-                                .padding(.bottom, 5.0)
-                            //Header
+                            //navigation to Settings page
+                            NavigationLink(destination: Settings()) {
+                                Image(systemName: "line.horizontal.3")
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.top, 15)
+                            .padding(.trailing, UIScreen.main.bounds.size.width * 1.5 / 2)
+                            
+                            /* For if you want to select notification time on this page
+                             HStack {
+                             
+                             //navigation to Settings page
+                             NavigationLink(destination: Settings()) { Text("Settings")  }.padding(.leading, 30)
+                             
+                             Spacer()
+                             
+                             
+                             Picker("Select a time", selection: $selection) {
+                             ForEach(times, id: \.self) {
+                             Text($0)
+                             }
+                             }
+                             .pickerStyle(.menu).padding(.trailing, 20)
+                             
+                             }
+                             .padding(.top, 30.0)
+                             */
                             
                             
-                            //current image chosen
-                            if curItem == nil { //explanation photo
-                                Image("Media-Access")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 330, height: 260)
-                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                            VStack{
+                                //Header
+                                Text("ACCESSIBLE MEDIA")
+                                    .font(.system(size: 20,  weight: .bold))
                                     .padding(.bottom, 5.0)
-                                    .accessibility(label: Text("Welcome to the Accessible Media App. Example of photo 'IMG_126.png' without alt text, then with 'A cute gray cat' added as alt text. Thank you for making technology accessible to all."))
+                                //Header
                                 
-                            } else { //if we have a curItem figure out how to display it
-                                if curItem?.mediaType == .photo {
-                                    if let image = curItem?.photo {
-                                        Image(uiImage: curItem?.photo ?? UIImage())
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 250, height: 250)
-                                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                                            .padding(.bottom, 0)
-                                            .onAppear {
-                                                // Perform image analysis when the image appears
-                                                //analyzeImage(image)
-                                            }
-                                        if !altTextSuggestion.isEmpty {
-                                            VStack {
-                                                
-                                                Text("Alt-Text Suggestion:")
-                                                    .font(.body)
-                                                    .multilineTextAlignment(.center)
-                                                    .padding(.bottom, 2)
-                                                    .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
-                                                
-                                                HStack {
-                                                    Text(altTextSuggestion)
+                                //current image chosen
+                                if curItem == nil { //explanation photo
+                                    Image("Media-Access")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 300, height: 250)
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        .padding(.bottom, 5.0)
+                                        .accessibility(label: Text("Welcome to the Accessible Media App. Example of photo 'IMG_126.png' without alt text, then with 'A cute gray cat' added as alt text. Thank you for making technology accessible to all."))
+                                    
+                                } else { //if we have a curItem figure out how to display it
+                                    if curItem?.mediaType == .photo {
+                                        if let image = curItem?.photo {
+                                            Image(uiImage: curItem?.photo ?? UIImage())
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 250, height: 250)
+                                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                                .padding(.bottom, 0)
+                                                .onAppear {
+                                                    // Perform image analysis when the image appears
+                                                    //analyzeImage(image)
+                                                }
+                                            if !altTextSuggestion.isEmpty {
+                                                VStack {
+                                                    
+                                                    Text("Alt-Text Suggestion:")
                                                         .font(.body)
                                                         .multilineTextAlignment(.center)
-                                                        .padding(.bottom, 5)
+                                                        .padding(.bottom, 2)
+                                                        .foregroundColor(Color(red: 23/255, green: 88/255, blue: 115/255))
                                                     
-                                                    Button(action: {
-                                                        UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
-                                                    }) {
-                                                        Image(systemName: "doc.on.doc") // System name for copy icon
+                                                    HStack {
+                                                        Text(altTextSuggestion)
+                                                            .font(.body)
+                                                            .multilineTextAlignment(.center)
+                                                            .padding(.bottom, 5)
+                                                        
+                                                        Button(action: {
+                                                            UIPasteboard.general.string = altTextSuggestion // Copy to clipboard
+                                                        }) {
+                                                            Image(systemName: "doc.on.doc") // System name for copy icon
+                                                        }
+                                                        
                                                     }
                                                     
                                                 }
-                                                
+                                                //                                        .frame(maxWidth: .infinity)
                                             }
-                                            //                                        .frame(maxWidth: .infinity)
-                                        }
-                                    }
-                                    
-                                } else if curItem?.mediaType == .video {
-                                    if let url = curItem?.url {
-                                        VideoPlayer(player: AVPlayer(url: url))
-                                            .frame(minHeight: 200)
-                                    } else { EmptyView() }
-                                    
-                                } else {
-                                    if let livePhoto = curItem?.livePhoto {
-                                        LivePhotoView(livePhoto: livePhoto)
-                                            .frame(minHeight: 200)
-                                    } else { EmptyView() }
-                                }
-                            }
-                            
-                            //current image chosen
-                            
-                            
-                            
-                            //Text editor input object
-                            TextEditor(text: $currentCaption)
-                                .frame(width: 350, height: 100, alignment: .center)
-                                .foregroundColor(Color.black)
-                                .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
-                                )
-                                .padding(.bottom, 5.0)
-                                .onTapGesture (count: 1){
-                                    // Dismiss the keyboard when tapped outside the text box
-                                    clearEditor()
-                                    hideKeyboard()
-                                }
-                            //To prevent the user from entering line breaks (pressing Enter) in the TextEditor box,
-                                .onChange(of: currentCaption) { newCaption in
-                                    if newCaption.contains("\n") {
-                                        // Remove newlines
-                                        currentCaption = newCaption.replacingOccurrences(of: "\n", with: "")
-                                    }
-                                }
-                            //Text editor input object
-                            
-                            
-                            //Clear & Submit button Stack
-                            HStack {
-                                
-                                //  Cancel Button
-                                Button(action: {
-                                    print("Cancelled")
-                                    if(currentCaption == "Choose one photo below, then add alt text to the photo.") {
-                                        currentCaption = ""
-                                    }
-                                    else {
-                                        currentCaption = "Choose one photo below, then add alt text to the photo."
-                                    }
-                                    
-                                }, label: {
-                                    HStack {
-                                        Image(systemName: "trash") // Check icon
-                                            .foregroundColor(.white)
-                                            .frame(width: 25, height: 25)
-                                            .background(Color.black)
-                                            .clipShape(Circle())
-                                        Text("CLEAR")
-                                            .bold() // Make the text bold
-                                            .foregroundColor(.white)
-                                    }
-                                })
-                                .frame(width: 100.0, height: 33.0)
-                                .background(Color(red: 23/255, green: 88/255, blue: 115/255))
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                
-                                
-                                
-                                //notif Scheduler test code
-                                
-                                //Notification scheduling test code.
-                                
-                                /* Button(action: {
-                                 print("Images Captioned:")
-                                 notificationManager.createNotificationMsg()
-                                 }, label: {
-                                 Text("Print #").foregroundColor(Color.white)
-                                 })
-                                 .frame(width: 100.0, height: 30.0)
-                                 .background(Color.gray)
-                                 .clipShape(Capsule())*/
-                                
-                                
-                                
-                                
-                                //SAVE button
-                                Button(action: {
-                                    //On press
-                                    if(curItem?.mediaType == .photo) { //save the current photo
-                                        
-                                    }
-                                    
-                                    if(curItem != nil) { //if we have a photo to save
-                                        if currentCaption == "Choose one photo below, then add alt text to the photo." {
-                                            // Show an alert if the user tries to submit without a caption
-                                            alertMessage = "Please add alt text before submitting."
-                                            showAlert = true
-                                            return
                                         }
                                         
-                                        // Check if the caption length is within the desired range
-                                        let captionLength = currentCaption.count
-                                        if captionLength < 1 {
-                                            alertMessage = "Please add alt text before submitting."
-                                            showAlert = true
-                                            return
+                                    } else if curItem?.mediaType == .video {
+                                        if let url = curItem?.url {
+                                            VideoPlayer(player: AVPlayer(url: url))
+                                                .frame(minHeight: 200)
+                                        } else { EmptyView() }
+                                        
+                                    } else {
+                                        if let livePhoto = curItem?.livePhoto {
+                                            LivePhotoView(livePhoto: livePhoto)
+                                                .frame(minHeight: 200)
+                                        } else { EmptyView() }
+                                    }
+                                }
+                                
+                                //current image chosen
+                                
+                                
+                                
+                                //Text editor input object
+                                TextEditor(text: $currentCaption)
+                                    .frame(width: 300, height: 100, alignment: .center)
+                                    .foregroundColor(Color.black)
+                                    .clipShape(RoundedRectangle(cornerRadius: 3)) // Apply rounded corners
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 3)
+                                            .stroke(Color(red: 23/255, green: 88/255, blue: 115/255), lineWidth: 2) // Apply rounded border
+                                    )
+                                    .padding(.bottom, 5.0)
+                                    .onTapGesture (count: 1){
+                                        // Dismiss the keyboard when tapped outside the text box
+                                        clearEditor()
+                                        hideKeyboard()
+                                    }
+                                //To prevent the user from entering line breaks (pressing Enter) in the TextEditor box,
+                                    .onChange(of: currentCaption) { newCaption in
+                                        if newCaption.contains("\n") {
+                                            // Remove newlines
+                                            currentCaption = newCaption.replacingOccurrences(of: "\n", with: "")
                                         }
-                                        if captionLength >= 1 &&  captionLength < 15{
-                                            alertMessage = "Please verify that your alt text describes all important elements of the image. Your previous alt text is still saved."
-                                            showAlert = true
+                                    }
+                                //Text editor input object
+                                
+                                
+                                //Clear & Submit button Stack
+                                HStack {
+                                    
+                                    //  Cancel Button
+                                    Button(action: {
+                                        print("Cancelled")
+                                        if(currentCaption == "Choose one photo below, then add alt text to the photo.") {
+                                            currentCaption = ""
+                                        }
+                                        else {
+                                            currentCaption = "Choose one photo below, then add alt text to the photo."
                                         }
                                         
-                                        // Check if the caption contains invalid words
-                                        let invalidWords = ["image", "picture", "icon", "photo"]
-                                        for word in invalidWords {
-                                            if currentCaption.localizedCaseInsensitiveContains(word) {
-                                                alertMessage = "Alt text should not include the words 'image', 'picture', 'photo', or 'icon'."
+                                    }, label: {
+                                        HStack {
+                                            Image(systemName: "trash") // Check icon
+                                                .foregroundColor(.white)
+                                                .frame(width: 25, height: 25)
+                                                .background(Color.black)
+                                                .clipShape(Circle())
+                                            Text("CLEAR")
+                                                .bold() // Make the text bold
+                                                .foregroundColor(.white)
+                                        }
+                                    })
+                                    .frame(width: 100.0, height: 33.0)
+                                    .background(Color(red: 23/255, green: 88/255, blue: 115/255))
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    
+                                    
+                                    
+                                    //notif Scheduler test code
+                                    
+                                    //Notification scheduling test code.
+                                    
+                                    /* Button(action: {
+                                     print("Images Captioned:")
+                                     notificationManager.createNotificationMsg()
+                                     }, label: {
+                                     Text("Print #").foregroundColor(Color.white)
+                                     })
+                                     .frame(width: 100.0, height: 30.0)
+                                     .background(Color.gray)
+                                     .clipShape(Capsule())*/
+                                    
+                                    
+                                    
+                                    
+                                    //SAVE button
+                                    Button(action: {
+                                        //On press
+                                        if(curItem?.mediaType == .photo) { //save the current photo
+                                            
+                                        }
+                                        
+                                        if(curItem != nil) { //if we have a photo to save
+                                            if currentCaption == "Choose one photo below, then add alt text to the photo." {
+                                                // Show an alert if the user tries to submit without a caption
+                                                alertMessage = "Please add alt text before submitting."
                                                 showAlert = true
                                                 return
                                             }
-                                        }
-                                        
-                                        
-                                        timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
-                                        
-                                        //Core Data save
-                                        savePhotoMetaDataLocally()
-                                        //Local library save
-                                        saveCaptionedPhotoToLibrary()
-                                        
-                                        //reset new start time for next caption
-                                        timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
-                                        
-                                        //update Startup Info
-                                        startupManager.updateStartupInformation(hour:nil)
-                                        //print("hour saved: \(CoreDataManager.shared.loadStartUp()![0].hour)")
-                                        
-                                        
-                                        
-                                        let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
-                                        mediaItems.getDeleteItem(item: curItemID)
-                                        if(nextItem.id != "") {
-                                            curItem = nextItem
-                                        } else {
-                                            curItem = nil
-                                        }
-                                        
-                                        
-                                        currentCaption = "Choose one photo below, then add alt text to the photo."
-                                        // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
-                                        notificationManager.refreshNotificationMsg()
-                                    } else {
-                                        // Show an alert or handle the case where the user is trying to submit without a photo
-                                        showAlert = true
-                                        alertMessage = "Please choose a photo before submmiting."
-                                    }
-                                }, label: {
-                                    HStack {
-                                        Image(systemName: "checkmark") // Check icon
-                                            .foregroundColor(.white)
-                                            .frame(width: 25, height: 25)
-                                            .background(Color.black)
-                                            .clipShape(Circle())
-                                        Text("SAVE")
-                                            .bold() // Make the text bold
-                                            .foregroundColor(.white)
-                                    }
-                                })
-                                .frame(width: 100.0, height: 33.0)
-                                .background(Color(red: 23/255, green: 88/255, blue: 115/255))
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("Warning"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                                    //submit button
-                                }
-                                
-                                
-                            }
-                            .padding(.trailing, 20.0)
-                            .padding(.bottom, 15.0)
-                            //Clear & Submit button Stack
-                            
-                            
-                            
-                            
-                            //Navigation for handeling photos that are being captioned
-                            NavigationView {
-                                
-                                //list of media items looking to be captioned
-                                List(mediaItems.items, id: \.id) { item in
-                                    ZStack(alignment: .topLeading) {
-                                        if item.mediaType == .photo {
-                                            Image(uiImage: item.photo ?? UIImage())
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .onTapGesture(count:1) {
-                                                    curItem = item
-                                                    curItemID = item.id
-                                                    
-                                                    if(item.image_properties != nil) //only set caption if image properties exist.
-                                                    {
-                                                        setCaptionFromSelectedPhoto()
-                                                    }
+                                            
+                                            // Check if the caption length is within the desired range
+                                            let captionLength = currentCaption.count
+                                            if captionLength < 1 {
+                                                alertMessage = "Please add alt text before submitting."
+                                                showAlert = true
+                                                return
+                                            }
+                                            if captionLength >= 1 &&  captionLength < 15{
+                                                alertMessage = "Please verify that your alt text describes all important elements of the image. Your previous alt text is still saved."
+                                                showAlert = true
+                                            }
+                                            
+                                            // Check if the caption contains invalid words
+                                            let invalidWords = ["image", "picture", "icon", "photo"]
+                                            for word in invalidWords {
+                                                if currentCaption.localizedCaseInsensitiveContains(word) {
+                                                    alertMessage = "Alt text should not include the words 'image', 'picture', 'photo', or 'icon'."
+                                                    showAlert = true
+                                                    return
                                                 }
+                                            }
                                             
                                             
-                                        } else if item.mediaType == .video {
-                                            if let url = item.url {
-                                                VideoPlayer(player: AVPlayer(url: url))
-                                                    .frame(minHeight: 200)
-                                            } else { EmptyView() }
-                                        } else {
-                                            if let livePhoto = item.livePhoto {
-                                                LivePhotoView(livePhoto: livePhoto)
-                                                    .frame(minHeight: 200)
-                                            } else { EmptyView() }
-                                        }
-                                        
-                                        Image(systemName: getMediaImageName(using: item))
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 24, height: 24)
-                                            .padding(4)
-                                            .background(Color.black.opacity(0.5))
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                //list of media items looking to be captioned
-                                
-                                
-                                
-                                
-                                
-                                
-                                // "queue buttons" location
-                                .toolbar {
-                                    //Trash button
-                                    ToolbarItem(placement: .navigation) {
-                                        Button(action:
-                                                //what happens when you click the button
-                                               {let nextItem = mediaItems.getNext(item: curItemID)
+                                            timeToCaption.setFinishCaptionTime(newFinishTime:Date().timeIntervalSinceReferenceDate)
+                                            
+                                            //Core Data save
+                                            savePhotoMetaDataLocally()
+                                            //Local library save
+                                            saveCaptionedPhotoToLibrary()
+                                            
+                                            //reset new start time for next caption
+                                            timeToCaption.setStartCaptionTime(newStartTime: Date().timeIntervalSinceReferenceDate)
+                                            
+                                            //update Startup Info
+                                            startupManager.updateStartupInformation(hour:nil)
+                                            //print("hour saved: \(CoreDataManager.shared.loadStartUp()![0].hour)")
+                                            
+                                            
+                                            
+                                            let nextItem = mediaItems.getNext(item: curItemID) //move onto working on the next picked item
                                             mediaItems.getDeleteItem(item: curItemID)
                                             if(nextItem.id != "") {
                                                 curItem = nextItem
                                             } else {
                                                 curItem = nil
                                             }
-                                            currentCaption = "Choose one photo below, then add alt text to the photo."
-                                        }){Image (systemName: "trash")
-                                                .foregroundColor(.black)
                                             
-                                            Text("REMOVE").foregroundColor(.black)
+                                            
+                                            currentCaption = "Choose one photo below, then add alt text to the photo."
+                                            // ADDED CODE TO REFRESH NOTIFICATION MSG - only necessary for motivational notifications
+                                            notificationManager.refreshNotificationMsg()
+                                        } else {
+                                            // Show an alert or handle the case where the user is trying to submit without a photo
+                                            showAlert = true
+                                            alertMessage = "Please choose a photo before submmiting."
+                                        }
+                                    }, label: {
+                                        HStack {
+                                            Image(systemName: "checkmark") // Check icon
+                                                .foregroundColor(.white)
+                                                .frame(width: 25, height: 25)
+                                                .background(Color.black)
+                                                .clipShape(Circle())
+                                            Text("SAVE")
+                                                .bold() // Make the text bold
+                                                .foregroundColor(.white)
+                                        }
+                                    })
+                                    .frame(width: 100.0, height: 33.0)
+                                    .background(Color(red: 23/255, green: 88/255, blue: 115/255))
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(title: Text("Warning"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                        //submit button
+                                    }
+                                    
+                                    
+                                }
+                                .padding(.trailing, 20.0)
+                                .padding(.bottom, 15.0)
+                                //Clear & Submit button Stack
+                                
+                                
+                                
+                                
+                                //Navigation for handeling photos that are being captioned
+                                NavigationView {
+                                    
+                                    //list of media items looking to be captioned
+                                    List(mediaItems.items, id: \.id) { item in
+                                        ZStack(alignment: .topLeading) {
+                                            if item.mediaType == .photo {
+                                                Image(uiImage: item.photo ?? UIImage())
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .onTapGesture(count:1) {
+                                                        curItem = item
+                                                        curItemID = item.id
+                                                        
+                                                        if(item.image_properties != nil) //only set caption if image properties exist.
+                                                        {
+                                                            setCaptionFromSelectedPhoto()
+                                                        }
+                                                    }
+                                                
+                                                
+                                            } else if item.mediaType == .video {
+                                                if let url = item.url {
+                                                    VideoPlayer(player: AVPlayer(url: url))
+                                                        .frame(minHeight: 200)
+                                                } else { EmptyView() }
+                                            } else {
+                                                if let livePhoto = item.livePhoto {
+                                                    LivePhotoView(livePhoto: livePhoto)
+                                                        .frame(minHeight: 200)
+                                                } else { EmptyView() }
+                                            }
+                                            
+                                            Image(systemName: getMediaImageName(using: item))
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 24, height: 24)
+                                                .padding(4)
+                                                .background(Color.black.opacity(0.5))
+                                                .foregroundColor(.white)
                                         }
                                     }
-                                    //Trash button
+                                    //list of media items looking to be captioned
                                     
                                     
-                                    //Camera button
-                                    ToolbarItem(placement: .principal) {
-                                        Button(action:
-                                                {self.showCamera.toggle()})
-                                        {Image (systemName: "camera")
-                                                .foregroundColor(.black)
-                                            Text("NEW").foregroundColor(.black)
+                                    
+                                    
+                                    
+                                    
+                                    // "queue buttons" location
+                                    .toolbar {
+                                        //Trash button
+                                        ToolbarItem(placement: .navigation) {
+                                            Button(action:
+                                                    //what happens when you click the button
+                                                   {let nextItem = mediaItems.getNext(item: curItemID)
+                                                mediaItems.getDeleteItem(item: curItemID)
+                                                if(nextItem.id != "") {
+                                                    curItem = nextItem
+                                                } else {
+                                                    curItem = nil
+                                                }
+                                                currentCaption = "Choose one photo below, then add alt text to the photo."
+                                            })
+                                            {Image (systemName: "trash")
+                                                    .foregroundColor(.black)
+                                                
+                                                Text("REMOVE").foregroundColor(.black)
+                                            }
                                         }
+                                        //Trash button
+                                        
+                                        
+                                        //Camera button
+                                        ToolbarItem(placement: .principal) {
+                                            Button(action:
+                                                    {self.showCamera.toggle()})
+                                            {Image (systemName: "camera")
+                                                    .foregroundColor(.black)
+                                                Text("NEW").foregroundColor(.black)
+                                            }
+                                            
+                                        }
+                                        //Camera button
+                                        
+                                        
+                                        
+                                        //Photo library
+                                        ToolbarItem(placement: .primaryAction) {
+                                            Button(action:
+                                                    {showSheet = true})
+                                            {Image (systemName: "photo")
+                                                    .foregroundColor(.black)
+                                                Text("OPEN").foregroundColor(.black)
+                                            }
+                                            .disabled(curItem != nil) // Disable button if curItem is not nil
+                                        }
+                                        //Photo library
+                                    }
+                                    // "queue buttons" location
+                                    
+                                }
+                                
+                                
+                                
+                                //sheets that popup when something is pressed
+                                
+                                
+                                /*
+                                 (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
+                                 
+                                 */
+                                
+                                
+                                //Camera sheet
+                                .sheet(isPresented: self.$showCamera) {
+                                    ImagePickerView( curItem: $curItem,  captionTimeControl: timeToCaption, sourceType: .camera)
+                                    
+                                }
+                                //Camera sheet
+                                
+                                //Photo picker
+                                .sheet(isPresented: $showSheet, content: {
+                                    PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
+                                        // Handle didSelectItems value here...
+                                        showSheet = false
                                         
                                     }
-                                    //Camera button
-                                    
-                                    
-                                    
-                                    //Photo library
-                                    ToolbarItem(placement: .primaryAction) {
-                                        Button(action:
-                                                {showSheet = true})
-                                        {Image (systemName: "photo")
-                                                .foregroundColor(.black)
-                                            Text("OPEN").foregroundColor(.black)
-                                        }
-                                        .disabled(curItem != nil) // Disable button if curItem is not nil
-                                    }
-                                    //Photo library
-                                }
-                                // "queue buttons" location
+                                })
+                                //Photo picker
+                                
+                                
+                                
+                                //End of View Stack
+                            }.onTapGesture{
+                                self.endEditing()
                                 
                             }
-                            
-                            
-                            
-                            //sheets that popup when something is pressed
-                            
-                            
-                            /*
-                             (BUG), atleast on the simluation Iphone, pressing this will throw an Exception, we should handle this so the app doesn't crash.
-                             
-                             */
-                            
-                            
-                            //Camera sheet
-                            .sheet(isPresented: self.$showCamera) {
-                                ImagePickerView( curItem: $curItem,  captionTimeControl: timeToCaption, sourceType: .camera)
-                                
-                            }
-                            //Camera sheet
-                            
-                            //Photo picker
-                            .sheet(isPresented: $showSheet, content: {
-                                PhotoPicker(mediaItems: mediaItems, captionTimeControl: timeToCaption) { didSelectItem in
-                                    // Handle didSelectItems value here...
-                                    showSheet = false
-                                    
-                                }
-                            })
-                            //Photo picker
-                            
-                            
-                            
-                            //End of View Stack
-                        }.onTapGesture{
-                            self.endEditing()
-                            
                         }
                     }
+                        
                     .background(Color.white) // Set the background color to white
                     .preferredColorScheme(.light) // Set preferred color scheme to light mode
                 }
-            }
-        }
     }
     
     
